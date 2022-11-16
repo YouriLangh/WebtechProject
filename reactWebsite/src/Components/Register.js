@@ -4,11 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faUser, faEyeSlash, faEye, faEnvelope, faArrowRight, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import Header from "./Header"
 import {useRef, useEffect} from "react"
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
   
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
-const PWD_REGEX = /^([?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,24}$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,24}$/
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   
 
@@ -16,7 +16,7 @@ function Register() {
 
     const userRef = useRef();
 
-    const history = useHistory()
+    const navigate = useNavigate()
     const[username, setUser] = useState('');
     const[validName, setValidName] = useState(false)
     const[userFocus, setUserFocus] = useState(false)
@@ -87,7 +87,7 @@ function Register() {
         const data = await response.json()
 
         if(data.status === 'ok') {
-            history.pushState('/login')
+            navigate('/login')
         }
         console.log(data)
         setSuccess(true)

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import jwt from 'jsonwebtoken'
-import { useHistory} from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 
 function Home() {
-    const history = useHistory()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -11,7 +11,7 @@ function Home() {
             const user = jwt.decode(token)
             if(!user) {
                 localStorage.removeItem('token')
-                history.replace('/login')
+                navigate('/login', { replace: true })
             } else {
                 //  show home
                  
