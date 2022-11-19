@@ -87,6 +87,10 @@ color: rgb(66, 66, 66);
     left: 0;
     }
 
+.input_field .icon.invalid{
+        color: rgb(223, 45, 45);
+        }
+
 .input_field i.showHidePw{
         right: 0;
         cursor: pointer;
@@ -174,16 +178,19 @@ form a:hover{
     top: -100%
 }
 
-.instructions{
+.form .instructions{
+    margin: 5px;
     z-index: 3;
     font-size: 14px;
-    background-color: rgb(0, 0, 0);
-    opacity: 0.5;
+    border: 1px solid #4070f4;
+    border-radius: 2px;
+    opacity: 0.7;
     color: rgb(255, 0, 0);
+    padding: 2px;
 }
 
 .instructions .icon{
-    padding: 10px;
+    padding: 0px 5px 0 0;
 }
 
 

@@ -66,14 +66,14 @@ function Register() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-      
+      try {
         const v1 = USER_REGEX.test(username);
         const v2 = PWD_REGEX.test(password);
         if (!v1 || !v2) {
             setErrorMessage("Invalid Entry");
             return;
         }
-        const response = await  fetch('http://localhost:4000/app/register', {
+        const response = await fetch('http://localhost:4000/app/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,13 +84,17 @@ function Register() {
                 password,
             }),
         })
-        const data = await response.json()
 
-        if(data.status === 'ok') {
-            navigate('/login')
-        }
+        const data = await response.json()
         console.log(data)
-        setSuccess(true)
+        if(data.status === 201) {
+            navigate('/login')
+            setSuccess(true)
+        }
+
+    } catch (error) {
+        console.log(error)
+    }
     }
  const [showPass,setShowPass] = useState(false)
  const [showFirst,setShowFirst] = useState(true)
@@ -130,11 +134,11 @@ function Register() {
             onFocus={() => setUserFocus(true)}
             onBlur={() => setUserFocus(false)}
            placeholder="Enter your username"  />
-            <i class="fa-regular fa-user icon"><FontAwesomeIcon icon={faUser}  /></i>
+            <i class={username && !validName ? "invalid fa-regular fa-user icon" : "fa-regular fa-user icon"}><FontAwesomeIcon icon={faUser}  /></i>
             
         </div>
         <p id="uidnote" className={userFocus && username && !validName ? "instructions" : "offscreen"}>
-                <FontAwesomeIcon icon={faInfoCircle} />
+                <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 4 to 24 characters. <br />
                 Must begin with a letter. <br />
                 Letters, numbers, underscores, hyphens allowed.
@@ -149,10 +153,10 @@ function Register() {
         onFocus={() => setEmailFocus(true)}
         onBlur={() => setEmailFocus(false)}
         placeholder="Enter your email" required />
-        <i class="fa-regular fa-envelope icon"><FontAwesomeIcon icon={faEnvelope}  /></i>
-    </div>
+        <i class={email && !validEmail ? "invalid fa-regular fa-envelope icon" : "fa-regular fa-envelope icon"}><FontAwesomeIcon icon={faEnvelope}  /></i>
+    </div> 
     <p id="emailnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
-                <FontAwesomeIcon icon={faInfoCircle} />
+                <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 Not a valid e-mail.
             </p>
     <div class="input_field">
@@ -165,12 +169,12 @@ function Register() {
         onFocus={() => setPasswordFocus(true)}
         onBlur={() => setPasswordFocus(false)}
          placeholder="Create a password" required />
-        <i class="fa-sharp fa-solid fa-lock icon"><FontAwesomeIcon icon={faLock}  /></i>
+        <i className = {password && !validPassword ? "invalid fa-sharp fa-solid fa-lock icon" : "fa-sharp fa-solid fa-lock icon"}><FontAwesomeIcon icon={faLock}  /></i>
         <i class="fa-regular fa-eye-slash showHidePw"><FontAwesomeIcon icon={passIcon} onClick= {() => setShowPass(!showPass)} /></i>
 
     </div>
     <p id="pwdnote" className={passwordFocus && !validPassword ? "instructions" : "offscreen"}>
-                <FontAwesomeIcon icon={faInfoCircle} />
+                <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 8 to 24 characters. <br />
                 Must include upper- and lowercase letters and a number<br />
             </p>
@@ -184,11 +188,11 @@ function Register() {
         onFocus={() => setMatchFocus(true)}
         onBlur={() => setMatchFocus(false)}
          placeholder="Confirm your password" required />
-        <i class="fa-sharp fa-solid fa-lock icon"><FontAwesomeIcon className="icon"icon={faLock}  /></i>
+        <i class= {matchPassword && !validMatch ? "invalid fa-sharp fa-solid fa-lock icon" : "fa-sharp fa-solid fa-lock icon"}><FontAwesomeIcon className="icon"icon={faLock}  /></i>
 
     </div>
     <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
-                <FontAwesomeIcon icon={faInfoCircle} />
+                <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 Must match other password.
             </p>
          

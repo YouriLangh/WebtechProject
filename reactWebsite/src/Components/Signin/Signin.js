@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import'./Signin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFacebook } from '@fortawesome/free-brands-svg-icons'
+import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { faLock, faUser, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons'
 import img from '../../images/google.png'
 import Header from "../Header"
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react'
+
+
 
 function Signin() {
 
@@ -28,6 +31,25 @@ function Signin() {
     passIcon =faEyeSlash
     passType = "password"
   }
+
+
+  function handleCredentialResponse(response){
+    console.log("Encoded JWT ID token:" + response.credential)
+  }
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+        client_id: "1017318377357-88ogmqp851mrijq93olcll9lcg1kb1i6.apps.googleusercontent.com",
+        callback: handleCredentialResponse
+    })
+
+    google.accounts.id.renderButton(
+        document.getElementById("google_login"),
+        { theme: "outline", size: "large"}
+    )
+
+  }, [])
 
 
   const loginUser = async (e) => {
@@ -110,12 +132,8 @@ function Signin() {
                 <span className="facebook_text">Login with Facebook</span>
             </a>
         </div>
-        <div className="google_login">
-            <a href="/" className="google_button">
-                <img src={img} alt="Google logo" className="google_logo" />
-                <span  className="google_text">Login with Google</span>
-            </a>
-        </div>
+        <div id='google_login' className="google_login">
+            </div>
         </div>
     </div>
 </div>
