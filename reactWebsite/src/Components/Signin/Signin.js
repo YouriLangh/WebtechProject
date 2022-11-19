@@ -5,19 +5,18 @@ import { faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { faLock, faUser, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons'
 import img from '../../images/google.png'
 import Header from "../Header"
+import { useNavigate } from 'react-router-dom';
 
 function Signin() {
 
-
+  const navigate = useNavigate()
   const [showPass,setShowPass] = useState(false)
   const[username, setUser] = useState('');
-  const[validName, setValidName] = useState(false)
-  const[userFocus, setUserFocus] = useState(false)
+
 
 
   const[password, setPassword] = useState('');
-  const[validPassword, setValidPassword] = useState(false)
-  const[passwordFocus, setPasswordFocus] = useState(false)
+
   
   let passIcon, passType
 
@@ -33,8 +32,8 @@ function Signin() {
 
   const loginUser = async (e) => {
     e.preventDefault();
-
-    const response = await  fetch('http://localhost:4000/app/login', {
+    try{ 
+    const response = await fetch('http://localhost:4000/app/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -44,17 +43,18 @@ function Signin() {
             password,
         }),
     })
-    const data = await response.json()
 
-    if(data.user){
+    const data = await response.json()
+     if(data.user){
         localStorage.setItem('token', data.user)
-        alert('Login succesful')
-        window.location.href = '/home'
+        navigate('/home')
+        
     }else {
         alert('Please check your username and password')
     }
-
-    console.log(data)
+    
+} catch (error) { console.log(error)}
+   
 }
 
   return (
@@ -70,11 +70,16 @@ function Signin() {
 
             <form action="#">
                 <div className="input_field">
-                <input type="text username" id="username" placeholder="Enter your username" required/>
+                <input value= {username} 
+                 onChange={(e) => setUser(e.target.value)}
+                 type="text username" id="username" placeholder="Enter your username" required/>
                 <i className="fa-regular fa-user icon"><FontAwesomeIcon icon={faUser} /></i>
             </div>
             <div className="input_field">
-                <input type={passType} className="password" id="loginPassword" placeholder="Enter your password" required />
+                <input type={passType} className="password" 
+                 value= {password}
+                 onChange={(e) => setPassword(e.target.value)}
+                 id="loginPassword" placeholder="Enter your password" required />
                 <i className="fa-sharp fa-solid fa-lock icon"><FontAwesomeIcon icon={faLock}  /></i>
                 <i className="fa-regular fa-eye-slash showHidePw"><FontAwesomeIcon icon= {passIcon} onClick= {() => setShowPass(!showPass)} /></i>
 
@@ -88,7 +93,7 @@ function Signin() {
                 <a href="/" className="text">Forgot password?</a>
             </div>
             <div className="input_field button">
-                <input type="button" value="Login now"/>
+                <input onClick= {(e) => loginUser(e)} type="button" value="Login now"/>
             </div>
             <div className="login_signup">
                 <span className="text">Don't have an account? 
@@ -108,7 +113,7 @@ function Signin() {
         <div className="google_login">
             <a href="/" className="google_button">
                 <img src={img} alt="Google logo" className="google_logo" />
-                <span className="google_text">Login with Google</span>
+                <span  className="google_text">Login with Google</span>
             </a>
         </div>
         </div>
