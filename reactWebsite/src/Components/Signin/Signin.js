@@ -7,6 +7,7 @@ import img from '../../images/google.png'
 import Header from "../Header"
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react'
+import jwt_decode from "jwt-decode"
 
 
 
@@ -33,9 +34,49 @@ function Signin() {
   }
 
 
-  function handleCredentialResponse(response){
+  const handleCredentialResponse = async (response) => {
     console.log("Encoded JWT ID token:" + response.credential)
-  }
+    var userObject = jwt_decode(response.credential)
+    console.log(userObject)
+    const userEmail = userObject.email
+    const emailVerified = userObject.email_verified
+    if (userEmail.substring(userEmail.length - 10) == "@gmail.com" && emailVerified){
+
+        const username = userObject.name
+    const uniqueId = userObject.sub
+
+    try{ 
+        const response = await fetch('http://localhost:4000/app/login/auth/google', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userEmail,
+                username,
+                uniqueId
+            }),
+        })
+    
+        const data = await response.json()
+        if(data.user){
+            localStorage.setItem('token', data.user)
+            navigate('/home')
+            
+        }else {
+            alert('Please check your username and password')
+        }
+        
+    } catch (error) { console.log(error)}
+       
+    } else {
+        console.log("Use a verified Google account")
+    }
+    }
+    
+
+    
+
 
   useEffect(() => {
     /* global google */

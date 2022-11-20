@@ -85,6 +85,25 @@ app.post('/app/login', async (req, res) => {
     }
 })
 
+app.post('/app/login/auth/google', async (req, res) => {
+
+        // Validate given input
+       const userInfo = req.body
+
+       const token = jwt.sign({
+        username: userInfo.username,
+        email: userInfo.userEmail,
+        id: userInfo.uniqueId
+
+    },  process.env.PRIVATE_KEY )
+    return  res.json({ status: 200, message: "Logged in successfully", user: token});
+    
+    })
+
+
+
+
+
 
 
 app.listen(4000, () => {console.log("Server is up and running")})
