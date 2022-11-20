@@ -87,7 +87,7 @@ function Signin() {
 
     google.accounts.id.renderButton(
         document.getElementById("google_login"),
-        { theme: "outline", size: "large"}
+        { theme: "outline", size: "large", width: "330px"}
     )
 
   }, [])

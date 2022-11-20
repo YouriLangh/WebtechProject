@@ -229,26 +229,11 @@ a.facebook_button .facebook{
     height: 50px;
 
     text-decoration: none;
-    border: 1px solid #cacaca;
+
 }
 
 
 
-a.google_button span{
-    color: #232836;
-    opacity: 0.6;
-    font-weight: 500;
-    font-size: 15px;
-}
-
-a.google_button .google_logo{
-    position: absolute;
-    left: 50px;
-    top: 88%;
-    width: 20px;
-    height: 20px;
-    object-fit: cover;
-}
 
 @media  screen and (max-width: 400px){
     .form{
