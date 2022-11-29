@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import'./Signin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFacebook, faGoogle } from '@fortawesome/free-brands-svg-icons'
+import { faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { faLock, faUser, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons'
-import img from '../../images/google.png'
-import Header from "../Header"
+import Header from "../Header/Header"
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react'
 import jwt_decode from "jwt-decode"
@@ -33,6 +32,8 @@ function Signin() {
     passType = "password"
   }
 
+  
+
 
   const handleCredentialResponse = async (response) => {
     console.log("Encoded JWT ID token:" + response.credential)
@@ -40,7 +41,7 @@ function Signin() {
     console.log(userObject)
     const userEmail = userObject.email
     const emailVerified = userObject.email_verified
-    if (userEmail.substring(userEmail.length - 10) == "@gmail.com" && emailVerified){
+    if (userEmail.substring(userEmail.length - 10) === "@gmail.com" && emailVerified){
 
         const username = userObject.name
     const uniqueId = userObject.sub
@@ -126,6 +127,7 @@ function Signin() {
 // <!-- Sign in & Log in-->
 <div className='page' >
     <Header />
+    <div className='page_container'>
     <div className='window_for_login'>
 <div className="login_container">
         <div className="form login">
@@ -177,6 +179,7 @@ function Signin() {
             </div>
         </div>
     </div>
+</div>
 </div>
 </div>
   )

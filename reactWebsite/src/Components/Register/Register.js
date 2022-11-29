@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import'../Register.css';
+import'./Register.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faUser, faEyeSlash, faEye, faEnvelope, faArrowRight, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
-import Header from "./Header"
+import Header from "../Header/Header"
 import {useRef, useEffect} from "react"
 import { useNavigate } from 'react-router-dom'
 
@@ -144,7 +144,7 @@ function Register() {
                 Letters, numbers, underscores, hyphens allowed.
             </p>
     <div class="input_field">
-        <input type="email" 
+        <input type="text" 
         id ="email"
         value= {email}
         onChange={(e) => setEmail(e.target.value)}
@@ -238,7 +238,7 @@ function Register() {
     // <!--Registration Form-->
     <div className='page'>
         <Header />
-
+        <div className='page_container'>
     <div className='windowForRegister'> 
     <div className='register_container'> 
     <div class="form register">
@@ -252,6 +252,7 @@ function Register() {
         </span>
         </div>
     </div>
+        </div>
         </div>
         </div>
         </div>

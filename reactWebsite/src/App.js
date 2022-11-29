@@ -1,11 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 
-import Footer from './Components/Footer';
-import Signin from './Components/Signin/Signin';
-import LandingPage from './Components/LandingPage';
-import Home from './Components/Home';
-import Register from './Components/Register';
+import Footer from './Components/Footer/Footer';
+import Signin from './Components/Login/Signin';
+import LandingPage from './Components/Landingpage/LandingPage';
+import Home from './Components/Home/Home';
+ import Register from './Components/Register/Register';
 import { 
   BrowserRouter as Router,
   Routes,
@@ -25,7 +25,6 @@ function App() {
           <Route exact path='/home' element={<Home />} />
         </Routes>
       </Router>
-      <Footer />
     </div>
   );
 }
