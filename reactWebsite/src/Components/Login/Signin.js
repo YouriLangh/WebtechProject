@@ -7,6 +7,7 @@ import Header from "../Header/Header"
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react'
 import jwt_decode from "jwt-decode"
+import axios from 'axios'
 
 
 
@@ -97,18 +98,18 @@ function Signin() {
   const loginUser = async (e) => {
     e.preventDefault();
     try{ 
-    const response = await fetch('http://localhost:4000/app/login', {
+    const { data } = await axios({
+        url: 'http://localhost:4000/app/login',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
+        data: JSON.stringify({
             username,
             password,
         }),
     })
 
-    const data = await response.json()
      if(data.user){
         localStorage.setItem('token', data.user)
         navigate('/home')

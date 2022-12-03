@@ -5,6 +5,7 @@ import { faLock, faUser, faEyeSlash, faEye, faEnvelope, faArrowRight, faInfoCirc
 import Header from "../Header/Header"
 import {useRef, useEffect} from "react"
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
   
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
@@ -73,19 +74,20 @@ function Register() {
             setErrorMessage("Invalid Entry");
             return;
         }
-        const response = await fetch('http://localhost:4000/app/register', {
+        const { data } = await axios({
+            url: 'http://localhost:4000/app/register', 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
+            data: JSON.stringify({
                 username,
                 email,
                 password,
             }),
         })
 
-        const data = await response.json()
+        //const data = await response.json()
         if(data.status === 201) {
             navigate('/login')
             setSuccess(true)
