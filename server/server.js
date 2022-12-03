@@ -7,6 +7,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 // Import userschema 
 const User = require('./models/user.model')
+const ProfileUser = require('./models/profile.model')
 // Use JWT to authenticate users
 const jwt = require('jsonwebtoken')
 // Env with all private variables
@@ -45,6 +46,9 @@ mongoose.connect(process.env.DB_CONNECTION, ()=> console.log('Database connected
              email: req.body.email,
             password: hashedPassword,
          })
+         await ProfileUser.create({
+            username: req.body.username,
+         })
          console.log(req.body.password)
         return res.json({ status: 201, message: "User created successfully"})
     } catch (err) {
@@ -68,6 +72,7 @@ app.post('/app/login', async (req, res) => {
     //if user exists, compare the passwords to eachother
 
     if (user) {
+        console.log(user);
         const validPwd = await bcrypt.compare(req.body.password, user.password)
         // Passwords do not match
         if (!validPwd) return res.json({ status: 401, message: "Invalid username or password", user: false});
@@ -100,10 +105,10 @@ app.post('/app/login/auth/google', async (req, res) => {
     
     })
 
-
-
-
-
-
+app.get('/app/profile', async (req, res) => {
+    const users = await ProfileUser.find();
+    console.log(users);
+    return users;
+})
 
 app.listen(4000, () => {console.log("Server is up and running")})

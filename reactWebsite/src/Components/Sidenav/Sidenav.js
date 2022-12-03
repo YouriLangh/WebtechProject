@@ -36,7 +36,7 @@ function Sidenav() {
       <nav className='sidebar'>
         <ul className='sidenav_ul'>
         <li className='sidenav_li'><Link className='side_nav_item'to="/dashboard"><FontAwesomeIcon className ='sidenav_icon'icon= {faHouseChimney}/></Link> <span> {foldSidenav ? '': 'Dashboard'} </span></li>
-        <li className='sidenav_li'><Link className='side_nav_item'to="/dashboard"> <FontAwesomeIcon className ='sidenav_icon'icon= {faUser}/> </Link> <span> {foldSidenav ? '': 'Profile'} </span></li>
+        <li className='sidenav_li'><Link className='side_nav_item'to="/profile"> <FontAwesomeIcon className ='sidenav_icon'icon= {faUser}/> </Link> <span> {foldSidenav ? '': 'Profile'} </span></li>
         <li className='sidenav_li'><Link className='side_nav_item'to="/dashboard"> <FontAwesomeIcon className ='sidenav_icon'icon= {faCalendarAlt}/> </Link> <span> {foldSidenav ? '': 'Events'} </span></li>
         <li className='sidenav_li'><Link className='side_nav_item'to="/dashboard"> <FontAwesomeIcon className ='sidenav_icon'icon= {faMagnifyingGlass}/> </Link> <span> {foldSidenav ? '': 'Search'} </span></li>
         <li className='sidenav_li'><Link className='side_nav_item'to="/dashboard"> <FontAwesomeIcon className ='sidenav_icon'icon= {faMap}/> </Link> <span> {foldSidenav ? '': 'Map'} </span></li>
