@@ -105,10 +105,14 @@ app.post('/app/login/auth/google', async (req, res) => {
     
     })
 
-app.get('/app/profile', async (req, res) => {
-    const users = await ProfileUser.find();
-    console.log(users);
-    return users;
+app.post('/app/profile', async (req, res) => {
+    const user = await ProfileUser.findOne({
+        username: req.body.username,
+    })
+    const token = jwt.sign({
+        username: user.username,
+    }, process.env.PRIVATE_KEY)
+    return res.json({ status: 200, message: "Profile found", profile: token});
 })
 
 app.listen(4000, () => {console.log("Server is up and running")})

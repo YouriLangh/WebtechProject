@@ -44,23 +44,23 @@ function Signin() {
     const emailVerified = userObject.email_verified
     if (userEmail.substring(userEmail.length - 10) === "@gmail.com" && emailVerified){
 
-        const username = userObject.name
+    const username = userObject.name
     const uniqueId = userObject.sub
 
     try{ 
-        const response = await fetch('http://localhost:4000/app/login/auth/google', {
+        const { data } = axios({
+            url: 'http://localhost:4000/app/login/auth/google',
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
+            data: JSON.stringify({
                 userEmail,
                 username,
                 uniqueId
             }),
         })
-    
-        const data = await response.json()
+
         if(data.user){
             localStorage.setItem('token', data.user)
             navigate('/home')
