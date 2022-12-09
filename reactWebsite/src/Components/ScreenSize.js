@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 
-function ScreenSize() {
+const ScreenSize = ()  => {
     const [windowDimension, detectHW] = useState({winWidth: window.innerWidth, winHeight: window.innerHeight})
 
     const detectSize = () => {
@@ -16,7 +16,7 @@ function ScreenSize() {
             }
         }, [windowDimension])
   return (
-    <div>ScreenSize</div>
+    {detectSize}
   )
 }
 

@@ -1,5 +1,4 @@
- body {
-    
+:root{
     
 }
 
@@ -7,8 +6,7 @@
     width: 100%;
     height: 100%;
     position: fixed;
-    background-image: linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
-    url("../../images/background.png");
+    background-image: var(--background-image);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: center;
@@ -36,6 +34,7 @@ p{
     color: white;
 }
 
+/* Zoom the picture in when going under 640px*/
 @media (max-width: 40em){
    .landing_page{
     background-size: 150% 150%;

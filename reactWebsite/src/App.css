@@ -1,0 +1,21 @@
+:root{
+    --background-color: #18191A;
+    --background-image: linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)),
+    url("./images/background.png");
+    --login-form-background: rgba(0,0,0,0.7);
+    --login-form-shadow-color: rgba(255, 255, 255, 0.2);
+    --form-title-size: 1.4375rem;
+}
+body{
+    margin: 0;
+    font-size: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    line-height: 1.3;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+}
+*, *::before, *::after {
+    box-sizing: inherit;
+}

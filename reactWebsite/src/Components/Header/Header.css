@@ -1,28 +1,26 @@
-body{
-    margin: 0;
-    font-size: 100%;
-    box-sizing: border-box;
-    padding: 0;
-    font-family: 'Roboto';
-    line-height: 1.3;
-    text-decoration: none;
-    font-family: 'Roboto', sans-serif;
+:root{
+--header-hover-color: rgb(148,0,0);
+--header-background: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
+--brand-name-color: #fff;
+--header-nav-item-text-color: #fff;
+--mobile-nav-icon-color: #fff;
+--mobile-nav-icon-background-color: rgba(20, 20, 20, 0.7);
+--hover-color: rgb(148, 0, 0);
+--mobile-nav-background-color:  rgba(255, 255, 255, 0.9);
+--nav-item-button-color:  rgba(20, 20, 20, 0.9);
+--mobile-nav-mask-color: rgba(0, 0, 0, 0.5);
+--mobile-nav-hover-color: rgb(100, 2, 2);
+--mobile-nav-hover-background-color: rgba(0, 0, 0, 0.1);
 }
-*, *::before, *::after {
-    box-sizing: inherit;
-}
-
-
 .navbar{
     width: 100%;
-    height: 60px;
+    height: 3.75rem;
     display: flex;
     padding-left: 5%;
     padding-right: 5%;
     align-items: center;
-    background-image: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.1));
+    background-image: var(--header-background);
     justify-content: space-between;
-
 }
 
 nav{
@@ -36,26 +34,24 @@ nav{
     height: 3.125rem;
     border-radius: 3.125rem;
     margin-right: 1rem;
-    
-
 }
 
 .brand_name{
     text-decoration: none;
-    color: white;
+    color: var(--brand-name-color);
     font-size: 200%;
+    font-style: italic;
     cursor: pointer;
     text-align: center;
-    /* margin-right: 3.125rem; */
     transition: all 0.2s ease-out;
 }
 
 .menu_icon{
     width: 1.25rem;
     height: 1.25rem;
-    color: white;
+    color: var(--mobile-nav-icon-color);
     padding: 0.5rem;
-    background-color: rgba(20, 20, 20, 0.7);
+    background-color: var(--mobile-nav-icon-background-color);
     border-radius:  1.25rem;
     cursor: pointer;
     margin-left: 3.125rem;
@@ -67,12 +63,11 @@ nav{
 .brand{
     display: flex;
     align-items: center;
-    font-family: 'Rubik Glitch', cursive;
     text-decoration: none;
 }
 
 .brand_name:hover{
-    color: rgb(148, 0, 0);
+    color: var(--hover-color);
     transition: all 0.2s ease-out;
 }
 
@@ -83,68 +78,33 @@ nav ul li{
 
 }
 .nav_item{
-    color: #fff;
+    color: var(--header-nav-item-text-color);
     text-decoration: none;
-    background-color: rgba(20, 20, 20, 0.9);
+    background-color: var(--nav-item-button-color);
     border-radius:  1.25rem;
-    padding: 12px 35px;
+    padding: 0.75rem 2.1875rem;
     letter-spacing:  .125rem;
     transition: all 0.2s ease-out;
 
 }
 .nav_item:hover{
-    color: rgb(148, 0, 0);
+    color: var(--header-hover-color);
     transition: all 0.2s ease-out;
-}
-
-@media (max-width: 40em){
-    .nav_item{
-     display: none; 
-    }
-
-    .menu_icon{
-        display: flex;
-    }
-    .brand{
-        position: fixed;
-    }
-}
-
-@media (max-width: 50em){
-    .nav_item{
-        padding: 8px 25px;
-    }
-
-}
-
-@media (max-width: 26.25em){
-
-    .menu_icon{
-        margin-left: 1rem;
-        position: fixed;
-        right: 20px;
-    }
-    .brand_name{
-        margin-left: 0;
-    }
-    .brand{
-        position: fixed;
-    }
 }
 
 .slide_window{
     position: fixed;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: var(--mobile-nav-background-color);
     height: 100%;
     width: 60%;
     right: -60%;
-    top: 0px;
+    top: 0;
     z-index: 1;
 }
 .slide_window_mask{
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--mobile-nav-mask-color);
     position: fixed;
-    top: 0px;
+    top: 0;
     right: -100%; 
     width: 100%;
     height: 100%;
@@ -171,11 +131,11 @@ nav ul li{
 }
 
 .slide_window.active ul{
-    margin-top: 80px;
+    margin-top: 5rem;
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding-right: 32px;
+    padding-right: 2rem;
     justify-content: space-evenly;
 
 
@@ -190,10 +150,9 @@ nav ul li{
     cursor: pointer;
 
 }
-
 .slide_nav_item{
     text-decoration: none;
-    color: rgb(148, 0, 0);
+    color: var(--header-hover-color);
     width: 100%;
     height: 100%;
     display:flex;
@@ -202,7 +161,43 @@ nav ul li{
 
 }
 .slide_nav_item:hover{
-    color: rgb(100, 2, 2);
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
+    color: var(--mobile-nav-hover-color);
+    background-color: var(--mobile-nav-hover-background-color);
+    border-radius: 0.3125em;
+}
+
+/* Media queries */
+@media (max-width: 40em){
+    .nav_item{
+     display: none; 
+    }
+
+    .menu_icon{
+        display: flex;
+    }
+    .brand{
+        position: fixed;
+    }
+}
+
+@media (max-width: 50em){
+    .nav_item{
+        padding: 0.5rem 1.5625rem;
+    }
+
+}
+
+@media (max-width: 26.25em){
+
+    .menu_icon{
+        margin-left: 1rem;
+        position: fixed;
+        right: 1.25rem;
+    }
+    .brand_name{
+        margin-left: 0;
+    }
+    .brand{
+        position: fixed;
+    }
 }
