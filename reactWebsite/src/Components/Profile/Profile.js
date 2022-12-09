@@ -62,21 +62,23 @@ function Profile() {
       <CardContent>
       <h1>{profile.username}</h1>
       <form onSubmit={handleSubmit}>
-        <input
+        <nobr>username: <input
           name="name"
           type="text"
           value={profile.username}
           placeholder={"Your names"}
           onChange={handleInput}
         />
+        </nobr>
         <br/>
-        <input
+        <nobr>email: <input
           name="email"
           type="email"
           value={profile.email}
           placeholder={"Your email"}
           onChange={handleInput}
         />
+        </nobr>
         <br/>
         <input type="submit" value="Update"/>
       </form>
