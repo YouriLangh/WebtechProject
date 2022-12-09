@@ -101,6 +101,11 @@ function Register() {
  const [showFirst,setShowFirst] = useState(true)
 
 
+ const handleInterest = (id) => {
+    var element = document.getElementById(id);
+    element.classList.toggle("selected")
+ }
+
   let passIcon, passType
 
   let content
@@ -204,27 +209,25 @@ function Register() {
         </div>
     </div>
     <div class="input_field button">
-        <input type="button" disabled={!validName || !validPassword || !validMatch ? true : false} onClick= {() => setShowFirst(false)}value="Continue"/>
+        <input type="button" disabled={!validName || !validPassword || !validMatch} onClick= {() => setShowFirst(false)}value="Continue"/>
         <FontAwesomeIcon className='arrow_icon' icon={faArrowRight} />
     </div>
     </div>
   } else {
-    title = "Step 2/2"
+    title = "Nearly there!"
     content = 
     <div>
-        <div class="input_fields">
-        <input type="radio" class="form-check-input" name="optradio" /> Individual
-        <input type="radio" class="form-check-input" name="optradio" /> Organization
-        </div>
     <div class="input_fields">
-        <p>Select interesting activities!</p>
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>Bowling
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />Soccer
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>Basketball
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>Parties
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>Concerts
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>Ipsum Lorem
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>Ipsum Lorem
+        <p>Select activities that interest you!</p>
+        <div className='interest_options'>
+        <input id="culture_interest" onClick= {() => handleInterest("culture_interest")} class="interests" value="Culture" type="button" />
+        <input id="music_interest" onClick= {() => handleInterest("music_interest")} class="interests" value="Music" type="button" />
+        <input id="sports_interest" onClick= {() => handleInterest("sports_interest")} class="interests" value="Sports" type="button" />
+        <input id="parties_interest" onClick= {() => handleInterest("parties_interest")}class="interests" value="Parties" type="button" />
+        <input id="concerts_interest" onClick= {() => handleInterest("concerts_interest")}class="interests" value="Concerts" type="button" />
+        <input id="social_interest" onClick= {() => handleInterest("social_interest")}class="interests" value="Social" type="button" />
+        <input id="other_interest" onClick= {() => handleInterest("other_interest")}class="interests" value="Other" type="button" />
+        </div>
     </div>
     <div>
     <div class="input_field button">

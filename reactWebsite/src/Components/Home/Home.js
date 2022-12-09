@@ -23,8 +23,6 @@ function Home() {
   return (
     <div className='home_page'>
          <Sidenav/> 
-        <div>Home</div>
-        <button >Logout</button>
     </div>
   )
 }

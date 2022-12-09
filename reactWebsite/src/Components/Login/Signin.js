@@ -7,6 +7,7 @@ import Header from "../Header/Header"
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react'
 import jwt_decode from "jwt-decode"
+import FacebookLogin from '@greatsumini/react-facebook-login';
 import axios from 'axios'
 
 
@@ -63,7 +64,7 @@ function Signin() {
 
         if(data.user){
             localStorage.setItem('token', data.user)
-            navigate('/home')
+            navigate('/app/home')
             
         }else {
             alert('Please check your username and password')
@@ -77,7 +78,13 @@ function Signin() {
     }
     
 
-    
+    const responseFacebook = (response) => {
+        console.log(response);
+      }
+
+      const componentClicked = (data) => {
+        console.warn(data)
+      }
 
 
   useEffect(() => {
@@ -89,7 +96,7 @@ function Signin() {
 
     google.accounts.id.renderButton(
         document.getElementById("google_login"),
-        { theme: "outline", size: "large", width: "330px"}
+        { theme: "outline", size: "medium"}
     )
 
   }, [])
@@ -171,10 +178,10 @@ function Signin() {
         <div className="or_line">
         </div>
         <div className="facebook_login">
-            <a href="/" className="facebook_button">
+             <a href="/" className="facebook_button">
                 <i className="fa-brands fa-facebook facebook"><FontAwesomeIcon icon={faFacebook} /></i>
                 <span className="facebook_text">Login with Facebook</span>
-            </a>
+            </a> 
         </div>
         <div id='google_login' className="google_login">
             </div>
