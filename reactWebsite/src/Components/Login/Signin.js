@@ -7,7 +7,6 @@ import Header from "../Header/Header"
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react'
 import jwt_decode from "jwt-decode"
-import FacebookLogin from '@greatsumini/react-facebook-login';
 import axios from 'axios'
 
 

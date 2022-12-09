@@ -1283,11 +1283,6 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@greatsumini/react-facebook-login@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@greatsumini/react-facebook-login/-/react-facebook-login-3.3.0.tgz#fa1d26c6b5a674b5eed014dede58ace67d327bcc"
-  integrity sha512-gTl6GWInEZUNFXoPBaEs5AbmqpICA+U8rtOMMVXX1pdMc6mD4FuI88mAxBV+0IWyF6Oker1MMPuG+xB5aJRFbg==
-
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@hapi/address/-/address-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
