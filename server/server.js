@@ -7,7 +7,6 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 // Import userschema 
 const User = require('./models/user.model')
-const ProfileUser = require('./models/profile.model')
 // Use JWT to authenticate users
 const jwt = require('jsonwebtoken')
 // Env with all private variables
@@ -81,8 +80,7 @@ app.post('/app/login', async (req, res) => {
             username: user.username,
             email: user.email
 
-        },  process.env.PRIVATE_KEY
-        )
+        },  process.env.PRIVATE_KEY)
         return  res.json({ status: 200, message: "Logged in successfully", user: token});
     } 
     } catch (error) {
@@ -100,19 +98,34 @@ app.post('/app/login/auth/google', async (req, res) => {
         email: userInfo.userEmail,
         id: userInfo.uniqueId
 
-    },  process.env.PRIVATE_KEY )
+    },  process.env.PRIVATE_KEY)
     return  res.json({ status: 200, message: "Logged in successfully", user: token});
     
     })
 
 app.post('/app/profile', async (req, res) => {
-    const user = await ProfileUser.findOne({
-        username: req.body.username,
-    })
-    const token = jwt.sign({
-        username: user.username,
-    }, process.env.PRIVATE_KEY)
-    return res.json({ status: 200, message: "Profile found", profile: token});
-})
+    try {
+        const user = await User.findOne({
+            username: req.body.username,
+        })
+        if(user) {
+        const token = jwt.sign({
+            username: user.username,
+            email: user.email,
+        }, process.env.PRIVATE_KEY)
+        return res.json({ status: 200, message: "Profile found", profile: token});
+        }
+    } catch (error) {
+         return res.json({ status: 500, message: "Server Error", profile: false});
+    }})
+
+app.put('/app/profile/edit', async (req, res) => {
+    User.findOneAndUpdate({username: req.body.username}, req.body, function(err, result) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(result);
+        }
+    })})
 
 app.listen(4000, () => {console.log("Server is up and running")})
