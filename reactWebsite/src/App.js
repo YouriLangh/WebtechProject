@@ -13,6 +13,8 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import Creator from "./Components/Creator/Creator";
+import Activity from "./Components/Activity/Activity";
 
 
 
@@ -26,7 +28,8 @@ function App() {
           <Route exact path='/login' element={<Signin />} />
           <Route exact path='/app/home' element={<Home />} />
           <Route exact path='/app/profile' element={<Map />} />
-          <Route exact path='/app/events' element={<Map />} />
+          <Route exact path='/app/events' element={<Activity />} />
+            <Route exact path='/app/events/create' element={<Creator />} />
           <Route exact path='/app/search' element={<Map />} />
           <Route exact path='/app/map' element={<Map />} />
           <Route exact path='/app/settings' element={<Map />} />
@@ -34,6 +37,7 @@ function App() {
           <Route exact path='/profile' element={<Profile />} />
         </Routes>
       </Router>
+      <Footer />
     </div>
   );
 }
