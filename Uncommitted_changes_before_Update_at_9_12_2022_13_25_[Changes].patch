@@ -1,0 +1,18 @@
+Index: reactWebsite/src/Components/Header.js
+===================================================================
+diff --git a/reactWebsite/src/Components/Header.js b/reactWebsite/src/Components/Header.js
+--- a/reactWebsite/src/Components/Header.js	
++++ b/reactWebsite/src/Components/Header.js	
+@@ -18,6 +18,12 @@
+       <li className="nav-item">
+         <a className="nav-link" href="/login">Login</a>
+       </li>
++      <li className="nav-item">
++        <a className="nav-link" href="/activity">Activity</a>
++      </li>
++      <li className="nav-item">
++        <a className="nav-link" href="/creator">Creator</a>
++      </li>
+     </ul>
+   </nav>
+   </div>
