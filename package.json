@@ -1,5 +1,10 @@
 {
   "dependencies": {
-    "jwt-decode": "^3.1.2"
+    "@cloudinary/react": "^1.7.0",
+    "@cloudinary/url-gen": "^1.8.7",
+    "cloudinary": "^1.32.0",
+    "cloudinary-core": "^2.13.0",
+    "jwt-decode": "^3.1.2",
+    "react-cloudinary-upload-widget": "^1.6.0"
   }
 }
