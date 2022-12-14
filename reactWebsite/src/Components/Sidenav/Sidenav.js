@@ -1,24 +1,79 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import'./Sidenav.css';
+import axios from 'axios';
 import logo from '../../images/Logo.png'
+import { Cloudinary } from '@cloudinary/url-gen';
+import {thumbnail} from "@cloudinary/url-gen/actions/resize";
+import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
+import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { AdvancedImage } from '@cloudinary/react'
 import { faHouseChimney,faUser, faBarsStaggered, faCog, faMap, faCalendarAlt, faBars, faTimes, faStar, faCloud, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+const jwt = require('jsonwebtoken')
 
+function Sidenav() {
 
-function Sidenav(props) {
-
+  const myCld = new Cloudinary({
+    cloud: {
+      cloudName: "dmm5cr74r",
+      api_key: '863166137145835', 
+      api_secret: 'W7tHs7zxqZdPwxX8PSKqrXzx0aw' 
+    }
+  });
   // Collapse the sidebar on page load
   const [foldSidenav,setFoldSidenav] = useState(true)
   const [showMobileNav, setShowMobileNav] = useState(false)
   const [windowDimension, detectHW] = useState({winWidth: window.innerWidth, winHeight: window.innerHeight})
-
+  const [userInfo, setUserInfo] = useState({username: "", pfp_url:""})
+  const [pfp, setPfp] = useState(myCld.image(userInfo.pfp_url))
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.reload()
 }
+const updatePfp = async (newUrl) => {
+  if (newUrl == "") {
+    setPfp(myCld.image("pfp/default_pfp"))
+  } else {
+    setPfp(myCld.image(newUrl));
+  }
+} 
 
+
+useEffect(() => {
+     const userToken = localStorage.getItem('token');
+     if(userToken !== null){
+      const username = jwt.decode(userToken).username;
+      try{
+        axios({
+          url: 'http://localhost:4000/app/profile',
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+              username,
+          }),
+          }).then(res => {
+            let newProfile = jwt.decode(res.data.profile);
+            let formattedInfo = {username: newProfile.username, pfp_url: newProfile.url}
+            setUserInfo(formattedInfo);
+            console.log("i updated profile", formattedInfo)
+            updatePfp(newProfile.url);})
+      } catch (error) {console.log(error)}
+      pfp
+      .resize(thumbnail().gravity(focusOn(FocusOn.face())))
+    }
+  }, [])
+
+  useEffect(() => {
+
+  },[pfp])
+
+  useEffect(() => {
+
+  },[userInfo])
 
 const onMobileNavClicked = () => {
   setShowMobileNav(!showMobileNav)
@@ -40,6 +95,12 @@ const detectSize = () => {
       }
   }, [windowDimension])
 
+  let profilePic = <AdvancedImage 
+  cldImg={pfp} 
+  className='sidenav_profile_pic'/>
+
+  let userName = <span className='sidenav_user_name'>{foldSidenav ? '' : userInfo.username} </span>
+
   return (
     <div>
     <div className={foldSidenav ? 'sidenav close' : 'sidenav'}>
@@ -53,8 +114,10 @@ const detectSize = () => {
         </div>
       </div>
       <div className='sidenav_user'>
-      <img src= {props.profilePictureURL} alt='profile_picture' className='sidenav_profile_pic'/> 
-        <span className='sidenav_user_name'>{foldSidenav ? '' : props.username} </span>
+        {profilePic}
+      {/* <img src= {userInfo.pfp_url} alt='profile_picture' className='sidenav_profile_pic'/>  */}
+      {userName}
+        {/* <span className='sidenav_user_name'>{foldSidenav ? '' : userInfo.username} </span> */}
       </div>
       <nav className='sidebar'>
         <ul className='sidenav_ul'>

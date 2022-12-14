@@ -188,12 +188,12 @@ function Signin() {
         
         <div className="or_line">
         </div>
-        <div className="facebook_login">
+        {/* <div className="facebook_login">
              <a href="/" className="facebook_button">
                 <i className="fa-brands fa-facebook facebook"><FontAwesomeIcon icon={faFacebook} /></i>
                 <span className="facebook_text">Login with Facebook</span>
             </a> 
-        </div>
+        </div> */}
         <div id='google_login' className="google_login">
             </div>
             <div id='google_login_medium' className="google_login">

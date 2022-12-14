@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import'./Register.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faUser, faEyeSlash, faEye, faEnvelope, faArrowRight, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faUser, faEyeSlash, faEye, faEnvelope, faArrowRight, faInfoCircle, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import Header from "../Header/Header"
 import {useRef, useEffect} from "react"
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { StyledEngineProvider } from '@mui/material';
 
   
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
@@ -36,10 +37,12 @@ function Register() {
 
     const[errorMessage, setErrorMessage] = useState('');
     const[success, setSuccess] = useState(false);
+
+    const[ToS, setToS] = useState(false)
+    const[interests, setInterests] = useState([])
     
     useEffect(()=> {
         userRef.current.focus();
-        console.log(userFocus)
     }, [])
 
     useEffect(() => {
@@ -65,18 +68,6 @@ function Register() {
     }, [username, password, matchPassword])
 
 
-    const getInterests = () => {
-        var interests = []
-        var element = document.getElementById("interests");
-        var children = element.getElementsByTagName('*')
-        for (var i = 0; i < children.length; i++){
-           var e = children[i]
-           if(e.classList.contains("selected")){
-            interests.push(e.value)
-           }
-        }
-        return interests
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -88,7 +79,7 @@ function Register() {
             setErrorMessage("Invalid Entry");
             return;
         }
-        const interests = getInterests()
+         console.log(interests)
          const { data } = await axios({
              url: 'http://localhost:4000/app/register', 
              method: 'POST',
@@ -119,12 +110,21 @@ function Register() {
  const handleInterest = (id) => {
     var element = document.getElementById(id);
     element.classList.toggle("selected")
+    if(element.classList.contains("selected")){
+        setInterests(prevArray => [...prevArray, id])
+    } else {setInterests(interests.filter(eId => eId !== id))}
+    console.log(interests)
+ }
+
+ const getClasses = (id) => {
+    if(interests.includes(id)){
+        return "interests selected"
+    } else return "interests"
  }
 
   let passIcon, passType
 
-  let content
-  let title
+  let content, title, arrow
   
 
   if(showPass){
@@ -139,6 +139,7 @@ function Register() {
 
   if(showFirst){
     title = "Register"
+    arrow = <div></div>
     content =    
         <div>
         <div class="input_field">
@@ -219,12 +220,12 @@ function Register() {
          
     <div class="checkbox_text">
         <div class="checkbox_content">
-            <input type="checkbox" id= "termsCheck" />
+            <input type="checkbox" onChange={(e) => setToS(!ToS)} checked={ToS} id= "termsCheck" />
             <label for="logCheck" class="text">Accept terms & conditions</label>
         </div>
     </div>
-    <div class="input_field button">
-        <input type="button" disabled={!validName || !validPassword || !validMatch} onClick= {() => setShowFirst(false)}value="Continue"/>
+    <div className={!validName || !validPassword || !validMatch || !ToS ? "input_field button disabled" : "input_field button"}>
+        <input type="button"  disabled={!validName || !validPassword || !validMatch || !ToS} onClick= {() => setShowFirst(false)}value="Continue"/>
         <FontAwesomeIcon className='arrow_icon' icon={faArrowRight} />
     </div>
     </div>
@@ -235,21 +236,22 @@ function Register() {
     <div class="input_fields">
         <p>Select activities that interest you!</p>
         <div id="interests"className='interest_options'>
-        <input id="culture_interest" onClick= {() => handleInterest("culture_interest")} class="interests" value="Culture" type="button" />
-        <input id="music_interest" onClick= {() => handleInterest("music_interest")} class="interests" value="Music" type="button" />
-        <input id="sports_interest" onClick= {() => handleInterest("sports_interest")} class="interests" value="Sports" type="button" />
-        <input id="parties_interest" onClick= {() => handleInterest("parties_interest")}class="interests" value="Parties" type="button" />
-        <input id="concerts_interest" onClick= {() => handleInterest("concerts_interest")}class="interests" value="Concerts" type="button" />
-        <input id="social_interest" onClick= {() => handleInterest("social_interest")}class="interests" value="Social" type="button" />
-        <input id="other_interest" onClick= {() => handleInterest("other_interest")}class="interests" value="Other" type="button" />
+        <input id="culture_interest" onClick= {() => handleInterest("culture_interest")} className={getClasses("culture_interest")} value="Culture" type="button" />
+        <input id="music_interest" onClick= {() => handleInterest("music_interest")} className={getClasses("music_interest")} value="Music" type="button" />
+        <input id="sports_interest" onClick= {() => handleInterest("sports_interest")} className={getClasses("sports_interest")} value="Sports" type="button" />
+        <input id="parties_interest" onClick= {() => handleInterest("parties_interest")} className={getClasses("parties_interest")} value="Parties" type="button" />
+        <input id="concerts_interest" onClick= {() => handleInterest("concerts_interest")} className={getClasses("concerts_interest")} value="Concerts" type="button" />
+        <input id="social_interest" onClick= {() => handleInterest("social_interest")} className={getClasses("social_interest")} value="Social" type="button" />
+        <input id="other_interest" onClick= {() => handleInterest("other_interest")} className={getClasses("other_interest")} value="Other" type="button" />
         </div>
     </div>
     <div>
-    <div class="input_field button">
-        <input type="button" value="Submit" onClick= {(e) => handleSubmit(e)} />
+    <div className={!validName || !validPassword || !validMatch || !ToS ? "input_field button disabled" : "input_field button"}>
+        <input  type="button" value="Submit"  disabled={!validName || !validPassword || !validMatch || !ToS} onClick= {(e) => handleSubmit(e)} />
         </div>
     </div>
     </div>
+    arrow = <div className='backarrow'>  <FontAwesomeIcon onClick={() => setShowFirst(true)} className="backarrow" icon={faArrowLeft} /></div>
   }
 
 
@@ -259,7 +261,8 @@ function Register() {
         <Header />
         <div className='page_container'>
     <div className='windowForRegister'> 
-    <div className='register_container'> 
+    <div className='register_container'>
+        {arrow}
     <div class="form register">
     <span class="login_title">{title}</span>
     <form  >

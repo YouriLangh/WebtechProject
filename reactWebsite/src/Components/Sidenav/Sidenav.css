@@ -153,7 +153,10 @@ span{
 
 .sidenav_profile_pic{
     width: 80px;
+    max-width: 80px;
+    max-height: 80px;
     height: 80px;
+    aspect-ratio: 1;
     margin-top: 10px;
     border-radius: 50px;
     box-shadow: 0 0 15px 3px rgb(100, 2, 2);
