@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import'./Profile.css';
 import Sidenav from '../Sidenav/Sidenav'
 import axios from 'axios';
@@ -6,9 +6,7 @@ import Card from '@mui/material/Card';
 import { CardContent, CardHeader } from '@mui/material';
 import { AdvancedImage } from '@cloudinary/react'
 import { Cloudinary } from '@cloudinary/url-gen';
-import { radius } from '@cloudinary/url-gen/actions/reshape/';
 import {thumbnail} from "@cloudinary/url-gen/actions/resize";
-import {max} from "@cloudinary/url-gen/actions/roundCorners";
 import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
 
@@ -29,40 +27,49 @@ function Profile() {
   const [profile, setProfile] = useState({
     username: '',
     email: '',
+    url: '',
   })
 
-  const [pfpUrl, setPfpUrl] = useState('pfp/default_pfp')
-  const [pfp, setPfp] = useState(myCld.image(pfpUrl))
-
-  useEffect(() => {
-    setPfp(myCld.image(pfpUrl))
-  }, [pfpUrl])
+  const [pfp, setPfp] = useState(myCld.image(profile.url))
 
   const handleInput = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    updateDb(profile);
+  };
+  
+  const updateDb = async (new_profile) => {
     try {
-      axios({
+      const res = await axios({
         url:'http://localhost:4000/app/profile/edit',
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        data: profile,
-    }).then(res => {
-      console.log(res.data);
-    })
+        data: new_profile,
+      });
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
-  };
+  };  
 
-  const handleUpload = (e) => {
-    console.log(e)
-    setPfpUrl(e.info.public_id);
+  const updatePfp = async (newUrl) => {
+    if (newUrl == "") {
+      setPfp(myCld.image("pfp/default_pfp"))
+    } else {
+      setPfp(myCld.image(newUrl));
+    }
+  } 
+
+  const handleUpload = async (e) => {
+    let new_profile = {...profile, url: e.info.public_id}
+    setProfile(new_profile);
+    updateDb(new_profile)
+    updatePfp(e.info.public_id);
   }
 
   useEffect(() => {
@@ -79,56 +86,57 @@ function Profile() {
             username,
         }),
         }).then(res => {
-          let profile = jwt.decode(res.data.profile);
-          setProfile(profile);})
+          let newProfile = jwt.decode(res.data.profile);
+          setProfile(newProfile);
+          updatePfp(newProfile.url);})
       } catch (error) {console.log(error)}
       pfp
       .resize(thumbnail().gravity(focusOn(FocusOn.face())))
   }, []);
 
   return (
-    <html>
+    <html> 
       <WidgetLoader />
-  <div className='profile_page'>
-      <Sidenav/> 
-      <Card variant="outlined" className='profile_card'>
-      <CardContent>
-      <h1>{profile.username}</h1>
-      <AdvancedImage 
-      cldImg={pfp} 
-      className='avatar'/>
-      <br/>
-      <Widget
-        resourceType={"image"}
-        cloudName={'dmm5cr74r'}
-        uploadPreset={'nsro5aio'}
-        folder={'pfp'}
-        onSuccess={handleUpload}
-        ></Widget>
-      <form onSubmit={handleSubmit}>
-        <label for="username">Username:</label>
-        <input
-          id = "username"
-          name="name"
-          type="text"
-          value={profile.username}
-          placeholder={"Your names"}
-          onChange={handleInput} 
+      <div className='profile_page'>
+        <Sidenav/> 
+        <Card variant="outlined" className='profile_card'>
+        <CardContent>
+        <h1>{profile.username}</h1>
+        <AdvancedImage 
+        cldImg={pfp} 
+        className='avatar'/>
+        <br/>
+        <Widget
+          resourceType={"image"}
+          cloudName={'dmm5cr74r'}
+          uploadPreset={'nsro5aio'}
+          folder={'pfp'}
+          onSuccess={handleUpload}
+          ></Widget>
+        <form onSubmit={handleSubmit}>
+          <label for="username">Username:</label>
+          <input
+            id = "username"
+            name="name"
+            type="text"
+            value={profile.username}
+            placeholder={"Your names"}
+            onChange={handleInput} 
+            />
+          <label for="username">E-mail: </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={profile.email}
+            placeholder={"Your email"}
+            onChange={handleInput}
           />
-        <label for="username">E-mail: </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          value={profile.email}
-          placeholder={"Your email"}
-          onChange={handleInput}
-        />
-        <input type="submit" value="Update"/>
-      </form>
-      </CardContent>
-      </Card>
-  </div>
+          <input type="submit" value="Update"/>
+        </form>
+        </CardContent>
+        </Card>
+    </div>
   </html>
   )
 }

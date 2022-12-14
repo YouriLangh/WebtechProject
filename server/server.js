@@ -110,6 +110,7 @@ app.post('/app/profile', async (req, res) => {
         const token = jwt.sign({
             username: user.username,
             email: user.email,
+            url: user.url,
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
         }
@@ -118,12 +119,10 @@ app.post('/app/profile', async (req, res) => {
     }})
 
 app.put('/app/profile/edit', async (req, res) => {
-    User.findOneAndUpdate({username: req.body.username}, req.body, function(err, result) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send(result);
-        }
-    })})
+    console.log(req.body);
+    User.findOneAndUpdate({username: req.body.username}, req.body, { new: true })
+        .exec()
+        .then((result) => res.send(result))
+        .catch((err) => res.send(err));})
 
 app.listen(4000, () => {console.log("Server is up and running")})
