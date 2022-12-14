@@ -172,7 +172,7 @@ function Signin() {
             <div className="checkbox_text">
                 <div className="checkbox_content">
                     <input type="checkbox" id= "logCheck"/>
-                    <label for="logCheck" className="text">Remember me</label>
+                    <label htmlFor="logCheck" className="text">Remember me</label>
                 </div>
                 <a href="/" className="text">Forgot password?</a>
             </div>

@@ -142,7 +142,7 @@ function Register() {
     arrow = <div></div>
     content =    
         <div>
-        <div class="input_field">
+        <div className="input_field">
            
             <input type="text" 
             id="username"
@@ -156,7 +156,7 @@ function Register() {
             onFocus={() => setUserFocus(true)}
             onBlur={() => setUserFocus(false)}
            placeholder="Enter your username"  />
-            <i class={username && !validName ? "invalid fa-regular fa-user icon" : "fa-regular fa-user icon"}><FontAwesomeIcon icon={faUser}  /></i>
+            <i className={username && !validName ? "invalid fa-regular fa-user icon" : "fa-regular fa-user icon"}><FontAwesomeIcon icon={faUser}  /></i>
             
         </div>
         <p id="uidnote" className={userFocus && username && !validName ? "instructions" : "offscreen"}>
@@ -165,7 +165,7 @@ function Register() {
                 Must begin with a letter. <br />
                 Letters, numbers, underscores, hyphens allowed.
             </p>
-    <div class="input_field">
+    <div className="input_field">
         <input type="text" 
         id ="email"
         value= {email}
@@ -175,14 +175,14 @@ function Register() {
         onFocus={() => setEmailFocus(true)}
         onBlur={() => setEmailFocus(false)}
         placeholder="Enter your email" required />
-        <i class={email && !validEmail ? "invalid fa-regular fa-envelope icon" : "fa-regular fa-envelope icon"}><FontAwesomeIcon icon={faEnvelope}  /></i>
+        <i className={email && !validEmail ? "invalid fa-regular fa-envelope icon" : "fa-regular fa-envelope icon"}><FontAwesomeIcon icon={faEnvelope}  /></i>
     </div> 
     <p id="emailnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
                 <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 Not a valid e-mail.
             </p>
-    <div class="input_field">
-        <input type= {passType} class="password" 
+    <div className="input_field">
+        <input type= {passType} className="password" 
         id='password'
         value= {password}
         onChange={(e) => setPassword(e.target.value)}
@@ -192,7 +192,7 @@ function Register() {
         onBlur={() => setPasswordFocus(false)}
          placeholder="Create a password" required />
         <i className = {password && !validPassword ? "invalid fa-sharp fa-solid fa-lock icon" : "fa-sharp fa-solid fa-lock icon"}><FontAwesomeIcon icon={faLock}  /></i>
-        <i class="fa-regular fa-eye-slash showHidePw"><FontAwesomeIcon icon={passIcon} onClick= {() => setShowPass(!showPass)} /></i>
+        <i className="fa-regular fa-eye-slash showHidePw"><FontAwesomeIcon icon={passIcon} onClick= {() => setShowPass(!showPass)} /></i>
 
     </div>
     <p id="pwdnote" className={passwordFocus && !validPassword ? "instructions" : "offscreen"}>
@@ -200,8 +200,8 @@ function Register() {
                 8 to 24 characters. <br />
                 Must include upper- and lowercase letters and a number<br />
             </p>
-    <div class="input_field">
-        <input type={passType} class="password"
+    <div className="input_field">
+        <input type={passType} className="password"
         id='confirm_password'
         value = {matchPassword}
         onChange={(e) => setMatchPassword(e.target.value)}
@@ -210,7 +210,7 @@ function Register() {
         onFocus={() => setMatchFocus(true)}
         onBlur={() => setMatchFocus(false)}
          placeholder="Confirm your password" required />
-        <i class= {matchPassword && !validMatch ? "invalid fa-sharp fa-solid fa-lock icon" : "fa-sharp fa-solid fa-lock icon"}><FontAwesomeIcon className="icon"icon={faLock}  /></i>
+        <i className= {matchPassword && !validMatch ? "invalid fa-sharp fa-solid fa-lock icon" : "fa-sharp fa-solid fa-lock icon"}><FontAwesomeIcon className="icon"icon={faLock}  /></i>
 
     </div>
     <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
@@ -218,10 +218,10 @@ function Register() {
                 Must match other password.
             </p>
          
-    <div class="checkbox_text">
-        <div class="checkbox_content">
+    <div className="checkbox_text">
+        <div className="checkbox_content">
             <input type="checkbox" onChange={(e) => setToS(!ToS)} checked={ToS} id= "termsCheck" />
-            <label for="logCheck" class="text">Accept terms & conditions</label>
+            <label htmlFor="logCheck" className="text">Accept terms & conditions</label>
         </div>
     </div>
     <div className={!validName || !validPassword || !validMatch || !ToS ? "input_field button disabled" : "input_field button"}>
@@ -233,7 +233,7 @@ function Register() {
     title = "Nearly there!"
     content = 
     <div>
-    <div class="input_fields">
+    <div className="input_fields">
         <p>Select activities that interest you!</p>
         <div id="interests"className='interest_options'>
         <input id="culture_interest" onClick= {() => handleInterest("culture_interest")} className={getClasses("culture_interest")} value="Culture" type="button" />
@@ -263,14 +263,14 @@ function Register() {
     <div className='windowForRegister'> 
     <div className='register_container'>
         {arrow}
-    <div class="form register">
-    <span class="login_title">{title}</span>
+    <div className="form register">
+    <span className="login_title">{title}</span>
     <form  >
                 {content}
                 </form>
-                <div class="login_signup">
-        <span class="text">Already have an account?
-        <a href="/login" class="text login_link">Log in</a>
+                <div className="login_signup">
+        <span className="text">Already have an account?
+        <a href="/login" className="text login_link">Log in</a>
         </span>
         </div>
     </div>

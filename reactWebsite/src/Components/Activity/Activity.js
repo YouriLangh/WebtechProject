@@ -93,8 +93,8 @@ function Activity() {
             <div className='window_for_activity'>
                 <div className='activity_container'>
                     <Link to='/app/events/create'>Go to Creator</Link>
-                    <div class="formA">
-                        <span class="activity_title">{title}</span>
+                    <div className="formA">
+                        <span className="activity_title">{title}</span>
                             {content}
                     </div>
 

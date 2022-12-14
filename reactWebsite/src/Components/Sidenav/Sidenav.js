@@ -33,7 +33,7 @@ function Sidenav() {
     window.location.reload()
 }
 const updatePfp = async (newUrl) => {
-  if (newUrl == "") {
+  if (newUrl === "") {
     setPfp(myCld.image("pfp/default_pfp"))
   } else {
     setPfp(myCld.image(newUrl));
