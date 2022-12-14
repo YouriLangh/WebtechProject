@@ -29,7 +29,7 @@ function App() {
           <Route exact path='/register' element={<Register/>} />
           <Route exact path='/login' element={<Signin />} />
           <Route exact path='/app/home' element={<Home />} />
-          <Route exact path='/app/profile' element={<Map />} />
+          <Route exact path='/app/profile' element={<Profile />} />
           <Route exact path='/app/events' element={<Activity />} />
           <Route exact path='/app/events/create' element={<Creator />} />
           <Route exact path='/app/search' element={<Map />} />
