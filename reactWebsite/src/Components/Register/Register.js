@@ -64,6 +64,20 @@ function Register() {
         
     }, [username, password, matchPassword])
 
+
+    const getInterests = () => {
+        var interests = []
+        var element = document.getElementById("interests");
+        var children = element.getElementsByTagName('*')
+        for (var i = 0; i < children.length; i++){
+           var e = children[i]
+           if(e.classList.contains("selected")){
+            interests.push(e.value)
+           }
+        }
+        return interests
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -74,24 +88,25 @@ function Register() {
             setErrorMessage("Invalid Entry");
             return;
         }
-        const { data } = await axios({
-            url: 'http://localhost:4000/app/register', 
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: JSON.stringify({
-                username,
-                email,
-                password,
-            }),
-        })
+        const interests = getInterests()
+         const { data } = await axios({
+             url: 'http://localhost:4000/app/register', 
+             method: 'POST',
+             headers: {
+                 'Content-Type': 'application/json',
+             },
+             data: JSON.stringify({
+                 username,
+                 email,
+                 password,
+             }),
+         })
 
-        //const data = await response.json()
-        if(data.status === 201) {
-            navigate('/login')
-            setSuccess(true)
-        }
+         console.log(data)
+         if(data.status === 201) {
+             navigate('/login')
+             setSuccess(true)
+         }
 
     } catch (error) {
         console.log(error)
@@ -219,7 +234,7 @@ function Register() {
     <div>
     <div class="input_fields">
         <p>Select activities that interest you!</p>
-        <div className='interest_options'>
+        <div id="interests"className='interest_options'>
         <input id="culture_interest" onClick= {() => handleInterest("culture_interest")} class="interests" value="Culture" type="button" />
         <input id="music_interest" onClick= {() => handleInterest("music_interest")} class="interests" value="Music" type="button" />
         <input id="sports_interest" onClick= {() => handleInterest("sports_interest")} class="interests" value="Sports" type="button" />

@@ -95,7 +95,19 @@ function Signin() {
 
     google.accounts.id.renderButton(
         document.getElementById("google_login"),
-        { theme: "outline", size: "medium"}
+        { theme: "outline", size: "large", width: "340px"}
+    )
+    google.accounts.id.renderButton(
+        document.getElementById("google_login_medium"),
+        { theme: "outline", size: "large", width: "320px"}
+    )
+    google.accounts.id.renderButton(
+        document.getElementById("google_login_small"),
+        { theme: "outline", size: "large", width: "280px"}
+    )
+    google.accounts.id.renderButton(
+        document.getElementById("google_login_xs"),
+        { theme: "outline", size: "medium", width: "200px"}
     )
 
   }, [])
@@ -183,6 +195,12 @@ function Signin() {
             </a> 
         </div>
         <div id='google_login' className="google_login">
+            </div>
+            <div id='google_login_medium' className="google_login">
+            </div>
+            <div id='google_login_small' className="google_login">
+            </div>
+            <div id='google_login_xs' className="google_login">
             </div>
         </div>
     </div>

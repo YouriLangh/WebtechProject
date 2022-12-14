@@ -31,25 +31,20 @@ mongoose.connect(process.env.DB_CONNECTION, ()=> console.log('Database connected
          if (error) 
          // if the requirements of all fields aren't met (if data changed with JS or payload edited )
           return res.json({ status: 400, message: "Invalid fields"});
-
          // See if a user already exists with this username
         const user = await User.findOne({username: req.body.username});
-         if (user)
+        if (user) {
          return res.json({ status: 409, message: "User with given username already exists"});
-         console.log(1)
-       // Hash the password and salt it with certain complexity 
-         // const salt = await bcrypt.genSalt(10);
+        }
+         // Hash the password and salt it with certain complexity 
          const hashedPassword = await bcrypt.hash(req.body.password, 10);
          await User.create({
-             username: req.body.username,
-             email: req.body.email,
-            password: hashedPassword,
-         })
-         await ProfileUser.create({
             username: req.body.username,
+             email: req.body.email,
+             password: hashedPassword
          })
-         console.log(req.body.password)
-        return res.json({ status: 201, message: "User created successfully"})
+         //await ProfileUser.create({username: req.body.username})
+         return res.json({ status: 201, message: "User created successfully"})
     } catch (err) {
          // in case of no reply from server
          return res.json({ status: 500, message: err})
