@@ -1,5 +1,5 @@
 :root{
-    
+    --cool_red: linear-gradient(to right, rgb(187, 85, 85),  rgb(153, 21, 21));
 }
 
 .landing_page{
@@ -27,7 +27,7 @@
 
 }
 .join_button{
-    background: linear-gradient(to right, rgb(187, 85, 85),  rgb(153, 21, 21));
+    background: linear-gradient(to bottom right,  rgb(153, 21, 21), rgb(187, 85, 85));
     color: rgb(255, 255, 255);
     height: 50px;
     width: 200px;
@@ -37,23 +37,25 @@
 
 }
 .join_button span{
-    font-weight: 800;
+    font-weight: 600;
     font-size: 23px;
     text-shadow: 1px 1px 2px rgb(0, 0, 0);
+    font-family: 'Secular One', sans-serif;
 }
 
 p.head{
-    color: white;
+    color: var(--cool_red);
     font-family: 'Poppins', sans-serif;
-    font-size: 22px;
+    font-size: 32px;
     font-weight: 800;
     text-shadow: 1px 1px 2px rgb(0, 0, 0);
     font-style: italic;
 
 }
 p.body{
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Secular One', sans-serif;
     line-height: 1.3;
+    font-size: 18px;
     color: white;
     text-shadow: 1px 1px 2px rgb(0, 0, 0);
 }

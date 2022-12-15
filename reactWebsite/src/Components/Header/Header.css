@@ -84,6 +84,7 @@ nav ul li{
     border-radius:  1.25rem;
     padding: 0.75rem 2.1875rem;
     letter-spacing:  .125rem;
+    font-weight: 600;
     transition: all 0.2s ease-out;
 
 }

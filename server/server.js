@@ -13,6 +13,7 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 const { registerValidation, loginValidation } = require('./validation/validation')
 const bcrypt = require("bcrypt")
+const activityModel = require('./models/activityModel')
 
 dotenv.config();
 
@@ -120,4 +121,15 @@ app.put('/app/profile/edit', async (req, res) => {
         .then((result) => res.send(result))
         .catch((err) => res.send(err));})
 
+
+app.get('/app/map', async (req, res) => {
+   // const activities = await activityModel.find()
+   // res.send(activities)
+   res.send([{lat:50.81, lon:4.3, activityName: "Bowling", date: new Date("2022-12-17")},
+   {lat: 50.80, lon:4.311, activityName: "ice skating", date: new Date("2022-12-18")},
+   {lat: 50.768, lon:4.29, activityName: "dancing", date: new Date("2022-12-18")}])
+})
+
 app.listen(4000, () => {console.log("Server is up and running")})
+
+

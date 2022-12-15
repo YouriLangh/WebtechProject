@@ -132,6 +132,7 @@ body{
 .form a.text{
     color: var(--sign-up-now-text-color);
     padding-left: 0.3125rem;
+    font-weight: 600;
     font-size: .8125rem;
 }
 
