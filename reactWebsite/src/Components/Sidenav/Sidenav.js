@@ -59,7 +59,6 @@ useEffect(() => {
             let newProfile = jwt.decode(res.data.profile);
             let formattedInfo = {username: newProfile.username, pfp_url: newProfile.url}
             setUserInfo(formattedInfo);
-            console.log("i updated profile", formattedInfo)
             updatePfp(newProfile.url);})
       } catch (error) {console.log(error)}
       pfp

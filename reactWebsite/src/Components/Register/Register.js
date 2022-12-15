@@ -9,7 +9,7 @@ import axios from 'axios'
 import { StyledEngineProvider } from '@mui/material';
 
   
-const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,19}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,24}$/
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   
@@ -71,7 +71,6 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
       try {
         const v1 = USER_REGEX.test(username);
         const v2 = PWD_REGEX.test(password);
@@ -79,7 +78,6 @@ function Register() {
             setErrorMessage("Invalid Entry");
             return;
         }
-         console.log(interests)
          const { data } = await axios({
              url: 'http://localhost:4000/app/register', 
              method: 'POST',
@@ -90,13 +88,16 @@ function Register() {
                  username,
                  email,
                  password,
+                 interests
              }),
          })
-
          console.log(data)
          if(data.status === 201) {
              navigate('/login')
              setSuccess(true)
+         }
+         if(data.status === 400){
+            alert('Invalid fields')
          }
 
     } catch (error) {
@@ -113,7 +114,6 @@ function Register() {
     if(element.classList.contains("selected")){
         setInterests(prevArray => [...prevArray, id])
     } else {setInterests(interests.filter(eId => eId !== id))}
-    console.log(interests)
  }
 
  const getClasses = (id) => {
@@ -161,7 +161,7 @@ function Register() {
         </div>
         <p id="uidnote" className={userFocus && username && !validName ? "instructions" : "offscreen"}>
                 <FontAwesomeIcon className="icon" icon={faInfoCircle} />
-                4 to 24 characters. <br />
+                4 to 20 characters. <br />
                 Must begin with a letter. <br />
                 Letters, numbers, underscores, hyphens allowed.
             </p>
