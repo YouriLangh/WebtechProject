@@ -7,8 +7,10 @@ import {
     faQuestion,
     faSortNumericDown, faSortNumericUp, faMapPin
 } from '@fortawesome/free-solid-svg-icons'
-import Header from "../Header/Header"
+import Sidenav from "../Sidenav/Sidenav";
 import {useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
+import axios from 'axios';
 
 
 
@@ -38,22 +40,27 @@ function Creator() {
             setErrorMessage("Invalid Entry");
             return;
         }
-        const response = await fetch('http://localhost:4000/app/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                activityName,
-                activityDate,
-                activityType,
-                activityMinAge,
-                activityMaxAge,
-                activityLocation,
-                activityMinGroupSize,
-                activityMaxGroupSize,
-            }),
-        })
+        try {
+              const response = await axios({
+                  url: 'http://localhost:4000/app/activities/post',
+                  method: 'PUT',
+                  headers: {
+                      'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    activityName,
+                    activityDate,
+                    activityType,
+                    activityMinAge,
+                    activityMaxAge,
+                    activityLocation,
+                    activityMinGroupSize,
+                    activityMaxGroupSize,
+                }),
+            })
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     const onSubmit = (e) => {
@@ -63,12 +70,12 @@ function Creator() {
 
 
 // <!-- Sign in & Log in-->
-        <div className='page' >
-            <Header />
-            <div className='window_for_login'>
-                <div className="login_container">
-                    <div className="form login">
-                        <span className="login_title">Create</span>
+        <div className='creator_page' >
+            <Sidenav />
+            <div className='window_for_creator'>
+                <div className="creator_container">
+                    <div className="form creator">
+                        <span className="creator_title">Create</span>
 
                         <form action="#">
                             <div className="input_field">
@@ -132,6 +139,7 @@ function Creator() {
                             <div className="input_field button">
                                 <input onClick= {(e) => onSubmit(e)} type="button" value="Create Activity"/>
                             </div>
+                            <Link to='/app/events'>Go to Events</Link>
                         </form>
                     </div>
                 </div>

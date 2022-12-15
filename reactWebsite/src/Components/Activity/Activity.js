@@ -1,9 +1,10 @@
-import Header from "../Header/Header";
+import Sidenav from "../Sidenav/Sidenav";
 import React, {useState} from "react";
 import './Activity.css';
 import './MockActivity';
 import MockActivity from "./MockActivity";
 import {Link} from "react-router-dom";
+import axios from 'axios'
 
 
 
@@ -17,6 +18,13 @@ function Activity() {
     const fourthA = new MockActivity("sport activity one", new Date("2023-12-01"), "hockey", 25, 28, "Leuven", 10, 20, Date.now());
     const fifthA = new MockActivity("theatre activity one", new Date("2023-03-14"), "theatre", 22, 27, "Antwerpen", 2, 20, Date.now());
     const mockActivities = [firstA, secondA, thirdA, fourthA, fifthA]
+    //const { activities } = axios({
+    //    url: 'http://localhost:4000/app/activities/fetch',
+    //    method: 'POST',
+    //    headers: {
+    //        'Content-Type': 'application/json',
+    //    }
+    //})
     const [current, setCurrent] = useState(0);
     let activityContent =
         <div>
@@ -38,7 +46,8 @@ function Activity() {
 
     const onInfo = (e) => {
         e.preventDefault();
-        console.log(firstA.activityName, firstA.activityDate.toDateString(), firstA.activityType, firstA.minimumAge, firstA.maximumAge, firstA.activityLocation, firstA.minimumGroupSize, firstA.maximumGroupSize, firstA.dateCreated.toDateString());
+       // console.log(activities);
+        console.log('info');
     }
 
     const onAccept = (e) => {
@@ -89,16 +98,16 @@ function Activity() {
 
     return (
         // <!--Registration Form-->
-        <div className='page'>
-            <Header />
+        <div className='activity_page'>
+            <Sidenav />
 
-            <div className='windowForRegister'>
-                <div className='register_container'>
-                    <Link to='/app/events/create'>Go to Creator</Link>
-                    <div class="form register">
-                        <span class="login_title">{title}</span>
+            <div className='window_for_activity'>
+                <div className='activity_container'>
+                    <div class="form activity">
+                        <span class="activity_title">{title}</span>
                             {content}
                     </div>
+                    <Link to='/app/events/create'>Go to Creator</Link>
 
                 </div>
             </div>

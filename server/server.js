@@ -7,6 +7,8 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 // Import userschema 
 const User = require('./models/user.model')
+// Import Activityschema
+const Activity = require('./models/activityModel')
 // Use JWT to authenticate users
 const jwt = require('jsonwebtoken')
 // Env with all private variables
@@ -124,5 +126,14 @@ app.put('/app/profile/edit', async (req, res) => {
         .exec()
         .then((result) => res.send(result))
         .catch((err) => res.send(err));})
+
+//app.post('/app/activities/fetch', async (req, res) => {
+//    Activity.find();
+//})
+
+//app.put('/app/activities/post', async (req, res) => {
+//    console.log(req.body)
+//    Activity.insertOne(res);
+//})
 
 app.listen(4000, () => {console.log("Server is up and running")})
