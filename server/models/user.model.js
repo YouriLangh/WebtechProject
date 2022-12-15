@@ -5,6 +5,7 @@ const User = new mongoose.Schema({
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     url: {type: String, required: true, default: 'pfp/default_pfp'},
+    comments: [{type: String}]
 }, 
 { collection: 'user-data'}
 )

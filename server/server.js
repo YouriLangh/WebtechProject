@@ -75,7 +75,7 @@ app.post('/app/login', async (req, res) => {
 
         },  process.env.PRIVATE_KEY)
         return  res.json({ status: 200, message: "Logged in successfully", user: token});
-    } 
+    }
     } catch (error) {
         return res.json({ status: 500, message: "Server Error", user: false});
     }
@@ -106,6 +106,7 @@ app.post('/app/profile', async (req, res) => {
             username: user.username,
             email: user.email,
             url: user.url,
+            comments: user.comments,
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
         }
@@ -116,6 +117,12 @@ app.post('/app/profile', async (req, res) => {
 app.put('/app/profile/edit', async (req, res) => {
     console.log(req.body);
     User.findOneAndUpdate({username: req.body.username}, req.body, { new: true })
+        .exec()
+        .then((result) => res.send(result))
+        .catch((err) => res.send(err));})
+
+app.patch('/app/profile/comment', async (req, res) => {
+    User.findOneAndUpdate({username: req.body.username}, { $push: { comments: req.body.comment } }, { new: true })
         .exec()
         .then((result) => res.send(result))
         .catch((err) => res.send(err));})

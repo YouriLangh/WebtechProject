@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import'./Profile.css';
 import Sidenav from '../Sidenav/Sidenav'
 import axios from 'axios';
 import Card from '@mui/material/Card';
-import { CardContent, CardHeader } from '@mui/material';
+import { CardContent, Typography, Button, Divider } from '@mui/material';
 import { AdvancedImage } from '@cloudinary/react'
 import { Cloudinary } from '@cloudinary/url-gen';
 import {thumbnail} from "@cloudinary/url-gen/actions/resize";
@@ -28,9 +28,12 @@ function Profile() {
     username: '',
     email: '',
     url: '',
+    comments: [],
   })
 
   const [pfp, setPfp] = useState(myCld.image(profile.url))
+  const [comment, setComment] = useState('')
+  const [comments, setComments] = useState([])
 
   const handleInput = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
@@ -72,6 +75,27 @@ function Profile() {
     updatePfp(e.info.public_id);
   }
 
+  const addComment = async (e) => {
+    const username = profile.username;
+    try {
+      axios({
+        url: 'http://localhost:4000/app/profile/comment',
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify({
+          username,
+          comment,
+        }),
+      }).then(res => {
+        console.log(res)
+      })
+    } catch (error) {console.log(error)}
+    setComment('')
+    document.getElementById("comment_input").value = '';
+  }
+
   useEffect(() => {
       const userToken = localStorage.getItem('token');
       const username = jwt.decode(userToken).username;
@@ -88,7 +112,9 @@ function Profile() {
         }).then(res => {
           let newProfile = jwt.decode(res.data.profile);
           setProfile(newProfile);
-          updatePfp(newProfile.url);})
+          updatePfp(newProfile.url);
+          setComments(newProfile.comments);
+          console.log(newProfile.comments);})
       } catch (error) {console.log(error)}
       pfp
       .resize(thumbnail().gravity(focusOn(FocusOn.face())))
@@ -101,18 +127,24 @@ function Profile() {
         <Sidenav/> 
         <Card variant="outlined" className='profile_card'>
         <CardContent>
-        <h1>{profile.username}</h1>
+        <Typography variant="h1" align="center">
+          {profile.username}
+        </Typography>
+        <div className='pfp'>
         <AdvancedImage 
         cldImg={pfp} 
         className='avatar'/>
         <br/>
         <Widget
+          buttonText={'Upload image'}
+          id='cloudinary_upload_button'
           resourceType={"image"}
           cloudName={'dmm5cr74r'}
           uploadPreset={'nsro5aio'}
           folder={'pfp'}
           onSuccess={handleUpload}
           ></Widget>
+        </div>
         <form onSubmit={handleSubmit}>
           <label htmlFor="username">Username:</label>
           <input
@@ -134,6 +166,28 @@ function Profile() {
           />
           <input type="submit" value="Update"/>
         </form>
+        <Divider />
+        <div className="comments">
+        <h5 id="comments_label">Comments</h5>
+          <ul className="comment_list">
+            {comments.map((comment) => (
+              <div>
+                <li key={comment}>{comment}</li>
+              </div>
+            ))}
+          </ul>
+        <textarea
+          id="comment_input"
+          rows='5'
+          cols='50'
+          placeholder='Type your comment here'
+          onChange={e => setComment(e.target.value)}
+        />
+        <br/>
+        <Button variant="outlined" onClick={addComment} id="add_comment_button">
+          Add comment
+        </Button>
+        </div>
         </CardContent>
         </Card>
     </div>
