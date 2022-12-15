@@ -92,6 +92,7 @@ function Profile() {
         console.log(res)
       })
     } catch (error) {console.log(error)}
+    document.getElementById("comments_list").innerHTML += ('<li>'+comment+'</li>');
     setComment('')
     document.getElementById("comment_input").value = '';
   }
@@ -121,7 +122,7 @@ function Profile() {
   }, []);
 
   return (
-    <html> 
+    <div> 
       <WidgetLoader />
       <div className='profile_page'>
         <Sidenav/> 
@@ -166,14 +167,11 @@ function Profile() {
           />
           <input type="submit" value="Update"/>
         </form>
-        <Divider />
+        <Divider>Comments</Divider>
         <div className="comments">
-        <h5 id="comments_label">Comments</h5>
-          <ul className="comment_list">
+          <ul id="comments_list">
             {comments.map((comment) => (
-              <div>
-                <li key={comment}>{comment}</li>
-              </div>
+              <li key={comment}>{comment}</li>
             ))}
           </ul>
         <textarea
@@ -191,7 +189,7 @@ function Profile() {
         </CardContent>
         </Card>
     </div>
-  </html>
+  </div>
   )
 }
 
