@@ -38,7 +38,6 @@ function Signin() {
 
   const handleCredentialResponse = async (response) => {
     var userObject = jwt_decode(response.credential)
-    console.log(userObject)
     const userEmail = userObject.email
     const emailVerified = userObject.email_verified
     if (userEmail.substring(userEmail.length - 10) === "@gmail.com" && emailVerified){
@@ -51,13 +50,12 @@ function Signin() {
          const { data } = await axios.post('http://localhost:4000/app/login/auth/google', payload)
          if(data.user){
             localStorage.setItem('token', data.user)
-            navigate('/home')
+            navigate('/app/home')
          }
-        
      } catch (error) { console.log(error)}
        
     } else {
-        console.log("Use a verified Google account")
+        alert("Use a verified Google account")
     }
     }
     

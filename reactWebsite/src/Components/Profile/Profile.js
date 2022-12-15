@@ -30,8 +30,9 @@ function Profile() {
     url: '',
   })
 
-  const [pfp, setPfp] = useState(myCld.image(profile.url))
+  const [dataToPass, setDataToPass] = useState({username: '', url: ''})
 
+  const [pfp, setPfp] = useState(myCld.image(profile.url))
   const handleInput = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
@@ -39,6 +40,7 @@ function Profile() {
   const handleSubmit = (e) => {
     e.preventDefault();
     updateDb(profile);
+    setDataToPass({username: profile.username, url: profile.url})
   };
   
   const updateDb = async (new_profile) => {
@@ -70,6 +72,7 @@ function Profile() {
     setProfile(new_profile);
     updateDb(new_profile)
     updatePfp(e.info.public_id);
+    setDataToPass({username: profile.username, url: e.info.public_id})
   }
 
   useEffect(() => {
@@ -98,7 +101,7 @@ function Profile() {
     <html> 
       <WidgetLoader />
       <div className='profile_page'>
-        <Sidenav/> 
+        <Sidenav newData = {dataToPass}/> 
         <Card variant="outlined" className='profile_card'>
         <CardContent>
         <h1>{profile.username}</h1>

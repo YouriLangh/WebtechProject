@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import'./Sidenav.css';
 import axios from 'axios';
 import logo from '../../images/Logo.png'
@@ -12,8 +12,8 @@ import { AdvancedImage } from '@cloudinary/react'
 import { faHouseChimney,faUser, faBarsStaggered, faCog, faMap, faCalendarAlt, faBars, faTimes, faStar, faCloud, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 const jwt = require('jsonwebtoken')
 
-function Sidenav() {
-
+function Sidenav(props) {
+  const navigate = useNavigate()
   const myCld = new Cloudinary({
     cloud: {
       cloudName: "dmm5cr74r",
@@ -43,36 +43,39 @@ const updatePfp = async (newUrl) => {
 
 useEffect(() => {
      const userToken = localStorage.getItem('token');
-     if(userToken !== null){
-      const username = jwt.decode(userToken).username;
+     if (userToken){
+      const user = jwt.decode(userToken)
+      if(!user){
+        localStorage.removeItem('token')
+        navigate('/login', { replace: true })}
+        else{
+          const username = jwt.decode(userToken).username;
       try{
-        axios({
-          url: 'http://localhost:4000/app/profile',
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          data: JSON.stringify({
-              username,
-          }),
-          }).then(res => {
+        axios.post('http://localhost:4000/app/profile', {username: username})
+        .then(res => {
+          if(res.data.profile){
             let newProfile = jwt.decode(res.data.profile);
             let formattedInfo = {username: newProfile.username, pfp_url: newProfile.url}
             setUserInfo(formattedInfo);
-            updatePfp(newProfile.url);})
+            updatePfp(newProfile.url);
+          }})
       } catch (error) {console.log(error)}
       pfp
       .resize(thumbnail().gravity(focusOn(FocusOn.face())))
-    }
+        }}
+        else navigate('/login', { replace: true });
+      
   }, [])
 
   useEffect(() => {
-
-  },[pfp])
-
-  useEffect(() => {
-
-  },[userInfo])
+    if(props){
+    if(props.newData.username !== ''){
+      console.log("updating")
+      const formattedData = {username: props.newData.username, pfp_url: props.newData.url}
+    setUserInfo(formattedData)
+    updatePfp(props.newData.url)
+    }}
+  },[props])
 
 const onMobileNavClicked = () => {
   setShowMobileNav(!showMobileNav)

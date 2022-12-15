@@ -87,6 +87,7 @@ app.post('/app/login', async (req, res) => {
 app.post('/app/login/auth/google', async (req, res) => {
     // Validate given input
     const userInfo = req.body
+    try{
     const user = await User.findOne({username: userInfo.username, email: userInfo.email})
     if (!user){
         await User.create({
@@ -100,7 +101,10 @@ app.post('/app/login/auth/google', async (req, res) => {
     email: userInfo.userEmail},  
     process.env.PRIVATE_KEY)
     return  res.json({ status: 200, message: "Logged in successfully", user: token});
-    })
+    } catch (error){
+        return res.json({ status: 500, message: "Server Error", user: false});
+    }
+})
 
 app.post('/app/profile', async (req, res) => {
     try {
