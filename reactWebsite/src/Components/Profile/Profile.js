@@ -114,7 +114,7 @@ function Profile() {
           onSuccess={handleUpload}
           ></Widget>
         <form onSubmit={handleSubmit}>
-          <label for="username">Username:</label>
+          <label htmlFor="username">Username:</label>
           <input
             id = "username"
             name="name"
@@ -123,7 +123,7 @@ function Profile() {
             placeholder={"Your names"}
             onChange={handleInput} 
             />
-          <label for="username">E-mail: </label>
+          <label htmlFor="username">E-mail: </label>
           <input
             id="email"
             name="email"

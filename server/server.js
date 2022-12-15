@@ -27,29 +27,26 @@ mongoose.connect(process.env.DB_CONNECTION, ()=> console.log('Database connected
  app.post('/app/register', async (req, res) => {
      try {
          // Validate the given input
-         const { error } = registerValidation(req.body)
+         formattedInput = {username: req.body.username, email: req.body.email, password: req.body.password}
+         const { error } = registerValidation(formattedInput)
          if (error) 
          // if the requirements of all fields aren't met (if data changed with JS or payload edited )
           return res.json({ status: 400, message: "Invalid fields"});
-
          // See if a user already exists with this username
-        const user = await User.findOne({username: req.body.username});
-         if (user)
+        const user = await User.findOne({username: req.body.username, email: req.body.email});
+        if (user) {
          return res.json({ status: 409, message: "User with given username already exists"});
-         console.log(1)
-       // Hash the password and salt it with certain complexity 
-         // const salt = await bcrypt.genSalt(10);
+        }
+         // Hash the password and salt it with certain complexity
          const hashedPassword = await bcrypt.hash(req.body.password, 10);
          await User.create({
-             username: req.body.username,
-             email: req.body.email,
-            password: hashedPassword,
-         })
-         await ProfileUser.create({
             username: req.body.username,
+             email: req.body.email,
+             password: hashedPassword,
+             interests: req.body.interests
          })
-         console.log(req.body.password)
-        return res.json({ status: 201, message: "User created successfully"})
+         //await ProfileUser.create({username: req.body.username})
+         return res.json({ status: 201, message: "User created successfully"})
     } catch (err) {
          // in case of no reply from server
          return res.json({ status: 500, message: err})
@@ -89,18 +86,21 @@ app.post('/app/login', async (req, res) => {
 })
 
 app.post('/app/login/auth/google', async (req, res) => {
-
-        // Validate given input
-       const userInfo = req.body
-
-       const token = jwt.sign({
-        username: userInfo.username,
-        email: userInfo.userEmail,
-        id: userInfo.uniqueId
-
-    },  process.env.PRIVATE_KEY)
+    // Validate given input
+    const userInfo = req.body
+    const user = await User.findOne({username: userInfo.username, email: userInfo.email})
+    if (!user){
+        await User.create({
+            username: req.body.username,
+            email: req.body.email,
+            password: "googlepasswordD1"
+         })
+       }
+    const token = jwt.sign({
+    username: userInfo.username,
+    email: userInfo.userEmail},
+    process.env.PRIVATE_KEY)
     return  res.json({ status: 200, message: "Logged in successfully", user: token});
-    
     })
 
 app.post('/app/profile', async (req, res) => {
@@ -112,7 +112,7 @@ app.post('/app/profile', async (req, res) => {
         const token = jwt.sign({
             username: user.username,
             email: user.email,
-            url: user.url,
+            url: user.url
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
         }
@@ -137,3 +137,5 @@ app.put('/app/profile/edit', async (req, res) => {
 //})
 
 app.listen(4000, () => {console.log("Server is up and running")})
+
+

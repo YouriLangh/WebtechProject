@@ -37,54 +37,30 @@ function Signin() {
 
 
   const handleCredentialResponse = async (response) => {
-    console.log("Encoded JWT ID token:" + response.credential)
     var userObject = jwt_decode(response.credential)
     console.log(userObject)
     const userEmail = userObject.email
     const emailVerified = userObject.email_verified
     if (userEmail.substring(userEmail.length - 10) === "@gmail.com" && emailVerified){
 
-    const username = userObject.name
+        //name without whitespaces
+    const username = userObject.name.replace(/\s+/g, '').substring(0, 19)
     const uniqueId = userObject.sub
-
-    try{ 
-        const { data } = axios({
-            url: 'http://localhost:4000/app/login/auth/google',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: JSON.stringify({
-                userEmail,
-                username,
-                uniqueId
-            }),
-        })
-
-        if(data.user){
+    const payload = {username: username, email: userEmail, iq: uniqueId}
+     try{ 
+         const { data } = await axios.post('http://localhost:4000/app/login/auth/google', payload)
+         if(data.user){
             localStorage.setItem('token', data.user)
-            navigate('/app/home')
-            
-        }else {
-            alert('Please check your username and password')
-        }
+            navigate('/home')
+         }
         
-    } catch (error) { console.log(error)}
+     } catch (error) { console.log(error)}
        
     } else {
         console.log("Use a verified Google account")
     }
     }
     
-
-    const responseFacebook = (response) => {
-        console.log(response);
-      }
-
-      const componentClicked = (data) => {
-        console.warn(data)
-      }
-
 
   useEffect(() => {
     /* global google */
@@ -95,7 +71,19 @@ function Signin() {
 
     google.accounts.id.renderButton(
         document.getElementById("google_login"),
-        { theme: "outline", size: "medium"}
+        { theme: "outline", size: "large", width: "340px"}
+    )
+    google.accounts.id.renderButton(
+        document.getElementById("google_login_medium"),
+        { theme: "outline", size: "large", width: "320px"}
+    )
+    google.accounts.id.renderButton(
+        document.getElementById("google_login_small"),
+        { theme: "outline", size: "large", width: "280px"}
+    )
+    google.accounts.id.renderButton(
+        document.getElementById("google_login_xs"),
+        { theme: "outline", size: "medium", width: "200px"}
     )
 
   }, [])
@@ -160,7 +148,7 @@ function Signin() {
             <div className="checkbox_text">
                 <div className="checkbox_content">
                     <input type="checkbox" id= "logCheck"/>
-                    <label for="logCheck" className="text">Remember me</label>
+                    <label htmlFor="logCheck" className="text">Remember me</label>
                 </div>
                 <a href="/" className="text">Forgot password?</a>
             </div>
@@ -176,13 +164,19 @@ function Signin() {
         
         <div className="or_line">
         </div>
-        <div className="facebook_login">
+        {/* <div className="facebook_login">
              <a href="/" className="facebook_button">
                 <i className="fa-brands fa-facebook facebook"><FontAwesomeIcon icon={faFacebook} /></i>
                 <span className="facebook_text">Login with Facebook</span>
             </a> 
-        </div>
+        </div> */}
         <div id='google_login' className="google_login">
+            </div>
+            <div id='google_login_medium' className="google_login">
+            </div>
+            <div id='google_login_small' className="google_login">
+            </div>
+            <div id='google_login_xs' className="google_login">
             </div>
         </div>
     </div>

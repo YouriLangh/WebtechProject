@@ -24,7 +24,7 @@ body{
 }
 
 .page_container{
-    height: 100%;
+    height: calc(100% - 60px);
     display: flex;
 }
 
@@ -37,7 +37,7 @@ body{
 }
 .login_container{
     max-width: 25rem;
-    transform: translate(0, -5%);
+    transform: translate(0, -10%);
     width: 100%;
     background: var(--login-form-background);
     overflow: hidden;
@@ -132,6 +132,7 @@ body{
 .form a.text{
     color: var(--sign-up-now-text-color);
     padding-left: 0.3125rem;
+    font-weight: 600;
     font-size: .8125rem;
 }
 
@@ -174,10 +175,11 @@ form a:hover{
     height: 1px;
     width: 100%;
     background-color:  #d4d4d4;
-    margin: 1.875rem 0px 0px 0px;
+    margin: 1.875rem 0px;
     align-items: center;
     justify-content: center;
 }
+
 
 .facebook_login{
     background-color: #4267b2;
@@ -188,7 +190,7 @@ form a:hover{
     justify-content: center;
     width: 100%;
     margin-top: 2.1875rem;
-    height: 3.125rem;
+    height: 40px;
     cursor: pointer;
 }
 
@@ -214,23 +216,52 @@ a.facebook_button .facebook{
 
 .google_login{
     display: flex;
-    border-radius: 5px;
+    /* border-radius: 5px;
     background-color: white;
-    cursor: pointer;
+    cursor: pointer; */
 
     align-items: center;
     justify-content: center;
     width: 100%;
-    margin-top: 20px;
+    /* margin-top: 20px; */
     height: 3.125rem;
 
     text-decoration: none;
+    transition: all 0.2ms ease;
 
 }
 
+ #google_login_medium{
+    position: fixed;
+    top: 2000px;
+    left: -300px;
+}
+#google_login_xs{
+    position: fixed;
+    top: 2000px;
+    left: -300px;
+} 
+#google_login_small{
+    position: fixed;
+    top: 2000px;
+    left: -300px;
+} 
 
 
 
+
+@media  screen and (max-width: 26.25rem){
+    #google_login_medium{
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+    #google_login{
+        position: fixed;
+        top: 2000px;
+        left: -400px;
+    }
+}
 @media  screen and (max-width: 25rem){
     .form{
         padding: 15px 10px;
@@ -238,5 +269,34 @@ a.facebook_button .facebook{
     a.facebook_button .facebook{
         left: 10px;
     }
+    #google_login_medium{
+        position: fixed;
+        top: 2000px;
+        left: -400px;
+    }
+    #google_login_small{
+        position: relative;
+        top: 0;
+        left: 0;
+    }
 }
-    
+
+@media  screen and (max-width: 21.875rem){
+
+    #google_login_xs{
+        position: relative;
+        top: 0;
+        left: 0;
+    }
+    #google_login_medium{
+        position: fixed;
+        top: 2000px;
+        left: -400px;
+    }
+    #google_login_small{
+        position: fixed;
+        top: 2000px;
+        left: -400px;
+    }
+}
+

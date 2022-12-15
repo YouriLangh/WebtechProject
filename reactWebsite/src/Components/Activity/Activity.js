@@ -1,9 +1,10 @@
-import Sidenav from "../Sidenav/Sidenav";
+import Header from "../Header/Header";
 import React, {useState} from "react";
 import './Activity.css';
 import './MockActivity';
 import MockActivity from "./MockActivity";
 import {Link} from "react-router-dom";
+import Sidenav from "../Sidenav/Sidenav";
 import axios from 'axios'
 
 
@@ -76,13 +77,13 @@ function Activity() {
             <div>
                 {activityContent}
             </div>
-        <div className="input_field button">
+        <div className="input_fieldA button">
             <input onClick= {(e) => onInfo(e)} type="button" value="info"/>
         </div>
-        <div className="input_field button">
+        <div className="input_fieldA button">
             <input onClick= {(e) => onAccept(e)} type="button" value="accept"/>
         </div>
-        <div className="input_field button">
+        <div className="input_fieldA button">
             <input onClick= {(e) => onDeny(e)} type="button" value="deny"/>
         </div>
             </div>
@@ -98,19 +99,19 @@ function Activity() {
 
     return (
         // <!--Registration Form-->
-        <div className='activity_page'>
-            <Sidenav />
-
+        <div className='aPage'>
             <div className='window_for_activity'>
                 <div className='activity_container'>
-                    <div class="form activity">
-                        <span class="activity_title">{title}</span>
+                    <Link to='/app/events/create'>Go to Creator</Link>
+                    <div className="formA">
+                        <span className="activity_title">{title}</span>
                             {content}
                     </div>
                     <Link to='/app/events/create'>Go to Creator</Link>
 
                 </div>
             </div>
+            <Sidenav/>
         </div>
     )
 }

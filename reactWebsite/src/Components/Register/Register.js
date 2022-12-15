@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import'./Register.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLock, faUser, faEyeSlash, faEye, faEnvelope, faArrowRight, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
+import { faLock, faUser, faEyeSlash, faEye, faEnvelope, faArrowRight, faInfoCircle, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import Header from "../Header/Header"
 import {useRef, useEffect} from "react"
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { StyledEngineProvider } from '@mui/material';
 
   
-const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
+const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,19}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,24}$/
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   
@@ -36,10 +37,12 @@ function Register() {
 
     const[errorMessage, setErrorMessage] = useState('');
     const[success, setSuccess] = useState(false);
+
+    const[ToS, setToS] = useState(false)
+    const[interests, setInterests] = useState([])
     
     useEffect(()=> {
         userRef.current.focus();
-        console.log(userFocus)
     }, [])
 
     useEffect(() => {
@@ -64,9 +67,10 @@ function Register() {
         
     }, [username, password, matchPassword])
 
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
       try {
         const v1 = USER_REGEX.test(username);
         const v2 = PWD_REGEX.test(password);
@@ -74,24 +78,27 @@ function Register() {
             setErrorMessage("Invalid Entry");
             return;
         }
-        const { data } = await axios({
-            url: 'http://localhost:4000/app/register', 
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: JSON.stringify({
-                username,
-                email,
-                password,
-            }),
-        })
-
-        //const data = await response.json()
-        if(data.status === 201) {
-            navigate('/login')
-            setSuccess(true)
-        }
+         const { data } = await axios({
+             url: 'http://localhost:4000/app/register', 
+             method: 'POST',
+             headers: {
+                 'Content-Type': 'application/json',
+             },
+             data: JSON.stringify({
+                 username,
+                 email,
+                 password,
+                 interests
+             }),
+         })
+         console.log(data)
+         if(data.status === 201) {
+             navigate('/login')
+             setSuccess(true)
+         }
+         if(data.status === 400){
+            alert('Invalid fields')
+         }
 
     } catch (error) {
         console.log(error)
@@ -104,12 +111,20 @@ function Register() {
  const handleInterest = (id) => {
     var element = document.getElementById(id);
     element.classList.toggle("selected")
+    if(element.classList.contains("selected")){
+        setInterests(prevArray => [...prevArray, id])
+    } else {setInterests(interests.filter(eId => eId !== id))}
+ }
+
+ const getClasses = (id) => {
+    if(interests.includes(id)){
+        return "interests selected"
+    } else return "interests"
  }
 
   let passIcon, passType
 
-  let content
-  let title
+  let content, title, arrow
   
 
   if(showPass){
@@ -124,9 +139,10 @@ function Register() {
 
   if(showFirst){
     title = "Register"
+    arrow = <div></div>
     content =    
         <div>
-        <div class="input_field">
+        <div className="input_field">
            
             <input type="text" 
             id="username"
@@ -140,16 +156,16 @@ function Register() {
             onFocus={() => setUserFocus(true)}
             onBlur={() => setUserFocus(false)}
            placeholder="Enter your username"  />
-            <i class={username && !validName ? "invalid fa-regular fa-user icon" : "fa-regular fa-user icon"}><FontAwesomeIcon icon={faUser}  /></i>
+            <i className={username && !validName ? "invalid fa-regular fa-user icon" : "fa-regular fa-user icon"}><FontAwesomeIcon icon={faUser}  /></i>
             
         </div>
         <p id="uidnote" className={userFocus && username && !validName ? "instructions" : "offscreen"}>
                 <FontAwesomeIcon className="icon" icon={faInfoCircle} />
-                4 to 24 characters. <br />
+                4 to 20 characters. <br />
                 Must begin with a letter. <br />
                 Letters, numbers, underscores, hyphens allowed.
             </p>
-    <div class="input_field">
+    <div className="input_field">
         <input type="text" 
         id ="email"
         value= {email}
@@ -159,14 +175,14 @@ function Register() {
         onFocus={() => setEmailFocus(true)}
         onBlur={() => setEmailFocus(false)}
         placeholder="Enter your email" required />
-        <i class={email && !validEmail ? "invalid fa-regular fa-envelope icon" : "fa-regular fa-envelope icon"}><FontAwesomeIcon icon={faEnvelope}  /></i>
+        <i className={email && !validEmail ? "invalid fa-regular fa-envelope icon" : "fa-regular fa-envelope icon"}><FontAwesomeIcon icon={faEnvelope}  /></i>
     </div> 
     <p id="emailnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
                 <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 Not a valid e-mail.
             </p>
-    <div class="input_field">
-        <input type= {passType} class="password" 
+    <div className="input_field">
+        <input type= {passType} className="password" 
         id='password'
         value= {password}
         onChange={(e) => setPassword(e.target.value)}
@@ -176,7 +192,7 @@ function Register() {
         onBlur={() => setPasswordFocus(false)}
          placeholder="Create a password" required />
         <i className = {password && !validPassword ? "invalid fa-sharp fa-solid fa-lock icon" : "fa-sharp fa-solid fa-lock icon"}><FontAwesomeIcon icon={faLock}  /></i>
-        <i class="fa-regular fa-eye-slash showHidePw"><FontAwesomeIcon icon={passIcon} onClick= {() => setShowPass(!showPass)} /></i>
+        <i className="fa-regular fa-eye-slash showHidePw"><FontAwesomeIcon icon={passIcon} onClick= {() => setShowPass(!showPass)} /></i>
 
     </div>
     <p id="pwdnote" className={passwordFocus && !validPassword ? "instructions" : "offscreen"}>
@@ -184,8 +200,8 @@ function Register() {
                 8 to 24 characters. <br />
                 Must include upper- and lowercase letters and a number<br />
             </p>
-    <div class="input_field">
-        <input type={passType} class="password"
+    <div className="input_field">
+        <input type={passType} className="password"
         id='confirm_password'
         value = {matchPassword}
         onChange={(e) => setMatchPassword(e.target.value)}
@@ -194,7 +210,7 @@ function Register() {
         onFocus={() => setMatchFocus(true)}
         onBlur={() => setMatchFocus(false)}
          placeholder="Confirm your password" required />
-        <i class= {matchPassword && !validMatch ? "invalid fa-sharp fa-solid fa-lock icon" : "fa-sharp fa-solid fa-lock icon"}><FontAwesomeIcon className="icon"icon={faLock}  /></i>
+        <i className= {matchPassword && !validMatch ? "invalid fa-sharp fa-solid fa-lock icon" : "fa-sharp fa-solid fa-lock icon"}><FontAwesomeIcon className="icon"icon={faLock}  /></i>
 
     </div>
     <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
@@ -202,14 +218,14 @@ function Register() {
                 Must match other password.
             </p>
          
-    <div class="checkbox_text">
-        <div class="checkbox_content">
-            <input type="checkbox" id= "termsCheck" />
-            <label for="logCheck" class="text">Accept terms & conditions</label>
+    <div className="checkbox_text">
+        <div className="checkbox_content">
+            <input type="checkbox" onChange={(e) => setToS(!ToS)} checked={ToS} id= "termsCheck" />
+            <label htmlFor="logCheck" className="text">Accept terms & conditions</label>
         </div>
     </div>
-    <div class="input_field button">
-        <input type="button" disabled={!validName || !validPassword || !validMatch} onClick= {() => setShowFirst(false)}value="Continue"/>
+    <div className={!validName || !validPassword || !validMatch || !ToS ? "input_field button disabled" : "input_field button"}>
+        <input type="button"  disabled={!validName || !validPassword || !validMatch || !ToS} onClick= {() => setShowFirst(false)}value="Continue"/>
         <FontAwesomeIcon className='arrow_icon' icon={faArrowRight} />
     </div>
     </div>
@@ -217,24 +233,25 @@ function Register() {
     title = "Nearly there!"
     content = 
     <div>
-    <div class="input_fields">
+    <div className="input_fields">
         <p>Select activities that interest you!</p>
-        <div className='interest_options'>
-        <input id="culture_interest" onClick= {() => handleInterest("culture_interest")} class="interests" value="Culture" type="button" />
-        <input id="music_interest" onClick= {() => handleInterest("music_interest")} class="interests" value="Music" type="button" />
-        <input id="sports_interest" onClick= {() => handleInterest("sports_interest")} class="interests" value="Sports" type="button" />
-        <input id="parties_interest" onClick= {() => handleInterest("parties_interest")}class="interests" value="Parties" type="button" />
-        <input id="concerts_interest" onClick= {() => handleInterest("concerts_interest")}class="interests" value="Concerts" type="button" />
-        <input id="social_interest" onClick= {() => handleInterest("social_interest")}class="interests" value="Social" type="button" />
-        <input id="other_interest" onClick= {() => handleInterest("other_interest")}class="interests" value="Other" type="button" />
+        <div id="interests"className='interest_options'>
+        <input id="culture_interest" onClick= {() => handleInterest("culture_interest")} className={getClasses("culture_interest")} value="Culture" type="button" />
+        <input id="music_interest" onClick= {() => handleInterest("music_interest")} className={getClasses("music_interest")} value="Music" type="button" />
+        <input id="sports_interest" onClick= {() => handleInterest("sports_interest")} className={getClasses("sports_interest")} value="Sports" type="button" />
+        <input id="parties_interest" onClick= {() => handleInterest("parties_interest")} className={getClasses("parties_interest")} value="Parties" type="button" />
+        <input id="concerts_interest" onClick= {() => handleInterest("concerts_interest")} className={getClasses("concerts_interest")} value="Concerts" type="button" />
+        <input id="social_interest" onClick= {() => handleInterest("social_interest")} className={getClasses("social_interest")} value="Social" type="button" />
+        <input id="other_interest" onClick= {() => handleInterest("other_interest")} className={getClasses("other_interest")} value="Other" type="button" />
         </div>
     </div>
     <div>
-    <div class="input_field button">
-        <input type="button" value="Submit" onClick= {(e) => handleSubmit(e)} />
+    <div className={!validName || !validPassword || !validMatch || !ToS ? "input_field button disabled" : "input_field button"}>
+        <input  type="button" value="Submit"  disabled={!validName || !validPassword || !validMatch || !ToS} onClick= {(e) => handleSubmit(e)} />
         </div>
     </div>
     </div>
+    arrow = <div className='backarrow'>  <FontAwesomeIcon onClick={() => setShowFirst(true)} className="backarrow" icon={faArrowLeft} /></div>
   }
 
 
@@ -244,15 +261,16 @@ function Register() {
         <Header />
         <div className='page_container'>
     <div className='windowForRegister'> 
-    <div className='register_container'> 
-    <div class="form register">
-    <span class="login_title">{title}</span>
+    <div className='register_container'>
+        {arrow}
+    <div className="form register">
+    <span className="login_title">{title}</span>
     <form  >
                 {content}
                 </form>
-                <div class="login_signup">
-        <span class="text">Already have an account?
-        <a href="/login" class="text login_link">Log in</a>
+                <div className="login_signup">
+        <span className="text">Already have an account?
+        <a href="/login" className="text login_link">Log in</a>
         </span>
         </div>
     </div>

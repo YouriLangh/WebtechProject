@@ -6,6 +6,7 @@ const registerValidation = data => {
         .min(4)
         .alphanum()
         .required()
+        .max(20)
         .label("username"),
         email: Joi.string()
         .label("email")

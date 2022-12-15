@@ -20,7 +20,7 @@ import Activity from "./Components/Activity/Activity";
  //  lat=50.8833&lon=4.5
 
 function App() {
-  let aDate = new Date("2022-12-20 23:00:00")
+  let aDate = new Date("2022-12-17 23:00:00")
   return (
     <div className="App">
        <Router>
@@ -40,7 +40,6 @@ function App() {
           <Route exact path='/profile' element={<Profile />} />
         </Routes>
       </Router>
-      <Footer />
     </div>
   );
 }

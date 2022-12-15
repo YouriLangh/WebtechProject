@@ -1,12 +1,17 @@
 .weather_display{
+    position: fixed;
     width: 6.25em;
     height: 6.25em;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
+.weather_display .weather_image{
+    width: 80px;
+    height: 80px;
+}
 .weather_image img{
     position: absolute;
     width: 80px;
@@ -14,6 +19,8 @@
 }
 
 .weather_display p{
+    position: absolute;
+    top: 80%;
     font-family: 'Poppins', sans-serif;
     font-weight: 500;
 }
