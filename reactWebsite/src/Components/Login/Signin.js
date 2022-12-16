@@ -37,54 +37,28 @@ function Signin() {
 
 
   const handleCredentialResponse = async (response) => {
-    console.log("Encoded JWT ID token:" + response.credential)
     var userObject = jwt_decode(response.credential)
-    console.log(userObject)
     const userEmail = userObject.email
     const emailVerified = userObject.email_verified
     if (userEmail.substring(userEmail.length - 10) === "@gmail.com" && emailVerified){
 
-    const username = userObject.name
+        //name without whitespaces
+    const username = userObject.name.replace(/\s+/g, '').substring(0, 19)
     const uniqueId = userObject.sub
-
-    try{ 
-        const { data } = axios({
-            url: 'http://localhost:4000/app/login/auth/google',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: JSON.stringify({
-                userEmail,
-                username,
-                uniqueId
-            }),
-        })
-
-        if(data.user){
+    const payload = {username: username, email: userEmail, iq: uniqueId}
+     try{ 
+         const { data } = await axios.post('http://localhost:4000/app/login/auth/google', payload)
+         if(data.user){
             localStorage.setItem('token', data.user)
             navigate('/app/home')
-            
-        }else {
-            alert('Please check your username and password')
-        }
-        
-    } catch (error) { console.log(error)}
+         }
+     } catch (error) { console.log(error)}
        
     } else {
-        console.log("Use a verified Google account")
+        alert("Use a verified Google account")
     }
     }
     
-
-    const responseFacebook = (response) => {
-        console.log(response);
-      }
-
-      const componentClicked = (data) => {
-        console.warn(data)
-      }
-
 
   useEffect(() => {
     /* global google */

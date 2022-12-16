@@ -36,7 +36,6 @@ function App() {
           <Route exact path='/app/map' element={<Map />} />
           <Route exact path='/app/settings' element={<Map />} />
           <Route exact path='/app/weather' element={<Weather eventLat="50.8833" eventLon="4.5" eventDate= {aDate} />} />
-          <Route exact path='/home' element={<Home />} />
           <Route exact path='/profile' element={<Profile />} />
         </Routes>
       </Router>

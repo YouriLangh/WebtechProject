@@ -12,7 +12,7 @@ const Activity = new mongoose.Schema({
         dateCreated: {type: Date, default:Date.now},
 
     },
-    { collection: 'user-data'}
+    { collection: 'event-data'}
 )
 
 const activityModel = mongoose.model('ActivityData', Activity)

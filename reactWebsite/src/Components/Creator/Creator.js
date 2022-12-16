@@ -56,6 +56,7 @@ function Creator() {
         })
     }
 
+    let pseudoData = {username: '', url:''}
     const onSubmit = (e) => {
         console.log(activityName)
     }
@@ -135,7 +136,7 @@ function Creator() {
                     </div>
                 </div>
             </div>
-            <Sidenav/>
+            <Sidenav newData= {pseudoData}/>
         </div>
     )
 }

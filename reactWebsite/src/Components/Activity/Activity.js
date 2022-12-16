@@ -86,6 +86,7 @@ function Activity() {
         </div>
 
     }
+    let pseudoData = {username: '', url:''}
 
     return (
         // <!--Registration Form-->
@@ -100,7 +101,7 @@ function Activity() {
 
                 </div>
             </div>
-            <Sidenav/>
+            <Sidenav newData={pseudoData}/>
         </div>
     )
 }

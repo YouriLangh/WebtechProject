@@ -13,6 +13,7 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 const { registerValidation, loginValidation } = require('./validation/validation')
 const bcrypt = require("bcrypt")
+const activityModel = require('./models/activityModel')
 
 dotenv.config();
 
@@ -25,12 +26,13 @@ mongoose.connect(process.env.DB_CONNECTION, ()=> console.log('Database connected
  app.post('/app/register', async (req, res) => {
      try {
          // Validate the given input
-         const { error } = registerValidation(req.body)
+         formattedInput = {username: req.body.username, email: req.body.email, password: req.body.password}
+         const { error } = registerValidation(formattedInput)
          if (error) 
          // if the requirements of all fields aren't met (if data changed with JS or payload edited )
           return res.json({ status: 400, message: "Invalid fields"});
          // See if a user already exists with this username
-        const user = await User.findOne({username: req.body.username});
+        const user = await User.findOne({username: req.body.username, email: req.body.email});
         if (user) {
          return res.json({ status: 409, message: "User with given username already exists"});
         }
@@ -39,7 +41,8 @@ mongoose.connect(process.env.DB_CONNECTION, ()=> console.log('Database connected
          await User.create({
             username: req.body.username,
              email: req.body.email,
-             password: hashedPassword
+             password: hashedPassword,
+             interests: req.body.interests
          })
          //await ProfileUser.create({username: req.body.username})
          return res.json({ status: 201, message: "User created successfully"})
@@ -82,19 +85,26 @@ app.post('/app/login', async (req, res) => {
 })
 
 app.post('/app/login/auth/google', async (req, res) => {
-
-        // Validate given input
-       const userInfo = req.body
-
-       const token = jwt.sign({
-        username: userInfo.username,
-        email: userInfo.userEmail,
-        id: userInfo.uniqueId
-
-    },  process.env.PRIVATE_KEY)
+    // Validate given input
+    const userInfo = req.body
+    try{
+    const user = await User.findOne({username: userInfo.username, email: userInfo.email})
+    if (!user){
+        await User.create({
+            username: req.body.username,
+            email: req.body.email,
+            password: "googlepasswordD1"
+         })
+       }
+    const token = jwt.sign({
+    username: userInfo.username,
+    email: userInfo.userEmail},  
+    process.env.PRIVATE_KEY)
     return  res.json({ status: 200, message: "Logged in successfully", user: token});
-    
-    })
+    } catch (error){
+        return res.json({ status: 500, message: "Server Error", user: false});
+    }
+})
 
 app.post('/app/profile', async (req, res) => {
     try {
@@ -105,7 +115,7 @@ app.post('/app/profile', async (req, res) => {
         const token = jwt.sign({
             username: user.username,
             email: user.email,
-            url: user.url,
+            url: user.url
             comments: user.comments,
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
@@ -121,6 +131,15 @@ app.put('/app/profile/edit', async (req, res) => {
         .then((result) => res.send(result))
         .catch((err) => res.send(err));})
 
+
+app.get('/app/map', async (req, res) => {
+   // const activities = await activityModel.find()
+   // res.send(activities)
+   res.send([{lat:50.81, lon:4.3, activityName: "Bowling", date: new Date("2022-12-17")},
+   {lat: 50.80, lon:4.311, activityName: "ice skating", date: new Date("2022-12-18")},
+   {lat: 50.768, lon:4.29, activityName: "dancing", date: new Date("2022-12-18")}])
+})
+
 app.patch('/app/profile/comment', async (req, res) => {
     User.findOneAndUpdate({username: req.body.username}, { $push: { comments: req.body.comment } }, { new: true })
         .exec()
@@ -128,3 +147,5 @@ app.patch('/app/profile/comment', async (req, res) => {
         .catch((err) => res.send(err));})
 
 app.listen(4000, () => {console.log("Server is up and running")})
+
+
