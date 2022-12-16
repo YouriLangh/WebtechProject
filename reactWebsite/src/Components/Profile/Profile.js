@@ -42,7 +42,6 @@ function Profile() {
   const handleSubmit = (e) => {
     e.preventDefault();
     updateDb(profile);
-    setDataToPass({username: profile.username, url: profile.url})
   };
   
   const updateDb = async (new_profile) => {
@@ -126,7 +125,6 @@ function Profile() {
     <div> 
       <WidgetLoader />
       <div className='profile_page'>
-        <Sidenav newData = {dataToPass}/> 
         <Card variant="outlined" className='profile_card'>
         <CardContent>
         <Typography variant="h1" align="center">

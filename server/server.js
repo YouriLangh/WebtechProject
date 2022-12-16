@@ -115,7 +115,7 @@ app.post('/app/profile', async (req, res) => {
         const token = jwt.sign({
             username: user.username,
             email: user.email,
-            url: user.url
+            url: user.url,
             comments: user.comments,
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
