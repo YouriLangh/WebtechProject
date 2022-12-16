@@ -16,6 +16,7 @@ import {
 } from "react-router-dom";
 import Creator from "./Components/Creator/Creator";
 import Activity from "./Components/Activity/Activity";
+import {fetchActivities} from "./Components/Activity/ActivityService";
 
  //  lat=50.8833&lon=4.5
 

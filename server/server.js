@@ -127,14 +127,27 @@ app.put('/app/profile/edit', async (req, res) => {
         .then((result) => res.send(result))
         .catch((err) => res.send(err));})
 
-//app.post('/app/activities/fetch', async (req, res) => {
-//    Activity.find();
-//})
+app.post('/app/activities/fetch', async (req, res) => {
+    Activity.find({}, (err, activities) => {
+        if (err) {
+            console.log(err)
+            res.send(err)
+            return;
+        }
+        if (activities.length !== 0) {
+            console.log(activities);
+            res.send(activities);
+        } else {
+            res.send([]);
+        }
+    });
+})
 
-//app.put('/app/activities/post', async (req, res) => {
-//    console.log(req.body)
-//    Activity.insertOne(res);
-//})
+app.put('/app/activities/publish', async (req, res) => {
+    console.log(req.body)
+    const activity = await Activity.insertMany(req.body);
+    console.log(JSON.stringify(activity));
+})
 
 app.listen(4000, () => {console.log("Server is up and running")})
 

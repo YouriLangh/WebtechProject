@@ -1,119 +1,132 @@
-import Header from "../Header/Header";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import './Activity.css';
 import './MockActivity';
-import MockActivity from "./MockActivity";
 import {Link} from "react-router-dom";
 import Sidenav from "../Sidenav/Sidenav";
-import axios from 'axios'
-
+import { fetchActivities } from "./ActivityService";
+import { getActivities } from "./ActivityService";
+import axios from "axios";
 
 
 function Activity() {
 
 
-
-    const firstA = new MockActivity("bowling activity one", new Date("2022-12-17"), "bowling", 18, 25, "Brussels", 4, 8, Date.now());
-    const secondA = new MockActivity("bowling activity two", new Date("2023-02-17"), "bowling", 20, 30, "Gent", 2, 6, Date.now());
-    const thirdA = new MockActivity("concert activity one", new Date("2022-12-10"), "concert", 18, 20, "Hasselt", 2, 20, Date.now());
-    const fourthA = new MockActivity("sport activity one", new Date("2023-12-01"), "hockey", 25, 28, "Leuven", 10, 20, Date.now());
-    const fifthA = new MockActivity("theatre activity one", new Date("2023-03-14"), "theatre", 22, 27, "Antwerpen", 2, 20, Date.now());
-    const mockActivities = [firstA, secondA, thirdA, fourthA, fifthA]
-    //const { activities } = axios({
-    //    url: 'http://localhost:4000/app/activities/fetch',
-    //    method: 'POST',
-    //    headers: {
-    //        'Content-Type': 'application/json',
-    //    }
-    //})
-    const [current, setCurrent] = useState(0);
-    let activityContent =
-        <div>
-            <li>{mockActivities[current].activityName}</li>
-            <li>{mockActivities[current].activityDate.toDateString()}</li>
-            <li>{mockActivities[current].activityType}</li>
-            <li>{mockActivities[current].minimumAge.toString()}</li>
-            <li>{mockActivities[current].maximumAge.toString()}</li>
-            <li>{mockActivities[current].activityLocation}</li>
-            <li>{mockActivities[current].minimumGroupSize.toString()}</li>
-            <li>{mockActivities[current].maximumGroupSize.toString()}</li>
-            <li>{mockActivities[current].dateCreated.toDateString()}</li>
-        </div>;
-
-    let content
-    let title
-
     const [showActivity,setShowActivity] = useState(true)
+    const [current, setCurrent] = useState(0);
+    const [activities, setActivities] = useState([]);
 
-    const onInfo = (e) => {
-        e.preventDefault();
-       // console.log(activities);
-        console.log('info');
-    }
-
-    const onAccept = (e) => {
-        e.preventDefault();
-        console.log(current);
-        console.log(mockActivities[current].activityName);
-        if (current >= mockActivities.length-1){
-            setShowActivity(false);
+    useEffect(() => {
+        console.log('fetch');
+        if (activities.length === 0) {
+            try {
+                axios({
+                    url: 'http://localhost:4000/app/activities/fetch',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(res => {
+                        setActivities(res.data);
+                        console.log(activities);
+                    }
+                );
+            } catch (error) {
+                console.log(error);
+            }
         }
-        else setCurrent(current+1);
-    }
+    })
 
-    const onDeny = (e) => {
-        e.preventDefault();
-        console.log("deny");
-        if (current >= mockActivities.length-1){
-        setShowActivity(false);
+    if (activities.length === 0) {
+        return <p>fetching</p>
+    }
+        console.log('fetched');
+
+        console.log("activities: ", activities);
+        let activityContent =
+            <div>
+                <li>{activities[current].activityName}</li>
+                <li>{activities[current].activityType}</li>
+                <li>{activities[current].minimumAge.toString()}</li>
+                <li>{activities[current].maximumAge.toString()}</li>
+                <li>{activities[current].activityLocation}</li>
+                <li>{activities[current].minimumGroupSize.toString()}</li>
+                <li>{activities[current].maximumGroupSize.toString()}</li>
+            </div>;
+
+        let content
+        let title
+
+        const onInfo = (e) => {
+            e.preventDefault();
+            console.log(activities);
+            console.log('info');
         }
-        else setCurrent(current+1);
-    }
 
-    if (showActivity) {
-        title = "Find";
-        content =
-            <div>
-            <div>
-                {activityContent}
-            </div>
-        <div className="input_fieldA button">
-            <input onClick= {(e) => onInfo(e)} type="button" value="info"/>
-        </div>
-        <div className="input_fieldA button">
-            <input onClick= {(e) => onAccept(e)} type="button" value="accept"/>
-        </div>
-        <div className="input_fieldA button">
-            <input onClick= {(e) => onDeny(e)} type="button" value="deny"/>
-        </div>
-            </div>
-    }
-    else {
-        title = "No more activities";
-        content =
-        <div>
-            <p>no more activities</p>
-        </div>
+        const onAccept = (e) => {
+            e.preventDefault();
+            console.log(current);
+            console.log(activities[current].activityName);
+            if (current >= activities.length-1){
+                setShowActivity(false);
+            }
+            else setCurrent(current+1);
+        }
 
-    }
+        const onDeny = (e) => {
+            e.preventDefault();
+            console.log("deny");
+            if (current >= activities.length-1){
+                setShowActivity(false);
+            }
+            else setCurrent(current+1);
+        }
 
-    return (
-        // <!--Registration Form-->
-        <div className='aPage'>
-            <div className='window_for_activity'>
-                <div className='activity_container'>
-                    <Link to='/app/events/create'>Go to Creator</Link>
-                    <div className="formA">
-                        <span className="activity_title">{title}</span>
-                            {content}
+        if (showActivity) {
+            title = "Find";
+            content =
+                <div>
+                    <div>
+                        {activityContent}
                     </div>
-                    <Link to='/app/events/create'>Go to Creator</Link>
-
+                    <div className="input_fieldA button">
+                        <input onClick= {(e) => onInfo(e)} type="button" value="info"/>
+                    </div>
+                    <div className="input_fieldA button">
+                        <input onClick= {(e) => onAccept(e)} type="button" value="accept"/>
+                    </div>
+                    <div className="input_fieldA button">
+                        <input onClick= {(e) => onDeny(e)} type="button" value="deny"/>
+                    </div>
                 </div>
+        }
+        else {
+            title = "No more activities";
+            content =
+                <div>
+                    <p>no more activities</p>
+                </div>
+
+        }
+
+        return (
+            // <!--Registration Form-->
+            <div className='aPage'>
+                <div className='window_for_activity'>
+                    <div className='activity_container'>
+                        <Link to='/app/events/create'>Go to Creator</Link>
+                        <div className="formA">
+                            <span className="activity_title">{title}</span>
+                            {content}
+                        </div>
+                        <Link to='/app/events/create'>Go to Creator</Link>
+
+                    </div>
+                </div>
+                <Sidenav/>
             </div>
-            <Sidenav/>
-        </div>
-    )
+        )
+
+
 }
 
 
