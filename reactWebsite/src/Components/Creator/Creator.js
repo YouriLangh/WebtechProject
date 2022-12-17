@@ -45,29 +45,20 @@ function Creator() {
             setErrorMessage("Invalid Entry");
             return;
         }
-        const response = await fetch('http://localhost:4000/app/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                activityName,
-                activityDate,
-                activityType,
-                minimumAge,
-                maximumAge,
-                activityLocation,
-                minimumGroupSize,
-                maximumGroupSize,
-                dateCreated,
-            }),
-        })
+        createActivity({
+            activityName,
+            activityDate,
+            activityType,
+            minimumAge,
+            maximumAge,
+            activityLocation,
+            minimumGroupSize,
+            maximumGroupSize,
+            dateCreated,
+        }).then(r => console.log(JSON.stringify(r))).catch(e => console.log(JSON.stringify(e)));
     }
 
     let pseudoData = {username: '', url:''}
-    const onSubmit = (e) => {
-        console.log(activityName)
-    }
     return (
 
 
