@@ -118,6 +118,7 @@ app.post('/app/profile', async (req, res) => {
             email: user.email,
             url: user.url,
             comments: user.comments,
+            rating: user.rating,
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
         }
@@ -155,7 +156,9 @@ app.put('/app/activities/publish', async (req, res) => {
 })
 
 app.patch('/app/profile/comment', async (req, res) => {
-    User.findOneAndUpdate({username: req.body.username}, { $push: { comments: req.body.comment } }, { new: true })
+    User.findOneAndUpdate({username: req.body.username}, 
+        { $push: { comments: {body: req.body.comment, rating: req.body.rating } } }, 
+        { new: true })
         .exec()
         .then((result) => res.send(result))
         .catch((err) => res.send(err));})

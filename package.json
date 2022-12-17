@@ -5,6 +5,7 @@
     "cloudinary": "^1.32.0",
     "cloudinary-core": "^2.13.0",
     "jwt-decode": "^3.1.2",
-    "react-cloudinary-upload-widget": "^1.6.0"
+    "react-cloudinary-upload-widget": "^1.6.0",
+    "react-star-rating-component": "^1.4.1"
   }
 }

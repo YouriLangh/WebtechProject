@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react'
+import { renderToString } from 'react-dom/server';
 import "./Comments.css"
 import { Button, Divider } from '@mui/material';
 import axios from 'axios';
+import StarRatingComponent from 'react-star-rating-component';
 
 const jwt = require('jsonwebtoken')
 
 function Comments(props) {
-    
+
     const [userInfo, setUserInfo] = useState({});
     const [comment, setComment] = useState('')
     const [comments, setComments] = useState([])
+    const [rating, setRating] = useState(1);
 
     useEffect(() => {
         if(props){
@@ -33,14 +36,22 @@ function Comments(props) {
             data: JSON.stringify({
               username,
               comment,
+              rating,
             }),
           }).then(res => {
             console.log(res)
           })
         } catch (error) {console.log(error)}
-        document.getElementById("comments_list").innerHTML += ('<li>'+comment+'</li>');
-        setComment('')
+        const stars = renderToString(<StarRatingComponent
+            name="rate2" 
+            editing={false}
+            starCount={5}
+            value={rating}/>)
+        console.log(stars)
+        document.getElementById("comments_list").innerHTML += ('<li>'+stars+'<br/>'+comment+'</li>');
+        setComment('');
         document.getElementById("comment_input").value = '';
+        setRating(1);
     }
 
     useEffect(() => {
@@ -58,7 +69,7 @@ function Comments(props) {
           }).then(res => {
             let newProfile = jwt.decode(res.data.profile);
             setComments(newProfile.comments);
-            console.log(newProfile.comments);})
+            console.log(newProfile.comments(1).rating);})
         } catch (error) {console.log(error)}
     }, []);
 
@@ -69,9 +80,24 @@ function Comments(props) {
         <Divider>Comments</Divider>
           <ul id="comments_list">
             {comments.map((comment) => (
-              <li key={comment}>{comment}</li>
+              <li key={comment.body}><StarRatingComponent
+              name="rate2" 
+              editing={false}
+              starCount={5}
+              value={comment.rating}/><br/>
+              {comment.body} </li>
             ))}
           </ul>
+          <StarRatingComponent
+          id="new_rating"
+          name="rate1" 
+          starCount={5}
+          value={rating}
+          onStarClick={(nextValue) => {
+            setRating(nextValue)
+            console.log(nextValue)
+        }}
+        /> 
         <textarea
           id="comment_input"
           rows='5'
