@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import'./Profile.css';
 import Sidenav from '../Sidenav/Sidenav'
+import Comments from '../Comments/Comments'
 import axios from 'axios';
 import Card from '@mui/material/Card';
-import { CardContent, CardHeader } from '@mui/material';
+import { CardContent, Typography } from '@mui/material';
 import { AdvancedImage } from '@cloudinary/react'
 import { Cloudinary } from '@cloudinary/url-gen';
 import {thumbnail} from "@cloudinary/url-gen/actions/resize";
 import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
-
 import { WidgetLoader, Widget } from 'react-cloudinary-upload-widget'
 
 const jwt = require('jsonwebtoken')
@@ -28,6 +28,7 @@ function Profile() {
     username: '',
     email: '',
     url: '',
+    comments: [],
   })
 
   const [pfp, setPfp] = useState(myCld.image(profile.url))
@@ -95,24 +96,30 @@ function Profile() {
   }, []);
 
   return (
-    <html> 
+    <div> 
       <WidgetLoader />
+      <Sidenav newData={profile}/>
       <div className='profile_page'>
-        <Sidenav/> 
         <Card variant="outlined" className='profile_card'>
         <CardContent>
-        <h1>{profile.username}</h1>
+        <Typography variant="h1" align="center">
+          {profile.username}
+        </Typography>
+        <div className='pfp'>
         <AdvancedImage 
         cldImg={pfp} 
         className='avatar'/>
         <br/>
         <Widget
+          buttonText={'Upload image'}
+          id='cloudinary_upload_button'
           resourceType={"image"}
           cloudName={'dmm5cr74r'}
           uploadPreset={'nsro5aio'}
           folder={'pfp'}
           onSuccess={handleUpload}
           ></Widget>
+        </div>
         <form onSubmit={handleSubmit}>
           <label htmlFor="username">Username:</label>
           <input
@@ -134,10 +141,11 @@ function Profile() {
           />
           <input type="submit" value="Update"/>
         </form>
+        <Comments profile={profile}/>
         </CardContent>
         </Card>
     </div>
-  </html>
+  </div>
   )
 }
 

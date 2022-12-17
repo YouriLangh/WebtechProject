@@ -10,9 +10,8 @@
   width: 500px;
   max-width: 800px;
   padding: 20px;
-  top: 20%;
+  top: 10%;
   left: 30%;
-  text-align: center;
 }
 
 .profile_card h1 {
@@ -47,6 +46,10 @@
   cursor: pointer;
 }
 
+.pfp {
+  text-align: center;
+}
+
 .avatar {
   width: 80px;
   height: 80px;
@@ -55,6 +58,24 @@
   box-shadow: 0 0 15px 3px rgb(100, 2, 2);
 }
 
-#upload_widget {
+#cloudinary_upload_button {
   margin-top: 20px;
+}
+
+.comments {
+  margin-top: 20px;
+}
+
+#add_comment_button {
+  margin-top: 5px;
+}
+
+#comment_input {
+  margin-top: 10px;
+  min-width: '500px'; 
+  min-height: '100px';
+}
+
+label {
+  text-align: left;
 }

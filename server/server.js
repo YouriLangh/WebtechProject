@@ -79,7 +79,7 @@ app.post('/app/login', async (req, res) => {
 
         },  process.env.PRIVATE_KEY)
         return  res.json({ status: 200, message: "Logged in successfully", user: token});
-    } 
+    }
     } catch (error) {
         return res.json({ status: 500, message: "Server Error", user: false});
     }
@@ -88,6 +88,7 @@ app.post('/app/login', async (req, res) => {
 app.post('/app/login/auth/google', async (req, res) => {
     // Validate given input
     const userInfo = req.body
+    try{
     const user = await User.findOne({username: userInfo.username, email: userInfo.email})
     if (!user){
         await User.create({
@@ -101,7 +102,10 @@ app.post('/app/login/auth/google', async (req, res) => {
     email: userInfo.userEmail},
     process.env.PRIVATE_KEY)
     return  res.json({ status: 200, message: "Logged in successfully", user: token});
-    })
+    } catch (error){
+        return res.json({ status: 500, message: "Server Error", user: false});
+    }
+})
 
 app.post('/app/profile', async (req, res) => {
     try {
@@ -112,7 +116,8 @@ app.post('/app/profile', async (req, res) => {
         const token = jwt.sign({
             username: user.username,
             email: user.email,
-            url: user.url
+            url: user.url,
+            comments: user.comments,
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
         }
@@ -148,6 +153,12 @@ app.put('/app/activities/publish', async (req, res) => {
     const activity = await Activity.insertMany(req.body);
     console.log(JSON.stringify(activity));
 })
+
+app.patch('/app/profile/comment', async (req, res) => {
+    User.findOneAndUpdate({username: req.body.username}, { $push: { comments: req.body.comment } }, { new: true })
+        .exec()
+        .then((result) => res.send(result))
+        .catch((err) => res.send(err));})
 
 app.listen(4000, () => {console.log("Server is up and running")})
 

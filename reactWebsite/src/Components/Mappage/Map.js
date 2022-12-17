@@ -33,6 +33,7 @@ function Map() {
         }})
     }, [])
 
+    let pseudoData = {username: '', url:''}
   return (
     <div className='map_page'>
 
@@ -51,7 +52,7 @@ function Map() {
    ) : '' } 
 </MapContainer>
 </div>
- <Sidenav/> 
+ <Sidenav newData={pseudoData}/> 
 
 </div>
   )

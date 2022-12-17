@@ -106,7 +106,8 @@ function Activity() {
                     <p>no more activities</p>
                 </div>
 
-        }
+    }
+    let pseudoData = {username: '', url:''}
 
         return (
             // <!--Registration Form-->
@@ -120,13 +121,11 @@ function Activity() {
                         </div>
                         <Link to='/app/events/create'>Go to Creator</Link>
 
-                    </div>
                 </div>
-                <Sidenav/>
             </div>
-        )
-
-
+            <Sidenav newData={pseudoData}/>
+        </div>
+    )
 }
 
 
