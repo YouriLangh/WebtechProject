@@ -10,6 +10,7 @@ const Activity = new mongoose.Schema({
             minimumGroupSize: {type: String, required: true, unique: false},
             maximumGroupSize: {type: String, required: true, unique: false},
             dateCreated: {type: Date, default:Date.now},
+            creator: {type: String, required: true, unique: false},
     },
     { collection: 'event-data'}
 )

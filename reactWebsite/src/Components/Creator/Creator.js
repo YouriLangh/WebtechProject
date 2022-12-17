@@ -11,6 +11,8 @@ import Sidenav from "../Sidenav/Sidenav";
 import {useNavigate} from "react-router-dom";
 import {Link} from "react-router-dom";
 import createActivity from "../Activity/ActivityService";
+import jwt from "jsonwebtoken";
+
 
 
 
@@ -41,6 +43,8 @@ function Creator() {
         e.preventDefault()
         setDateCreated(Date.now);
         console.log(activityName);
+        const userToken = localStorage.getItem('token');
+        const creator = jwt.decode(userToken).username;
         if (!checkValues) {
             setErrorMessage("Invalid Entry");
             return;
@@ -55,6 +59,7 @@ function Creator() {
             minimumGroupSize,
             maximumGroupSize,
             dateCreated,
+            creator,
         }).then(r => console.log(JSON.stringify(r))).catch(e => console.log(JSON.stringify(e)));
     }
 

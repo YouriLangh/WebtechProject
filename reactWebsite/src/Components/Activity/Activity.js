@@ -36,8 +36,16 @@ function Activity() {
         }
     })
 
+    const fetchingContent = (
+        <div>
+            <p>       fetching</p>
+            <Link to='/app/events/create'>Go to Creator</Link>
+            <Sidenav newData={pseudoData}/>
+        </div>
+    )
+
     if (activities.length === 0) {
-        return <p>fetching</p>
+        return <Link to='/app/events/create'>Go to Creator</Link>
     }
         console.log('fetched');
 
