@@ -144,7 +144,7 @@ function Signin() {
                 <i className="fa-regular fa-eye-slash showHidePw"><FontAwesomeIcon icon= {passIcon} onClick= {() => setShowPass(!showPass)} /></i>
 
             </div>
-                 
+
             <div className="checkbox_text">
                 <div className="checkbox_content">
                     <input type="checkbox" id= "logCheck"/>

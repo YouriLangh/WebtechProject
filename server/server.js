@@ -7,14 +7,14 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 // Import userschema 
 const User = require('./models/user.model')
+// Import Activityschema
+const Activity = require('./models/activityModel')
 // Use JWT to authenticate users
 const jwt = require('jsonwebtoken')
 // Env with all private variables
 const dotenv = require('dotenv')
 const { registerValidation, loginValidation } = require('./validation/validation')
 const bcrypt = require("bcrypt")
-const activityModel = require('./models/activityModel')
-const { format } = require('@cloudinary/url-gen/actions/delivery')
 
 dotenv.config();
 
@@ -37,7 +37,7 @@ mongoose.connect(process.env.DB_CONNECTION, ()=> console.log('Database connected
         if (user) {
          return res.json({ status: 409, message: "User with given username already exists"});
         }
-         // Hash the password and salt it with certain complexity 
+         // Hash the password and salt it with certain complexity
          const hashedPassword = await bcrypt.hash(req.body.password, 10);
          await User.create({
             username: req.body.username,
@@ -79,7 +79,7 @@ app.post('/app/login', async (req, res) => {
 
         },  process.env.PRIVATE_KEY)
         return  res.json({ status: 200, message: "Logged in successfully", user: token});
-    } 
+    }
     } catch (error) {
         return res.json({ status: 500, message: "Server Error", user: false});
     }
@@ -99,7 +99,7 @@ app.post('/app/login/auth/google', async (req, res) => {
        }
     const token = jwt.sign({
     username: userInfo.username,
-    email: userInfo.userEmail},  
+    email: userInfo.userEmail},
     process.env.PRIVATE_KEY)
     return  res.json({ status: 200, message: "Logged in successfully", user: token});
     } catch (error){
@@ -116,7 +116,9 @@ app.post('/app/profile', async (req, res) => {
         const token = jwt.sign({
             username: user.username,
             email: user.email,
-            url: user.url
+            url: user.url,
+            comments: user.comments,
+            rating: user.rating,
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
         }
@@ -131,13 +133,26 @@ app.put('/app/profile/edit', async (req, res) => {
         .then((result) => res.send(result))
         .catch((err) => res.send(err));})
 
+app.post('/app/activities/fetch', async (req, res) => {
+    Activity.find({}, (err, activities) => {
+        if (err) {
+            console.log(err)
+            res.send(err)
+            return;
+        }
+        if (activities.length !== 0) {
+            console.log(activities);
+            res.send(activities);
+        } else {
+            res.send([]);
+        }
+    });
+})
 
-app.get('/app/map', async (req, res) => {
-   // const activities = await activityModel.find()
-   // res.send(activities)
-   res.send([{lat:50.81, lon:4.3, activityName: "Bowling", date: new Date("2022-12-17")},
-   {lat: 50.80, lon:4.311, activityName: "ice skating", date: new Date("2022-12-18")},
-   {lat: 50.768, lon:4.29, activityName: "dancing", date: new Date("2022-12-18")}])
+app.put('/app/activities/publish', async (req, res) => {
+    console.log(req.body)
+    const activity = await Activity.insertMany(req.body);
+    console.log(JSON.stringify(activity));
 })
 
 
@@ -178,6 +193,53 @@ app.post('/app/user/search', async (req, res) => {
     res.send({token: false})
 }
 })
+
+
+app.get('/app/users', async (req, res) => {
+    const users = await User.find()
+    const formatted = users.map(element => jwt.sign({username: element.username, 
+        id: element._id, 
+        email: element.email, 
+        url: element.url, 
+        interests: element.interests}, process.env.PRIVATE_KEY))
+    // console.log(formatted)
+    res.send({formatted})
+})
+
+app.post('/app/users', async (req, res) => {
+    const theId = req.body.id
+    try{
+    const user = await User.findOne({_id: theId})
+    const formatted = jwt.sign({username: user.username,  
+        email: user.email, 
+        url: user.url,
+        date_joined: user._id.getTimestamp(), 
+        interests: user.interests}, process.env.PRIVATE_KEY)
+     res.send({token: formatted})}
+     catch (err){
+        res.send({token: false})
+     }
+    })
+
+app.post('/app/user/search', async (req, res) => {
+    const name = req.body.aName
+    try{
+    const user = await User.findOne({username: name})
+    console.log(user)
+    const formatted = jwt.sign({id: user._id}, process.env.PRIVATE_KEY)
+    res.send({token: formatted})}
+    catch (err){
+    res.send({token: false})
+}
+})
+
+app.patch('/app/profile/comment', async (req, res) => {
+    User.findOneAndUpdate({username: req.body.username}, 
+        { $push: { comments: {body: req.body.comment, rating: req.body.rating } } }, 
+        { new: true })
+        .exec()
+        .then((result) => res.send(result))
+        .catch((err) => res.send(err));})
 
 app.listen(4000, () => {console.log("Server is up and running")})
 

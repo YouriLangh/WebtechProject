@@ -7,8 +7,12 @@ import {
     faQuestion,
     faSortNumericDown, faSortNumericUp, faMapPin
 } from '@fortawesome/free-solid-svg-icons'
+import Sidenav from "../Sidenav/Sidenav";
 import {useNavigate} from "react-router-dom";
-import Sidenav from '../Sidenav/Sidenav';
+import {Link} from "react-router-dom";
+import createActivity from "../Activity/ActivityService";
+import jwt from "jsonwebtoken";
+
 
 
 
@@ -21,45 +25,45 @@ function Creator() {
     const[activityName, setActivityName] = useState("");
     const[activityDate, setActivityDate] = useState('');
     const[activityType, setActivityType] = useState('');
-    const[activityMinAge, setActivityMinAge] = useState('');
-    const[activityMaxAge, setActivityMaxAge] = useState('');
+    const[minimumAge, setMinimumAge] = useState('');
+    const[maximumAge, setMaximumAge] = useState('');
     const[activityLocation, setActivityLocation] = useState('');
-    const[activityMinGroupSize, setActivityMinGroupSize] = useState('');
-    const[activityMaxGroupSize, setActivityMaxGroupSize] = useState('');
+    const[minimumGroupSize, setMinimumGroupSize] = useState('');
+    const[maximumGroupSize, setMaximumGroupSize] = useState('');
+    const[dateCreated, setDateCreated] = useState(0);
 
 
     function checkValues() {
         return true;
     }
 
-    const createActivity = async (e) => {
+
+
+    const onSubmit = (e) => {
         e.preventDefault()
-        if (checkValues) {
+        setDateCreated(Date.now);
+        console.log(activityName);
+        const userToken = localStorage.getItem('token');
+        const creator = jwt.decode(userToken).username;
+        if (!checkValues) {
             setErrorMessage("Invalid Entry");
             return;
         }
-        const response = await fetch('http://localhost:4000/app/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                activityName,
-                activityDate,
-                activityType,
-                activityMinAge,
-                activityMaxAge,
-                activityLocation,
-                activityMinGroupSize,
-                activityMaxGroupSize,
-            }),
-        })
+        createActivity({
+            activityName,
+            activityDate,
+            activityType,
+            minimumAge,
+            maximumAge,
+            activityLocation,
+            minimumGroupSize,
+            maximumGroupSize,
+            dateCreated,
+            creator,
+        }).then(r => console.log(JSON.stringify(r))).catch(e => console.log(JSON.stringify(e)));
     }
 
     let pseudoData = {username: '', url:''}
-    const onSubmit = (e) => {
-        console.log(activityName)
-    }
     return (
 
 
@@ -93,15 +97,15 @@ function Creator() {
                             </div>
 
                             <div className="input_fieldC">
-                                <input value= {activityMinAge}
-                                       onChange={(e) => setActivityMinAge(e.target.value)}
+                                <input value= {minimumAge}
+                                       onChange={(e) => setMinimumAge(e.target.value)}
                                        type="number" id="activityMinAge" placeholder="Enter min age" min="18" max="30" required/>
                                 <i className="fa-regular icon"><FontAwesomeIcon icon={faSortNumericDown} /></i>
                             </div>
 
                             <div className="input_fieldC">
-                                <input value= {activityMaxAge}
-                                       onChange={(e) => setActivityMaxAge(e.target.value)}
+                                <input value= {maximumAge}
+                                       onChange={(e) => setMaximumAge(e.target.value)}
                                        type="number" id="activityMaxAge" placeholder="Enter max age" min="18" max="30" required/>
                                 <i className="fa-regular icon"><FontAwesomeIcon icon={faSortNumericUp} /></i>
                             </div>
@@ -114,15 +118,15 @@ function Creator() {
                             </div>
 
                             <div className="input_fieldC">
-                                <input value= {activityMinGroupSize}
-                                       onChange={(e) => setActivityMinGroupSize(e.target.value)}
+                                <input value= {minimumGroupSize}
+                                       onChange={(e) => setMinimumGroupSize(e.target.value)}
                                        type="number" id="activityMinGroupSize" placeholder="min group size" min="2" max="20" required/>
                                 <i className="fa-regular icon"><FontAwesomeIcon icon={faSortNumericDown} /></i>
                             </div>
 
                             <div className="input_fieldC">
-                                <input value= {activityMaxGroupSize}
-                                       onChange={(e) => setActivityMaxGroupSize(e.target.value)}
+                                <input value= {maximumGroupSize}
+                                       onChange={(e) => setMaximumGroupSize(e.target.value)}
                                        type="number" id="activityMaxGroupSize" placeholder="max group size" min="2" max="20" required/>
                                 <i className="fa-regular icon"><FontAwesomeIcon icon={faSortNumericUp} /></i>
                             </div>
@@ -132,6 +136,7 @@ function Creator() {
                             <div className="input_fieldC button">
                                 <input onClick= {(e) => onSubmit(e)} type="button" value="Create Activity"/>
                             </div>
+                            <Link to='/app/events'>Go to Events</Link>
                         </form>
                     </div>
                 </div>

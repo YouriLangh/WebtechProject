@@ -5,7 +5,7 @@ body{
     box-sizing: inherit;
 }
 
-.page{
+.activity_page{
     position: absolute;
     width: 100%;
     height: 100%;
@@ -23,12 +23,14 @@ body{
     position: relative;
     max-width: 25rem;
     width: 100%;
-    background: #fff;
+    background: rgba(0,0,0,0.7);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
 }
 
 
 .activity_container .formA{
+    max-width: 25rem;
+    transform: translate(0, -5%);
     width: 100%;
     padding: 1.875em;
     background-color: #333;
@@ -55,8 +57,47 @@ body{
     font-size: 0.9375em;
 }
 
+.input_field input:is(:focus, :valid){
+    border-bottom-color: #b1b1b1;
+}
 
 
+.input_field i.showHidePw{
+    cursor: pointer;
+    padding: 0.3125em;
+}
+
+.input_field i{
+    position: absolute;
+    top: 30%;
+    color: rgb(66, 66, 66);
+}
+
+.input_field i.icon{
+    left: 0;
+}
+
+.input_field i.showHidePw{
+    right: 0;
+    cursor: pointer;
+    padding: 5px;
+    align-items: center;
+}
+
+
+.form .checkbox_text{
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 20px;
+    align-items: center;
+
+}
+.checkbox_text .checkbox_content{
+    display: flex;
+    align-items: center;
+}
 
 .formA .button{
     margin-top: 30px;
@@ -74,6 +115,43 @@ body{
     cursor: pointer;
     transition: all 0.2s ease;
 }
+
+.button input:hover{
+    background-color: #265df2;
+}
+
+.activity_container .login_signup{
+    margin-top: 20px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.or_line{
+    height: 1px;
+    width: 100%;
+    background-color: #d4d4d4;
+    margin: 20px 0px;
+    align-items: center;
+    justify-content: center;
+}
+
+.or_line::before{
+    content: 'Or';
+    position: absolute;
+    font-family: 'Poppins', sans-serif;
+    background-color: white;
+    color: #8b8b8b;
+    align-items: center;
+    right: 45%;
+    font-weight: 400;
+    top: 63%;
+    padding: 0 10px;
+
+}
+
+
+
+
 
 
 @media  screen and (max-width: 400px){

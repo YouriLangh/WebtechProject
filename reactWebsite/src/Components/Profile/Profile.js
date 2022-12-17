@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import'./Profile.css';
+import Comments from '../Comments/Comments'
 import axios from 'axios';
 import Card from '@mui/material/Card';
-import { CardContent, CardHeader } from '@mui/material';
+import { CardContent, Typography } from '@mui/material';
 import { AdvancedImage } from '@cloudinary/react'
 import { Cloudinary } from '@cloudinary/url-gen';
 import {thumbnail} from "@cloudinary/url-gen/actions/resize";
 import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
-
 import { WidgetLoader, Widget } from 'react-cloudinary-upload-widget'
 
 const jwt = require('jsonwebtoken')
@@ -27,10 +27,11 @@ function Profile(props) {
     username: '',
     email: '',
     url: '',
+    comments: [],
   })
 
-
   const [pfp, setPfp] = useState(myCld.image(profile.url))
+
   const handleInput = (e) => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
@@ -38,7 +39,6 @@ function Profile(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     updateDb(profile);
-    props.updateCallback({username: profile.username, url: profile.url})
   };
   
   const updateDb = async (new_profile) => {
@@ -70,7 +70,6 @@ function Profile(props) {
     setProfile(new_profile);
     updateDb(new_profile)
     updatePfp(e.info.public_id);
-    props.updateCallback({username: profile.username, url: e.info.public_id})
   }
 
   useEffect(() => {
@@ -101,18 +100,24 @@ function Profile(props) {
       <div className='profile_page'>
         <Card variant="outlined" className='profile_card'>
         <CardContent>
-        <h1>{profile.username}</h1>
+        <Typography variant="h1" align="center">
+          {profile.username}
+        </Typography>
+        <div className='pfp'>
         <AdvancedImage 
         cldImg={pfp} 
         className='avatar'/>
         <br/>
         <Widget
+          buttonText={'Upload image'}
+          id='cloudinary_upload_button'
           resourceType={"image"}
           cloudName={'dmm5cr74r'}
           uploadPreset={'nsro5aio'}
           folder={'pfp'}
           onSuccess={handleUpload}
           ></Widget>
+        </div>
         <form onSubmit={handleSubmit}>
           <label htmlFor="username">Username:</label>
           <input
@@ -134,6 +139,7 @@ function Profile(props) {
           />
           <input type="submit" value="Update"/>
         </form>
+        <Comments profile={profile}/>
         </CardContent>
         </Card>
     </div>

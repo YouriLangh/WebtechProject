@@ -25,10 +25,13 @@ function Map() {
                 navigate('/login', { replace: true })
     
                 // Get all the activities from the database 
-             } else { axios.get('http://localhost:4000/app/map').then((res) => {
-              if (res.status === 200){
-                setMarkers(res.data)
-              }})}
+             } else { 
+              // axios.get('http://localhost:4000/app/map').then((res) => {
+              // if (res.status === 200){
+              //   setMarkers(res.data)
+              // }})
+            }
+
         } else { navigate('/login', { replace: true })}
     }, [])
 
