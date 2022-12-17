@@ -3,8 +3,6 @@ import './Activity.css';
 import './MockActivity';
 import {Link} from "react-router-dom";
 import Sidenav from "../Sidenav/Sidenav";
-import { fetchActivities } from "./ActivityService";
-import { getActivities } from "./ActivityService";
 import axios from "axios";
 
 
@@ -72,12 +70,30 @@ function Activity() {
 
         const onAccept = (e) => {
             e.preventDefault();
+            const userToken = localStorage.getItem('token');
             console.log(current);
-            console.log(activities[current].activityName);
+            try {
+                axios({
+                    url: 'http://localhost:4000/app/activity/join',
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    data: JSON.stringify({
+                        userToken,
+                        activityID: activities[current]._id,
+                    }),
+                }).then(res => {
+                    console.log("returned from activity add activity");
+                    console.log(res);
+                })
+            } catch (error) {console.log(error)}
             if (current >= activities.length-1){
                 setShowActivity(false);
             }
-            else setCurrent(current+1);
+            else {
+                setCurrent(current+1);
+            }
         }
 
         const onDeny = (e) => {
@@ -131,7 +147,7 @@ function Activity() {
 
                 </div>
             </div>
-            <Sidenav newData={pseudoData}/>
+            {/* <Sidenav newData={pseudoData}/> */}
         </div>
     )
 }

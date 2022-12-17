@@ -186,7 +186,7 @@ form a:hover{
 .form .arrow_icon{
     position: absolute;
     right: 50px;
-    top: 40%;
+    top: 37%;
     justify-content: center;
     color: white;
     cursor: pointer;  
@@ -244,5 +244,14 @@ form a:hover{
     padding: 0px 5px 0 0;
 }
 
+@media (max-width: 18.25em){
+    .form .arrow_icon{
+        right: 25px;
+    }
+}
 
-
+@media (min-width: 40em){
+    .input_field input{
+        font-size: 17px;
+    }
+}

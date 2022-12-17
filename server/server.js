@@ -15,6 +15,7 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 const { registerValidation, loginValidation } = require('./validation/validation')
 const bcrypt = require("bcrypt")
+const jwtDecode = require("jwt-decode");
 
 dotenv.config();
 
@@ -150,9 +151,106 @@ app.post('/app/activities/fetch', async (req, res) => {
 })
 
 app.put('/app/activities/publish', async (req, res) => {
-    console.log(req.body)
-    const activity = await Activity.insertMany(req.body);
+    console.log(req.body);
+    const userToken = req.body.userToken;
+    console.log(jwtDecode(userToken));
+    const user = await User.findOne({
+        username: jwtDecode(userToken).username,
+        email: jwtDecode(userToken).email,
+    });
+    console.log(user._id);
+    const activityBody = {
+        activityName: req.body.activityName,
+        activityDate: req.body.activityDate,
+        activityType: req.body.activityType,
+        minimumAge: req.body.minimumAge,
+        maximumAge: req.body.maximumAge,
+        activityLocation: req.body.activityLocation,
+        minimumGroupSize: req.body.minimumGroupSize,
+        maximumGroupSize: req.body.maximumGroupSize,
+        dateCreated: req.body.dateCreated,
+        creator: user._id,
+    }
+    const activity = await Activity.insertMany(activityBody);
     console.log(JSON.stringify(activity));
+})
+
+
+app.get('/app/users', async (req, res) => {
+    const users = await User.find()
+    const formatted = users.map(element => jwt.sign({username: element.username, 
+        id: element._id, 
+        email: element.email, 
+        url: element.url, 
+        interests: element.interests}, process.env.PRIVATE_KEY))
+    // console.log(formatted)
+    res.send({formatted})
+})
+
+app.post('/app/users', async (req, res) => {
+    const theId = req.body.id
+    try{
+    const user = await User.findOne({_id: theId})
+    const formatted = jwt.sign({username: user.username,  
+        email: user.email, 
+        url: user.url,
+        date_joined: user._id.getTimestamp(), 
+        interests: user.interests}, process.env.PRIVATE_KEY)
+     res.send({token: formatted})}
+     catch (err){
+        res.send({token: false})
+     }
+    })
+
+app.post('/app/user/search', async (req, res) => {
+    const name = req.body.aName
+    try{
+    const user = await User.findOne({username: name})
+    console.log(user)
+    const formatted = jwt.sign({id: user._id}, process.env.PRIVATE_KEY)
+    res.send({token: formatted})}
+    catch (err){
+    res.send({token: false})
+}
+})
+
+
+app.get('/app/users', async (req, res) => {
+    const users = await User.find()
+    const formatted = users.map(element => jwt.sign({username: element.username, 
+        id: element._id, 
+        email: element.email, 
+        url: element.url, 
+        interests: element.interests}, process.env.PRIVATE_KEY))
+    // console.log(formatted)
+    res.send({formatted})
+})
+
+app.post('/app/users', async (req, res) => {
+    const theId = req.body.id
+    try{
+    const user = await User.findOne({_id: theId})
+    const formatted = jwt.sign({username: user.username,  
+        email: user.email, 
+        url: user.url,
+        date_joined: user._id.getTimestamp(), 
+        interests: user.interests}, process.env.PRIVATE_KEY)
+     res.send({token: formatted})}
+     catch (err){
+        res.send({token: false})
+     }
+    })
+
+app.post('/app/user/search', async (req, res) => {
+    const name = req.body.aName
+    try{
+    const user = await User.findOne({username: name})
+    console.log(user)
+    const formatted = jwt.sign({id: user._id}, process.env.PRIVATE_KEY)
+    res.send({token: formatted})}
+    catch (err){
+    res.send({token: false})
+}
 })
 
 app.patch('/app/profile/comment', async (req, res) => {
@@ -161,7 +259,42 @@ app.patch('/app/profile/comment', async (req, res) => {
         { new: true })
         .exec()
         .then((result) => res.send(result))
-        .catch((err) => res.send(err));})
+        .catch((err) => res.send(err));
+})
+
+app.patch('/app/activity/leave', async (req, res) => {
+    const userToken = req.body.userToken;
+    const activityID = req.body.activityID;
+    User.findOneAndUpdate({
+        username: jwtDecode(userToken).username,
+        email: jwtDecode(userToken).email,
+    }, { $pull:
+            {
+                activities: activityID
+            }
+    }, { new: true })
+        .exec()
+        .then((result) => res.send(result))
+        .catch((err) => res.send(err));
+})
+
+app.patch('/app/activity/join', async (req, res) => {
+    const userToken = req.body.userToken;
+    const activityID = req.body.activityID;
+    console.log("in add activity on server");
+    User.findOneAndUpdate({
+        username: jwtDecode(userToken).username,
+        email: jwtDecode(userToken).email,
+    }, { $push:
+            {
+                activities: activityID
+            }
+    }, { new: true })
+        .exec()
+        .then((result) => res.send(result))
+        .catch((err) => res.send(err));
+})
+
 
 app.listen(4000, () => {console.log("Server is up and running")})
 

@@ -74,4 +74,8 @@ p.body{
     .join_button span{
         font-size: 21px;
     }
+    .landing_page_content .body{
+        display: none;
+    }
  }
+ 

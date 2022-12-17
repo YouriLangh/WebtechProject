@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import'./Profile.css';
-import Sidenav from '../Sidenav/Sidenav'
 import Comments from '../Comments/Comments'
 import axios from 'axios';
 import Card from '@mui/material/Card';
@@ -14,7 +13,7 @@ import { WidgetLoader, Widget } from 'react-cloudinary-upload-widget'
 
 const jwt = require('jsonwebtoken')
 
-function Profile() {
+function Profile(props) {
 
   const myCld = new Cloudinary({
     cloud: {
@@ -72,7 +71,6 @@ function Profile() {
   return (
     <div> 
       <WidgetLoader />
-      <Sidenav newData={profile}/>
       <div className='profile_page'>
         <Card variant="outlined" className='profile_card'>
         <CardContent>

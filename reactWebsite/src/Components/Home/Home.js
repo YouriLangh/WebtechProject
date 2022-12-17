@@ -1,13 +1,55 @@
-import React from 'react'
-import Sidenav from '../Sidenav/Sidenav'
+import { Card, CardContent } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import "./Home.css"
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+const jwt = require('jsonwebtoken')
+
+// home page for the users once they log in
 function Home() {
 
-  let pseudoData = {username: '', url:''}
+  const [name, setName] = useState('')
+  const navigate = useNavigate()
+
+  // Check if user is logged in
+  useEffect(() => {
+    const userToken = localStorage.getItem('token');
+    if (userToken){
+     const user = jwt.decode(userToken)
+     if(!user){
+       localStorage.removeItem('token')
+       navigate('/login', { replace: true })}
+       else{
+         setName(jwt.decode(userToken).username);}
+       }
+  }, [])
   return (
     <div className='home_page'>
-         <Sidenav newData={pseudoData}/> 
+        <div className='get_swiping'>
+          <div className='title_content'>
+          <div className='home_page_title'>
+            <h1>Welcome back, {name}</h1>
+            </div>
+            <div className='title_text'>
+            <p> Get swiping!</p>
+            <button onClick={() => navigate('/app/events')}> <FontAwesomeIcon className ='sidenav_icon' icon= {faArrowRight}/></button>
+          </div>
+          </div>
+          <div className='features' >
+          <Card style={{backgroundColor: "#121213"}} className='feature'>
+            <CardContent>
+              <p> What's new</p>
+            </CardContent>
+          </Card>
+          <Card style={{backgroundColor: "#18191A"}} className='feature'>
+            <CardContent>
+              <p>What's hot</p>
+            </CardContent>
+          </Card>
+          </div>
+        </div>
     </div>
   )
 }

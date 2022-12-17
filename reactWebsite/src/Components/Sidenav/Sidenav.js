@@ -9,7 +9,7 @@ import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AdvancedImage } from '@cloudinary/react'
-import { faHouseChimney,faUser, faBarsStaggered, faCog, faMap, faCalendarAlt, faBars, faTimes, faStar, faCloud, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faHouseChimney,faUser, faBarsStaggered, faCog, faMap, faCalendarAlt, faBars, faTimes, faStar, faCloud, faArrowRightFromBracket, faMagnifyingGlass, faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 const jwt = require('jsonwebtoken')
 
 function Sidenav(props) {
@@ -28,6 +28,7 @@ function Sidenav(props) {
   const [userInfo, setUserInfo] = useState({username: "", pfp_url:""})
   const [pfp, setPfp] = useState(myCld.image(userInfo.pfp_url))
 
+  const[filter, setFilter] = useState('')
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.reload()
@@ -50,7 +51,9 @@ useEffect(() => {
         navigate('/login', { replace: true })}
         else{
           const username = jwt.decode(userToken).username;
+          if(userInfo.username === ""){
       try{
+
         axios.post('http://localhost:4000/app/profile', {username: username})
         .then(res => {
           if(res.data.profile){
@@ -60,8 +63,7 @@ useEffect(() => {
             updatePfp(newProfile.url);
           }})
       } catch (error) {console.log(error)}
-      pfp
-      .resize(thumbnail().gravity(focusOn(FocusOn.face())))
+      pfp.resize(thumbnail().gravity(focusOn(FocusOn.face())))}
         }}
         else navigate('/login', { replace: true });
       
@@ -70,9 +72,7 @@ useEffect(() => {
   useEffect(() => {
     if(props){
     if(props.newData.username !== ''){
-      console.log("updating")
-      const formattedData = {username: props.newData.username, pfp_url: props.newData.url}
-    setUserInfo(formattedData)
+    setUserInfo(props.newData)
     updatePfp(props.newData.url)
     }}
   },[props])
@@ -103,6 +103,23 @@ const detectSize = () => {
 
   let userName = <span className='sidenav_user_name'>{foldSidenav ? '' : userInfo.username} </span>
 
+  const handleSearch = async () => {
+    if(filter.length > 0){
+    await axios.post('http://localhost:4000/app/user/search', {aName: filter}).then((res) => {
+      if(res.status === 200){
+        const aToken = jwt.decode(res.data.token)
+        if(aToken){
+          const id = aToken.id
+          navigate(`/app/users/${id}`)
+          setFilter('')
+          setFoldSidenav(true)
+        } else {console.log("user not found")}
+      }
+
+    })}
+  }
+
+
   return (
     <div>
     <div className={foldSidenav ? 'sidenav close' : 'sidenav'}>
@@ -112,7 +129,7 @@ const detectSize = () => {
          <span className='sidenav_brand_name'>{foldSidenav ? '': 'Eventer'}</span>
         </Link>
         <div onClick={() => setFoldSidenav(!foldSidenav)} className= 'fold_nav_toggle'>
-        <FontAwesomeIcon className ='sidenav_icon' icon= {faBarsStaggered}/>
+        <FontAwesomeIcon className ='sidenav_icon' icon= {foldSidenav ? faArrowRight : faArrowLeft}/>
         </div>
       </div>
       <div className='sidenav_user'>
@@ -121,15 +138,17 @@ const detectSize = () => {
       {userName}
         {/* <span className='sidenav_user_name'>{foldSidenav ? '' : userInfo.username} </span> */}
       </div>
-      <nav className='sidebar'>
+      <nav className={foldSidenav ? "sidebar closed" : "sidebar"}>
+      {foldSidenav ? '' : <div className='search_bar'> <input id="searchbar"type="text" onChange={(e) => setFilter(e.target.value)}className='sidenav_search' placeholder='Find user...'></input> <FontAwesomeIcon onClick={() => handleSearch()} className ='searchbar_icon' icon= {faMagnifyingGlass}/></div>}
         <ul className='sidenav_ul'>
         <Link className='side_nav_item' to="/app/home"><li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faHouseChimney}/><span> {foldSidenav ? '': 'Home'} </span></li></Link> 
         <Link className='side_nav_item' to="/app/profile"> <li className='sidenav_li'>  <FontAwesomeIcon className ='sidenav_icon'icon= {faUser}/><span> {foldSidenav ? '': 'Profile'} </span></li> </Link>
         <Link className='side_nav_item' to="/app/events"> <li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faCalendarAlt}/> <span> {foldSidenav ? '': 'Events'} </span></li> </Link>
-        <Link className='side_nav_item' to="/app/search"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faStar}/><span> {foldSidenav ? '': 'Review'} </span></li> </Link> 
+        {/* <Link className='side_nav_item' to="/app/review"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faStar}/><span> {foldSidenav ? '': 'Review'} </span></li> </Link>  */}
         <Link className='side_nav_item' to="/app/map"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faMap}/>  <span> {foldSidenav ? '': 'Map'} </span></li></Link>
-        <Link className='side_nav_item' to="/app/settings"> <li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faCog}/>  <span> {foldSidenav ? '': 'Settings'} </span></li></Link>
-        <Link className='side_nav_item' to="/app/weather"> <li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faCloud}/>  <span> {foldSidenav ? '': 'Weather'} </span></li></Link>
+        <Link className='side_nav_item' to="/app/settings"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faCog}/>  <span> {foldSidenav ? '': 'Settings'} </span></li></Link>
+        <Link className='side_nav_item' to="/app/users"> <li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faMagnifyingGlass}/>  <span> {foldSidenav ? '': 'Search'} </span></li></Link>
+        {/* <Link className='side_nav_item' to="/app/weather"> <li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faCloud}/>  <span> {foldSidenav ? '': 'Weather'} </span></li></Link> */}
         <li onClick={() => {handleLogout()}} className='sidenav_li'> <FontAwesomeIcon className ='side_nav_item sidenav_icon'icon= {faArrowRightFromBracket}/> <span> {foldSidenav ? '': 'Logout'} </span></li>
         </ul>
       </nav>
@@ -143,9 +162,9 @@ const detectSize = () => {
         <Link className='mobile_nav_item' to="/app/home"><li className='mobile_nav_li'><FontAwesomeIcon className ='mobile_icon'icon= {faHouseChimney}/><span> Home </span></li></Link> 
         <Link className='mobile_nav_item' to="/app/profile"> <li className='mobile_nav_li'>  <FontAwesomeIcon className ='mobile_icon'icon= {faUser}/><span> Profile </span></li> </Link>
         <Link className='mobile_nav_item' to="/app/events"> <li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faCalendarAlt}/> <span> Events </span></li> </Link>
-        <Link className='mobile_nav_item' to="/app/search"><li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faStar}/><span> Review </span></li> </Link> 
+        <Link className='mobile_nav_item' to="/app/review"><li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faStar}/><span> Review </span></li> </Link> 
         <Link className='mobile_nav_item' to="/app/map"><li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faMap}/>  <span> Map </span></li></Link>
-        <Link className='mobile_nav_item' to="/app/settings"> <li className='mobile_nav_li'><FontAwesomeIcon className ='mobile_icon'icon= {faCog}/>  <span> Settings </span></li></Link>
+        <Link className='mobile_nav_item' to="/app/users"> <li className='mobile_nav_li'><FontAwesomeIcon className ='mobile_icon'icon= {faMagnifyingGlass}/>  <span> Search </span></li></Link>
         <li onClick={() => {handleLogout()}} className='mobile_nav_li logout_button'> <FontAwesomeIcon className ='side_nav_item mobile_icon'icon= {faArrowRightFromBracket}/> <span> Logout </span></li>
         </ul>
         </div>

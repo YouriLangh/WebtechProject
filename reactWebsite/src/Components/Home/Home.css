@@ -1,5 +1,139 @@
-
 .home_page{
-    width: 100vw;
+    position: fixed;
+    width: calc(100vw - 78px);
     height: 100vh;
+    left: 78px;
+    background-image:  linear-gradient(rgba(0,0,0,0), rgba(0, 0, 0, 1)), url('../../images/backgrounde.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
+
+.get_swiping{
+    height: 100%;
+    width: 100%;
+    
+    display: flex;
+    align-items: center;
+}
+.title_content{
+    position: absolute;
+    /* background-color: blue; */
+    display: flex;
+    flex-direction: column;
+    left: 20%;
+}
+
+
+
+.home_page_title h1{
+    font-size: 50px;
+    max-width: 400px;
+}
+
+.title_text p{
+    font-size: 32px;
+    color:rgb(255, 255, 255);
+    margin-bottom: 0px;
+    /* margin-top: 1rem; */
+    font-weight: 600; 
+}
+.features{
+    position: absolute;
+    margin: 1em;
+    top: 70%;
+    height: 200px;
+    width: 90%;
+    display: flex;
+    justify-content:space-evenly;
+}
+
+.title_text{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 100%;
+    transform: translate(30%,50%);
+
+}
+
+
+.title_text button{
+    margin-left: 2em;
+    width: 90px;
+    height: 40px;
+    background-color: rgb(214, 85, 85);
+    border-radius: 30px;
+    border: none;
+}
+
+.feature{
+    width: 40%;
+    max-width: 500px;
+    min-width: 250px;
+    min-height: 150px;
+    margin: 20px;
+}
+
+.feature p{
+    color: rgb(165, 33, 33);
+    font-size: 23px;
+    font-weight: 600;
+}
+
+
+@media (max-width: 26.25em){
+    .home_page{
+        left: 0px;
+        width: 100vw;
+    }
+    .title_content{
+        left: 5%;
+    }
+    .home_page_title h1{
+        font-size: 20px;
+    }
+    .title_text{
+        transform: translate(25%, 10%);
+    }
+    .title_text p{
+        font-size: 18px;
+    }
+    .title_text button{
+        width: 80px;
+        height: 35px;
+        margin-left: 1rem;
+    }
+    .features{
+        display:none;
+    }
+
+}
+
+@media (max-width: 40.5em)  and (min-width: 26.251em){
+
+    .home_page_title h1{
+        font-size: 36px;
+    }
+    .title_text p{
+        font-size: 25px;
+        margin-bottom: 0px;
+    }
+    .title_text{
+        transform: translate(15%, 30%);
+        text-align: center;
+    }
+    .title_content{
+        left:5%;
+        top: 20%;
+    }
+    .features{
+        position: absolute;
+        top: 40%;
+        justify-content: space-between;
+        flex-direction: column;
+    }
+
+}
+
