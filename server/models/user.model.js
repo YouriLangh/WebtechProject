@@ -6,7 +6,8 @@ const User = new mongoose.Schema({
     password: {type: String, required: true},
     url: {type: String, required: true, default: 'pfp/default_pfp'},
     interests: [{type: String}],
-    comments: [{type: String}]
+    comments: [{type: String}],
+    activities: [{type: String}]
 }, 
 { collection: 'user-data'}
 )

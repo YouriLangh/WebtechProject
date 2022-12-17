@@ -113,6 +113,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(1) sepia(100%) saturate(100000%) hue-rotate(170deg);
 }
 
+.dropdown {
+    position: relative;
+    margin-top: 1.5625em;
+    cursor: pointer;
+    width: 100%;
+    height: 2.5em;
+}
+
+.dropdown input {
+    height: 100%;
+    width: 100%;
+    padding: 0 1.875em;
+    border-bottom: 2px solid #ccc;
+    font-size: 0.9375em;
+}
+
 
 
 
