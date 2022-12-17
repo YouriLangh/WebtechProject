@@ -12,7 +12,7 @@ const User = new mongoose.Schema({
     url: {type: String, required: true, default: 'pfp/default_pfp'},
     interests: [{type: String}],
     comments: [CommentSchema],
-    rating: {type: Number}
+    rating: {type: Number},
     activities: [{type: String}]
 },
 { collection: 'user-data'}
