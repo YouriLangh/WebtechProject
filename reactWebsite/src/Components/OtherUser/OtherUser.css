@@ -1,0 +1,335 @@
+/* 
+.other_user_page{
+    position: absolute;
+    width: calc(100% - 78px);
+    height: 100%;
+    left: 78px;
+    display: flex;
+}
+
+.content{
+    margin: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.content .other_user_card{
+    position: absolute;
+    width: calc(80% - 80px);
+    height: 60%;
+    min-height: 500px;
+    min-width: 250px;
+    max-width: 400px;
+    box-shadow: 0 1px 8px 1px rgba(0, 0 ,0 , 0.7);
+    background-image: linear-gradient(rgba(255, 255, 255, 0.185), rgba(255, 255, 255, 0.377)), 
+    url('../../images/stock_background.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+}
+
+.other_user_card_content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    margin-top: 0.3em;
+}
+
+.other_user_pic{
+    aspect-ratio: 1;
+    border-radius: 600px;
+    width: 100px;
+    height: 100px;
+    box-shadow: 0 1px 8px 1px rgba(0, 0 ,0 , 0.7);
+}
+.line{
+    margin: 1.3em 0;
+    width: 90%;
+    height: 2px;
+    background-color: rgb(223, 223, 223);
+}
+
+.other_user_card_content .other_user_title{
+    margin-bottom: 1rem;
+    font-weight: 1000;
+    font-size: 23px;
+    font-family: 'Secular One', sans-serif;
+    color: black;
+    font-style: italic;
+}
+
+.other_user_info{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.other_user_info p{
+    font-size: 21px;
+    /* font-family: 'Secular One', sans-serif; 
+    color: rgb(0, 0, 0);
+    font-weight: 1000;
+}
+.other_user_info span{
+    color: black;
+    font-weight: 600;
+}
+
+
+
+@media (max-width: 26.25em){
+    .other_user_page{
+        left: 0px;
+        width: 100%;
+    }
+    .content .other_user_card{
+        width: 95%;
+    }
+} */
+
+.other_user_page{
+    position: absolute;
+    height: 100%;
+    left: 78px;
+    width: calc(100% - 78px);
+
+}
+
+.background{
+    width: calc(100% - 78px);
+    height: 100%;
+    z-index: -1;
+    position: fixed;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.185), rgba(255, 255, 255, 0.377)), 
+    url('../../images/stock_background.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.content{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+}
+
+.top_banner{
+    position: fixed;
+    width: calc(100% - 78px);
+    z-index: 1;
+    height: 17%;
+    min-height: 100px;
+    background: #1F2134;
+    display: flex;
+
+}
+
+.top_banner_content{
+    margin: auto 2rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.other_user_pic{
+    width: min(14vw, 14vh);
+    height:  min(14vw, 14vh);
+    min-width: 80px;
+    min-height: 80px;
+    object-fit: cover;
+    max-width: 110px;
+    max-height: 110px;
+    border-radius: 500px;
+    margin: auto 2rem;
+}
+
+.top_banner span{
+    font-size: max(calc(10vw / 3), 21px);
+    font-family: Overpass,-apple-system,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+    color: white;
+    font-weight: 600;
+
+}
+
+.top_banner p{
+    position: absolute;
+    font-family: Overpass,-apple-system,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+    right: 5%;
+    bottom: 0;
+}
+
+.other_user_content{
+    position: absolute;
+    width: 100%;
+    top: 17%;
+    height: calc(100% - 17%);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.other_user_card{
+    width: 60%;
+    transform: translate();
+    max-width: 500px;
+    min-width: 320px;
+
+}
+.card .card_content{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card_content .other_user_info{
+    width: 100%;
+    height: 100%;
+    padding: 1rem 2rem;
+}
+.other_user_info .info{
+    display: flex;
+    width: 100%;
+    margin-bottom: 1rem;
+   
+}
+.info .explanation{
+    width: 20%;
+}
+.info p{
+    color: black;
+    font-weight: 600;
+    font-size: 17px;
+}
+p.user_data{
+    font-style: italic;
+    font-weight: 600;
+    color: black;
+}
+.card span{
+    width: 100%;
+    text-align: center;
+    color: black;
+    font-weight: 600;
+    font-size: 23px;
+    margin-left: 0;
+}
+.card .line{
+    margin: 1em 0;
+    width: 90%;
+    height: 3px;
+    background-color: rgb(148, 169, 187);
+}
+.card .pic_line{
+    margin-top: 1em;
+    margin-bottom: 2em;
+    width: 30%;
+    height: 3px;
+    background-color: rgb(148, 169, 187);
+}
+.card_content .card_title{
+    font-size: 25px;
+    font-style: italic;
+    margin-bottom: 0.5em;
+}
+
+.other_user_bio{
+    border: solid 3px rgba(87, 86, 86, 0.637);
+    border-radius: 5px;
+    padding: 5px 10px;
+    display: flex;
+    flex-direction: column;
+}
+.rating{
+    margin-top: 1rem;
+}
+
+.other_user_interests{
+    color: black;
+    width: 90%;
+    font-weight: 600;
+    border: solid 3px rgba(87, 86, 86, 0.637);
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.registered_activities{
+    min-width: 200px;
+    width: 20%;
+    max-width: 300px;
+    height: 70%;
+    margin-left: 3rem;
+}
+
+
+@media (max-width: 26.25em){
+    .other_user_page{
+        left: 0px;
+        width: 100%;
+    }
+    .top_banner{
+        width: 100%;
+    }
+    .background{
+        width: 100%;
+    }
+
+
+    .other_user_pic{
+        margin: auto 0.7rem auto 0;
+    }
+} 
+
+@media (max-width: 26.875em){
+    .other_user_pic{
+        margin: auto 0.7rem auto 0;
+    }
+} 
+
+@media (max-width: 78.75em){
+    .other_user_pic{
+        margin: auto 0.7rem auto 0;
+    }
+    .top_banner p{
+    right: 8%;
+    }
+} 
+@media (max-width: 53.75em){
+    .registered_activities{
+        display: none;
+    }
+    .other_user_card{
+        width: 80%;
+    }
+} 
+
+@media (max-width: 42.5em){
+    .info p{
+        font-size: 16px;
+    }
+    .info{
+        margin: -1rem;
+    }
+    .info .user_data{
+        margin-left: 0.5rem;
+    }
+} 
+
+@media (max-width: 30em){
+    .card{
+        width: 100%;
+        position: absolute;
+        top: 5%;
+    }
+} 
+/* from 30 rem --> mobile ui */

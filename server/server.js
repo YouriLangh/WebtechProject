@@ -14,6 +14,7 @@ const dotenv = require('dotenv')
 const { registerValidation, loginValidation } = require('./validation/validation')
 const bcrypt = require("bcrypt")
 const activityModel = require('./models/activityModel')
+const { format } = require('@cloudinary/url-gen/actions/delivery')
 
 dotenv.config();
 
@@ -137,6 +138,45 @@ app.get('/app/map', async (req, res) => {
    res.send([{lat:50.81, lon:4.3, activityName: "Bowling", date: new Date("2022-12-17")},
    {lat: 50.80, lon:4.311, activityName: "ice skating", date: new Date("2022-12-18")},
    {lat: 50.768, lon:4.29, activityName: "dancing", date: new Date("2022-12-18")}])
+})
+
+
+app.get('/app/users', async (req, res) => {
+    const users = await User.find()
+    const formatted = users.map(element => jwt.sign({username: element.username, 
+        id: element._id, 
+        email: element.email, 
+        url: element.url, 
+        interests: element.interests}, process.env.PRIVATE_KEY))
+    // console.log(formatted)
+    res.send({formatted})
+})
+
+app.post('/app/users', async (req, res) => {
+    const theId = req.body.id
+    try{
+    const user = await User.findOne({_id: theId})
+    const formatted = jwt.sign({username: user.username,  
+        email: user.email, 
+        url: user.url,
+        date_joined: user._id.getTimestamp(), 
+        interests: user.interests}, process.env.PRIVATE_KEY)
+     res.send({token: formatted})}
+     catch (err){
+        res.send({token: false})
+     }
+    })
+
+app.post('/app/user/search', async (req, res) => {
+    const name = req.body.aName
+    try{
+    const user = await User.findOne({username: name})
+    console.log(user)
+    const formatted = jwt.sign({id: user._id}, process.env.PRIVATE_KEY)
+    res.send({token: formatted})}
+    catch (err){
+    res.send({token: false})
+}
 })
 
 app.listen(4000, () => {console.log("Server is up and running")})

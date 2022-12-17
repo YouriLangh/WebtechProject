@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import'./Profile.css';
-import Sidenav from '../Sidenav/Sidenav'
 import axios from 'axios';
 import Card from '@mui/material/Card';
 import { CardContent, CardHeader } from '@mui/material';
@@ -14,7 +13,7 @@ import { WidgetLoader, Widget } from 'react-cloudinary-upload-widget'
 
 const jwt = require('jsonwebtoken')
 
-function Profile() {
+function Profile(props) {
 
   const myCld = new Cloudinary({
     cloud: {
@@ -30,7 +29,6 @@ function Profile() {
     url: '',
   })
 
-  const [dataToPass, setDataToPass] = useState({username: '', url: ''})
 
   const [pfp, setPfp] = useState(myCld.image(profile.url))
   const handleInput = (e) => {
@@ -40,7 +38,7 @@ function Profile() {
   const handleSubmit = (e) => {
     e.preventDefault();
     updateDb(profile);
-    setDataToPass({username: profile.username, url: profile.url})
+    props.updateCallback({username: profile.username, url: profile.url})
   };
   
   const updateDb = async (new_profile) => {
@@ -72,7 +70,7 @@ function Profile() {
     setProfile(new_profile);
     updateDb(new_profile)
     updatePfp(e.info.public_id);
-    setDataToPass({username: profile.username, url: e.info.public_id})
+    props.updateCallback({username: profile.username, url: e.info.public_id})
   }
 
   useEffect(() => {
@@ -98,10 +96,9 @@ function Profile() {
   }, []);
 
   return (
-    <html> 
+    <div> 
       <WidgetLoader />
       <div className='profile_page'>
-        <Sidenav newData = {dataToPass}/> 
         <Card variant="outlined" className='profile_card'>
         <CardContent>
         <h1>{profile.username}</h1>
@@ -140,7 +137,7 @@ function Profile() {
         </CardContent>
         </Card>
     </div>
-  </html>
+  </div>
   )
 }
 

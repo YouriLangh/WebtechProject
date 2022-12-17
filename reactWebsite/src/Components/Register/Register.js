@@ -6,14 +6,15 @@ import Header from "../Header/Header"
 import {useRef, useEffect} from "react"
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { StyledEngineProvider } from '@mui/material';
 
-  
+// Client-side validation is done via REGEX expressions
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,19}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,24}$/
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   
 
+
+// The Register component holds fields for all of the data that can be updated in the form
 function Register() {
 
     const userRef = useRef();
@@ -35,16 +36,20 @@ function Register() {
     const[validMatch, setValidMatch] = useState(false)
     const[matchFocus, setMatchFocus] = useState(false)
 
-    const[errorMessage, setErrorMessage] = useState('');
-    const[success, setSuccess] = useState(false);
-
     const[ToS, setToS] = useState(false)
     const[interests, setInterests] = useState([])
+
+    // To be able to hide and show the password
+    const [showPass,setShowPass] = useState(false)
+    const [showFirst,setShowFirst] = useState(true)
+   
     
+    //initialize the focus on the user field
     useEffect(()=> {
         userRef.current.focus();
     }, [])
 
+    // Client side validation
     useEffect(() => {
         const result = USER_REGEX.test(username);
         setValidName(result);
@@ -62,22 +67,17 @@ function Register() {
         setValidMatch(match);
     }, [password, matchPassword])
 
-    useEffect(() => {
-        setErrorMessage('')
-        
-    }, [username, password, matchPassword])
-
-
-
+    // Prevent the form from reloading the page
     const handleSubmit = async (e) => {
         e.preventDefault();
       try {
         const v1 = USER_REGEX.test(username);
         const v2 = PWD_REGEX.test(password);
+        // If the data has been altered via html editing
         if (!v1 || !v2) {
-            setErrorMessage("Invalid Entry");
             return;
         }
+        // Register the user with all the inputted data
          const { data } = await axios({
              url: 'http://localhost:4000/app/register', 
              method: 'POST',
@@ -94,7 +94,6 @@ function Register() {
          console.log(data)
          if(data.status === 201) {
              navigate('/login')
-             setSuccess(true)
          }
          if(data.status === 400){
             alert('Invalid fields')
@@ -104,10 +103,9 @@ function Register() {
         console.log(error)
     }
     }
- const [showPass,setShowPass] = useState(false)
- const [showFirst,setShowFirst] = useState(true)
 
 
+    // If clicked on an interest, add a class for CSS purposes and toggle it from the array of interests kept as a constant
  const handleInterest = (id) => {
     var element = document.getElementById(id);
     element.classList.toggle("selected")
@@ -116,6 +114,7 @@ function Register() {
     } else {setInterests(interests.filter(eId => eId !== id))}
  }
 
+ // get the correct classes for a certain interest (CSS purposes)
  const getClasses = (id) => {
     if(interests.includes(id)){
         return "interests selected"
@@ -126,7 +125,7 @@ function Register() {
 
   let content, title, arrow
   
-
+  // if we have to hide the password, change the types
   if(showPass){
     passIcon = faEye
     passType = "text"
@@ -136,14 +135,13 @@ function Register() {
     passType = "password"
   }
 
-
+  // Update content of the register_form depending on the page.
   if(showFirst){
     title = "Register"
     arrow = <div></div>
     content =    
         <div>
         <div className="input_field">
-           
             <input type="text" 
             id="username"
             value= {username}
@@ -159,6 +157,7 @@ function Register() {
             <i className={username && !validName ? "invalid fa-regular fa-user icon" : "fa-regular fa-user icon"}><FontAwesomeIcon icon={faUser}  /></i>
             
         </div>
+        {/* Show instructions if doesn't conform to client-side validation  */}
         <p id="uidnote" className={userFocus && username && !validName ? "instructions" : "offscreen"}>
                 <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 4 to 20 characters. <br />
@@ -265,10 +264,10 @@ function Register() {
         {arrow}
     <div className="form register">
     <span className="login_title">{title}</span>
-    <form  >
-                {content}
-                </form>
-                <div className="login_signup">
+    <form>
+        {content}
+        </form>
+        <div className="login_signup">
         <span className="text">Already have an account?
         <a href="/login" className="text login_link">Log in</a>
         </span>

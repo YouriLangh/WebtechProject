@@ -12,6 +12,7 @@ margin: 0;
 }
 
 .sidenav{
+    z-index: 2;
     position: fixed;
     height: 100%;
     width: 250px;
@@ -37,6 +38,27 @@ margin: 0;
     height: 0px;
 }
 
+.search_bar{
+    display: flex;
+    align-items: center;
+    height: 2.5rem;
+    margin: 1.5em 5px;
+}
+.searchbar_icon{
+    position: absolute;
+    color: #3d3e3f;
+    right: 10%;
+    cursor: pointer;
+}
+
+.sidebar .sidenav_search{
+    position: absolute;
+    border-radius: 5px;
+
+    width: 90%;
+    height: 2rem;
+
+}
 
 .sidenav.close .side_nav_item{
     align-items: center;
@@ -68,10 +90,14 @@ margin: 0;
 
 .sidebar{
     /* background-color: yellow; */
-    padding: 30px 5px;
+    padding: 0 5px;
+}
+.sidebar.closed{
+    padding: 20px 5px;
 }
 
 .sidebar .sidenav_ul{
+    margin-top: 1em;
     padding: 0;
     margin: 0;
     display: flex;

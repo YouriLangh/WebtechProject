@@ -136,7 +136,7 @@ function Creator() {
                     </div>
                 </div>
             </div>
-            <Sidenav newData= {pseudoData}/>
+            {/* <Sidenav newData= {pseudoData}/> */}
         </div>
     )
 }

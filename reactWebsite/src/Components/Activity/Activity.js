@@ -101,7 +101,7 @@ function Activity() {
 
                 </div>
             </div>
-            <Sidenav newData={pseudoData}/>
+            {/* <Sidenav newData={pseudoData}/> */}
         </div>
     )
 }

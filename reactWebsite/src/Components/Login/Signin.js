@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import'./Signin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { faLock, faUser, faEyeSlash, faEye } from '@fortawesome/free-solid-svg-icons'
 import Header from "../Header/Header"
 import { useNavigate } from 'react-router-dom';
@@ -9,16 +8,13 @@ import { useEffect } from 'react'
 import jwt_decode from "jwt-decode"
 import axios from 'axios'
 
-
-
+// Used to sign a user in
+// It contains an option to Login via Google aswell.
 function Signin() {
 
   const navigate = useNavigate()
   const [showPass,setShowPass] = useState(false)
   const[username, setUser] = useState('');
-
-
-
   const[password, setPassword] = useState('');
 
   
@@ -35,13 +31,13 @@ function Signin() {
 
   
 
-
+// Decode the cookie given by the google login API
   const handleCredentialResponse = async (response) => {
     var userObject = jwt_decode(response.credential)
     const userEmail = userObject.email
     const emailVerified = userObject.email_verified
+    // only if the email is verified and is an actual gmail account, log the user in
     if (userEmail.substring(userEmail.length - 10) === "@gmail.com" && emailVerified){
-
         //name without whitespaces
     const username = userObject.name.replace(/\s+/g, '').substring(0, 19)
     const uniqueId = userObject.sub
@@ -49,6 +45,7 @@ function Signin() {
      try{ 
          const { data } = await axios.post('http://localhost:4000/app/login/auth/google', payload)
          if(data.user){
+            // if we get a reply, and the user field is not false, log in
             localStorage.setItem('token', data.user)
             navigate('/app/home')
          }
@@ -60,6 +57,8 @@ function Signin() {
     }
     
 
+    // Load in the google buttons on page load
+    // The comment /* global google */ is needed for the google log in API.
   useEffect(() => {
     /* global google */
     google.accounts.id.initialize({
@@ -67,6 +66,8 @@ function Signin() {
         callback: handleCredentialResponse
     })
 
+    // Load in multiple buttons for different sizes.
+    // These buttons cannot be resized via CSS.
     google.accounts.id.renderButton(
         document.getElementById("google_login"),
         { theme: "outline", size: "large", width: "340px"}
@@ -87,6 +88,7 @@ function Signin() {
   }, [])
 
 
+  // logging in normally
   const loginUser = async (e) => {
     e.preventDefault();
     try{ 
@@ -101,10 +103,10 @@ function Signin() {
             password,
         }),
     })
-
+    // Keep the user data in the local storage so we can verify the user is logged in
      if(data.user){
         localStorage.setItem('token', data.user)
-        navigate('/home')
+        navigate('/app/home')
         
     }else {
         alert('Please check your username and password')
@@ -160,14 +162,8 @@ function Signin() {
             </div>
         </form>
         
-        <div className="or_line">
-        </div>
-        {/* <div className="facebook_login">
-             <a href="/" className="facebook_button">
-                <i className="fa-brands fa-facebook facebook"><FontAwesomeIcon icon={faFacebook} /></i>
-                <span className="facebook_text">Login with Facebook</span>
-            </a> 
-        </div> */}
+        <div className="or_line"> <div className="or_line1"></div>
+        <p> OR </p> <div className="or_line1"></div> </div>
         <div id='google_login' className="google_login">
             </div>
             <div id='google_login_medium' className="google_login">

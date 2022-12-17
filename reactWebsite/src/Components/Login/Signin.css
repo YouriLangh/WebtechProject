@@ -172,8 +172,17 @@ form a:hover{
 }
 
 .or_line{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.or_line p{
+    transform: translate(0, 45%);
+}
+
+.or_line1{
     height: 1px;
-    width: 100%;
+    width: 42%;
     background-color:  #d4d4d4;
     margin: 1.875rem 0px;
     align-items: center;
@@ -181,54 +190,14 @@ form a:hover{
 }
 
 
-.facebook_login{
-    background-color: #4267b2;
-    position: relative;
-    display: flex;
-    border-radius: 5px;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    margin-top: 2.1875rem;
-    height: 40px;
-    cursor: pointer;
-}
-
-.facebook_login a{
-    color: white;
-    text-decoration: none;
-    
-}
-
-.facebook_text{
-    font-size: 0.9375rem;
-}
-
-a.facebook_button .facebook{
-    position: absolute;
-    left: 30px;
-    transform: translate(0, -2px);
-    border-radius: 100%;
-    width: 20px;
-    height: 20px;
-    font-size: 21px;
-}
-
 .google_login{
     display: flex;
-    /* border-radius: 5px;
-    background-color: white;
-    cursor: pointer; */
-
     align-items: center;
     justify-content: center;
     width: 100%;
-    /* margin-top: 20px; */
     height: 3.125rem;
-
     text-decoration: none;
     transition: all 0.2ms ease;
-
 }
 
  #google_login_medium{
