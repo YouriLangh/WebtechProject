@@ -33,31 +33,6 @@ function Profile() {
 
   const [pfp, setPfp] = useState(myCld.image(profile.url))
 
-  const handleInput = (e) => {
-    setProfile({ ...profile, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updateDb(profile);
-  };
-  
-  const updateDb = async (new_profile) => {
-    try {
-      const res = await axios({
-        url:'http://localhost:4000/app/profile/edit',
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: new_profile,
-      });
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };  
-
   const updatePfp = async (newUrl) => {
     if (newUrl == "") {
       setPfp(myCld.image("pfp/default_pfp"))
@@ -69,7 +44,6 @@ function Profile() {
   const handleUpload = async (e) => {
     let new_profile = {...profile, url: e.info.public_id}
     setProfile(new_profile);
-    updateDb(new_profile)
     updatePfp(e.info.public_id);
   }
 
@@ -102,9 +76,6 @@ function Profile() {
       <div className='profile_page'>
         <Card variant="outlined" className='profile_card'>
         <CardContent>
-        <Typography variant="h1" align="center">
-          {profile.username}
-        </Typography>
         <div className='pfp'>
         <AdvancedImage 
         cldImg={pfp} 
@@ -120,27 +91,12 @@ function Profile() {
           onSuccess={handleUpload}
           ></Widget>
         </div>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Username:</label>
-          <input
-            id = "username"
-            name="name"
-            type="text"
-            value={profile.username}
-            placeholder={"Your names"}
-            onChange={handleInput} 
-            />
-          <label htmlFor="username">E-mail: </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            value={profile.email}
-            placeholder={"Your email"}
-            onChange={handleInput}
-          />
-          <input type="submit" value="Update"/>
-        </form>
+        <Typography variant="h1" align="center">
+          {profile.username}
+        </Typography>
+        <p className="muted" align="center">
+          {profile.email}
+        </p>
         <Comments profile={profile}/>
         </CardContent>
         </Card>

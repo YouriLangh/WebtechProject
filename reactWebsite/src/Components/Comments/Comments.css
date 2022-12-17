@@ -4,11 +4,15 @@ Divider {
     margin-bottom: 1em;
     text-align: center;
   }
-  
+
   #comments_list {
     list-style: none;
     margin: 0;
     padding: 0;
+    height: auto;
+    max-height: 180px;
+    overflow-x: hidden; 
+    overflow-y: scroll;
   }
   
   #comments_list li {
