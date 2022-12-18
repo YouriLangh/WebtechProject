@@ -3,6 +3,7 @@ import'./Profile.css';
 import Comments from '../Comments/Comments'
 import axios from 'axios';
 import Card from '@mui/material/Card';
+import { useNavigate } from 'react-router-dom';
 import { CardContent, Typography } from '@mui/material';
 import { AdvancedImage } from '@cloudinary/react'
 import { Cloudinary } from '@cloudinary/url-gen';
@@ -23,6 +24,7 @@ function Profile(props) {
     }
   });
 
+  const navigate = useNavigate()
   const [profile, setProfile] = useState({
     username: '',
     email: '',
@@ -49,27 +51,36 @@ function Profile(props) {
   }
 
   useEffect(() => {
-      const userToken = localStorage.getItem('token');
-      console.log(userToken)
-      const username = jwt.decode(userToken).username;
-      try{ 
-      axios({
-        url: 'http://localhost:4000/app/profile',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        data: JSON.stringify({
-            username,
-        }),
-        }).then(res => {
-          let newProfile = jwt.decode(res.data.profile);
-          setProfile(newProfile);
-          updatePfp(newProfile.url);
-          setInterests(newProfile.interests);})
-      } catch (error) {console.log(error)}
-      pfp
-      .resize(thumbnail().gravity(focusOn(FocusOn.face())))
+    const userToken = localStorage.getItem('token');
+    if (userToken){
+     const user = jwt.decode(userToken)
+     if(!user){
+       localStorage.removeItem('token')
+       navigate('/login', { replace: true })}
+       else{
+        const username = jwt.decode(userToken).username;
+        try{ 
+          axios({
+            url: 'http://localhost:4000/app/profile',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: JSON.stringify({
+                username,
+            }),
+            }).then(res => {
+              let newProfile = jwt.decode(res.data.profile);
+              setProfile(newProfile);
+              updatePfp(newProfile.url);
+              setInterests(newProfile.interests);})
+          } catch (error) {console.log(error)}
+          pfp
+          .resize(thumbnail().gravity(focusOn(FocusOn.face())))
+        }
+       }
+
+     
   }, []);
 
   return (

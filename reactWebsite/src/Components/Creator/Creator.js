@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import'./Creator.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
@@ -12,7 +12,7 @@ import {useNavigate} from "react-router-dom";
 import {Link} from "react-router-dom";
 import createActivity from "../Activity/ActivityService";
 
-
+const jwt = require('jsonwebtoken')
 
 
 function Creator() {
@@ -36,6 +36,15 @@ function Creator() {
         return true;
     }
 
+    useEffect(() => {
+        const userToken = localStorage.getItem('token');
+        if (userToken){
+         const user = jwt.decode(userToken)
+         if(!user){
+           localStorage.removeItem('token')
+           navigate('/login', { replace: true })}
+           }
+      }, []);
 
 
     const onSubmit = (e) => {

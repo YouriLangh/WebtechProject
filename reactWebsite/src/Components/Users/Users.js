@@ -29,7 +29,18 @@ function Users() {
          })
     }
     useEffect( () => {
-        getUsers()
+        const token = localStorage.getItem('token')
+        if (token) {
+            const user = jwt.decode(token)
+            if(!user) {
+                localStorage.removeItem('token')
+                navigate('/login', { replace: true })
+    
+                // Get all the activities from the database 
+             } else {getUsers()
+              }
+        } else { navigate('/login', { replace: true })}
+
     },[])
 
 

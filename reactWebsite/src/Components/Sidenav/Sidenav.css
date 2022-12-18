@@ -158,8 +158,11 @@ span{
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    transition: all ease 1s;
 }
-
+.fold_nav_toggle:hover{
+    background-color: rgb(119, 25, 25);
+}
 .sidenav_user{
     height: 130px;
     /* background-color: red; */
