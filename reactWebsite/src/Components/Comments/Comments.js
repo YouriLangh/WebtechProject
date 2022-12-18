@@ -94,6 +94,7 @@ function Comments(props) {
               editing={false}
               starCount={5}
               value={comment.rating}/><br/>
+              {comment.user}
               {comment.body} </li>
             ))}
           </ul> : <p> No new comments</p>}
