@@ -27,18 +27,18 @@
 .avatar {
   width: 100px;
   height: 100px;
-  margin-top: 10px;
   border-radius: 50px;
   box-shadow: 0 0 15px 3px rgb(100, 2, 2);
 }
 
 #cloudinary_upload_button {
   margin-top: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
-.comments {
-  margin-top: 20px;
+.profile-username {
+  font-size: 2rem;
+  text-align: center;
 }
 
 #add_comment_button {

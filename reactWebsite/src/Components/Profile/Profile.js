@@ -13,7 +13,7 @@ import { WidgetLoader, Widget } from 'react-cloudinary-upload-widget'
 
 const jwt = require('jsonwebtoken')
 
-function Profile(props) {
+function Profile() {
 
   const myCld = new Cloudinary({
     cloud: {
@@ -31,6 +31,7 @@ function Profile(props) {
   })
 
   const [pfp, setPfp] = useState(myCld.image(profile.url))
+  const [interests, setInterests] = useState([]);
 
   const updatePfp = async (newUrl) => {
     if (newUrl == "") {
@@ -62,7 +63,8 @@ function Profile(props) {
         }).then(res => {
           let newProfile = jwt.decode(res.data.profile);
           setProfile(newProfile);
-          updatePfp(newProfile.url);})
+          updatePfp(newProfile.url);
+          setInterests(newProfile.interests);})
       } catch (error) {console.log(error)}
       pfp
       .resize(thumbnail().gravity(focusOn(FocusOn.face())))
@@ -89,10 +91,8 @@ function Profile(props) {
           onSuccess={handleUpload}
           ></Widget>
         </div>
-        <Typography variant="h1" align="center">
-          {profile.username}
-        </Typography>
-        <p className="muted" align="center">
+        <div className="profile-username">{profile.username}</div>
+        <p align="center">
           {profile.email}
         </p>
         <Comments profile={profile}/>

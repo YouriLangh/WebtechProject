@@ -120,6 +120,7 @@ app.post('/app/profile', async (req, res) => {
             url: user.url,
             comments: user.comments,
             rating: user.rating,
+            interests: user.interests
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
         }
