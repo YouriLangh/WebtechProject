@@ -39,13 +39,21 @@ function Home() {
           </div>
           <div className='features' >
           <Card style={{backgroundColor: "#121213"}} className='feature'>
-            <CardContent>
+            <CardContent className='feature_content'>
+              <div className='feature_title'>
               <p> What's new</p>
+              </div>
+              <div className='feature_body'>  <p> What'seyr reeyr reey reeyr  </p></div>
             </CardContent>
           </Card>
           <Card style={{backgroundColor: "#18191A"}} className='feature'>
-            <CardContent>
-              <p>What's hot</p>
+            <CardContent className='feature_content'>
+            <div className='feature_title'>
+              <p> What's hot</p>
+              </div>
+              <div className='feature_body'>
+                <p> rezrezrz</p>
+              </div>
             </CardContent>
           </Card>
           </div>

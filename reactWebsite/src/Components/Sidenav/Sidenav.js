@@ -70,11 +70,10 @@ useEffect(() => {
   }, [])
 
   useEffect(() => {
-    if(props){
-    if(props.newData.username !== ''){
+    if(props && props.newData.username !== ''){
     setUserInfo(props.newData)
     updatePfp(props.newData.url)
-    }}
+    }
   },[props])
 
 const onMobileNavClicked = () => {
@@ -141,13 +140,13 @@ const detectSize = () => {
       <nav className={foldSidenav ? "sidebar closed" : "sidebar"}>
       {foldSidenav ? '' : <div className='search_bar'> <input id="searchbar"type="text" onChange={(e) => setFilter(e.target.value)}className='sidenav_search' placeholder='Find user...'></input> <FontAwesomeIcon onClick={() => handleSearch()} className ='searchbar_icon' icon= {faMagnifyingGlass}/></div>}
         <ul className='sidenav_ul'>
-        <Link className='side_nav_item' to="/app/home"><li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faHouseChimney}/><span> {foldSidenav ? '': 'Home'} </span></li></Link> 
-        <Link className='side_nav_item' to="/app/profile"> <li className='sidenav_li'>  <FontAwesomeIcon className ='sidenav_icon'icon= {faUser}/><span> {foldSidenav ? '': 'Profile'} </span></li> </Link>
-        <Link className='side_nav_item' to="/app/events"> <li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faCalendarAlt}/> <span> {foldSidenav ? '': 'Events'} </span></li> </Link>
+        <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/home"><li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faHouseChimney}/><span> {foldSidenav ? '': 'Home'} </span></li></Link> 
+        <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/profile"> <li className='sidenav_li'>  <FontAwesomeIcon className ='sidenav_icon'icon= {faUser}/><span> {foldSidenav ? '': 'Profile'} </span></li> </Link>
+        <Link  onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/events"> <li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faCalendarAlt}/> <span> {foldSidenav ? '': 'Events'} </span></li> </Link>
         {/* <Link className='side_nav_item' to="/app/review"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faStar}/><span> {foldSidenav ? '': 'Review'} </span></li> </Link>  */}
-        <Link className='side_nav_item' to="/app/map"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faMap}/>  <span> {foldSidenav ? '': 'Map'} </span></li></Link>
-        <Link className='side_nav_item' to="/app/settings"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faCog}/>  <span> {foldSidenav ? '': 'Settings'} </span></li></Link>
-        <Link className='side_nav_item' to="/app/users"> <li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faMagnifyingGlass}/>  <span> {foldSidenav ? '': 'Search'} </span></li></Link>
+        <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/map"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faMap}/>  <span> {foldSidenav ? '': 'Map'} </span></li></Link>
+        <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/settings"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faCog}/>  <span> {foldSidenav ? '': 'Settings'} </span></li></Link>
+        <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/users"> <li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faMagnifyingGlass}/>  <span> {foldSidenav ? '': 'Search'} </span></li></Link>
         {/* <Link className='side_nav_item' to="/app/weather"> <li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faCloud}/>  <span> {foldSidenav ? '': 'Weather'} </span></li></Link> */}
         <li onClick={() => {handleLogout()}} className='sidenav_li'> <FontAwesomeIcon className ='side_nav_item sidenav_icon'icon= {faArrowRightFromBracket}/> <span> {foldSidenav ? '': 'Logout'} </span></li>
         </ul>

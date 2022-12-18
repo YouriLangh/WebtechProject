@@ -76,11 +76,37 @@
     margin: 20px;
 }
 
-.feature p{
+.feature .feature_title{
     color: rgb(165, 33, 33);
     font-size: 23px;
     font-weight: 600;
+    text-decoration: underline;
 }
+
+.feature_content{
+    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.feature_body{
+    color: white;
+}
+
+.feature_content::-webkit-scrollbar {
+    width: 8px;
+    background-color: #353434;
+    border-radius: 10px;
+    margin: 2px;
+  }
+  
+.feature_content::-webkit-scrollbar-thumb {
+    background-color: rgb(114, 23, 23);
+    border-radius: 10px;
+    width: 6px;
+  }
+
 
 
 @media (max-width: 26.25em){
