@@ -34,6 +34,23 @@ function Comments(props) {
       }
     }, [comments])
 
+    useEffect(() => {
+      try {
+        axios({
+          url: 'http://localhost:4000/app/profile/edit',
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+            rating: avgRating
+          }),
+        }).then(res => {
+          console.log(res)
+        })
+      } catch (error) {console.log(error)}
+    }, [avgRating])
+
     const addComment = async (e) => {
         const username = userInfo.username;
         try {
