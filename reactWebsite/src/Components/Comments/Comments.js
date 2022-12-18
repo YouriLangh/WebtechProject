@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { renderToString } from 'react-dom/server';
 import "./Comments.css"
 import { Button, Divider } from '@mui/material';
 import axios from 'axios';
