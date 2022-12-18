@@ -11,7 +11,6 @@ import Sidenav from "../Sidenav/Sidenav";
 import {useNavigate} from "react-router-dom";
 import {Link} from "react-router-dom";
 import createActivity from "../Activity/ActivityService";
-import jwt from "jsonwebtoken";
 
 
 
@@ -43,8 +42,8 @@ function Creator() {
         e.preventDefault()
         setDateCreated(Date.now);
         console.log(activityName);
+        console.log(activityType);
         const userToken = localStorage.getItem('token');
-        const creator = jwt.decode(userToken).username;
         if (!checkValues) {
             setErrorMessage("Invalid Entry");
             return;
@@ -59,7 +58,7 @@ function Creator() {
             minimumGroupSize,
             maximumGroupSize,
             dateCreated,
-            creator,
+            userToken,
         }).then(r => console.log(JSON.stringify(r))).catch(e => console.log(JSON.stringify(e)));
     }
 
@@ -89,11 +88,17 @@ function Creator() {
                                 <i className="fa-regular icon"><FontAwesomeIcon icon={faClock} /></i>
                             </div>
 
-                            <div className="input_fieldC">
-                                <input value= {activityType}
-                                       onChange={(e) => setActivityType(e.target.value)}
-                                       type="text" id="activityType" placeholder="Enter activity type" required/>
+                            <div className="dropdown">
                                 <i className="fa-regular icon"><FontAwesomeIcon icon={faQuestion} /></i>
+                                <select name="type" onChange={(e) => setActivityType(e.target.value)}>
+                                    <option value="Culture">Culture</option>
+                                    <option value="Music">Music</option>
+                                    <option value="Sports">Sports</option>
+                                    <option value="Parties">Parties</option>
+                                    <option value="Concerts">Concerts</option>
+                                    <option value="Social">Social</option>
+                                    <option value="Other">Other</option>
+                                </select>
                             </div>
 
                             <div className="input_fieldC">

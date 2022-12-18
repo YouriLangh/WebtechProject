@@ -20,50 +20,25 @@
   color:black;
 }
 
-.profile_card form {
-  display: flex;
-  flex-direction: column;
-  margin-top: 5%;
-  align-items: center;
-}
-
-.profile_card form p {
-  color: black;
-}
-
-.profile_card form input {
-  margin: 10px;
-  height: 40px;
-  font-size: 16px;
-  padding: 0 10px;
-}
-
-.profile_card form input[type="submit"] {
-  width: 60%;
-  background-color: #3d3d3d;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-
 .pfp {
   text-align: center;
 }
 
 .avatar {
-  width: 80px;
-  height: 80px;
-  margin-top: 10px;
+  width: 100px;
+  height: 100px;
   border-radius: 50px;
   box-shadow: 0 0 15px 3px rgb(100, 2, 2);
 }
 
 #cloudinary_upload_button {
   margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-.comments {
-  margin-top: 20px;
+.profile-username {
+  font-size: 2rem;
+  text-align: center;
 }
 
 #add_comment_button {
