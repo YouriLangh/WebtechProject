@@ -70,10 +70,12 @@ function Profile(props) {
     setProfile(new_profile);
     updateDb(new_profile)
     updatePfp(e.info.public_id);
+    props.updateCallback(e.info.public_id)
   }
 
   useEffect(() => {
       const userToken = localStorage.getItem('token');
+      console.log(userToken)
       const username = jwt.decode(userToken).username;
       try{ 
       axios({

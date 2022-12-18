@@ -126,29 +126,6 @@ body{
     text-align: center;
 }
 
-.or_line{
-    height: 1px;
-    width: 100%;
-    background-color: #d4d4d4;
-    margin: 20px 0px;
-    align-items: center;
-    justify-content: center;
-}
-
-.or_line::before{
-    content: 'Or';
-    position: absolute;
-    font-family: 'Poppins', sans-serif;
-    background-color: white;
-    color: #8b8b8b;
-    align-items: center;
-    right: 45%;
-    font-weight: 400;
-    top: 63%;
-    padding: 0 10px;
-
-}
-
 
 
 
