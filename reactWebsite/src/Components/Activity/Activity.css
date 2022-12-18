@@ -116,19 +116,12 @@ body{
     transition: all 0.2s ease;
 }
 
-.button input:hover{
-    background-color: #265df2;
-}
 
 .activity_container .login_signup{
     margin-top: 20px;
     font-size: 13px;
     text-align: center;
 }
-
-
-
-
 
 
 @media  screen and (max-width: 400px){

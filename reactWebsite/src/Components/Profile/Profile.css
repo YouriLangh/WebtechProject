@@ -24,6 +24,11 @@
   text-align: center;
 }
 
+.user_comments{
+  width: 100%;
+  align-content: center;
+}
+
 .avatar {
   width: 100px;
   height: 100px;

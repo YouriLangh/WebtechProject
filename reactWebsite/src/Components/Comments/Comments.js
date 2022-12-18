@@ -10,7 +10,7 @@ function Comments(props) {
     const [userInfo, setUserInfo] = useState({});
     const [comment, setComment] = useState('');
     const [comments, setComments] = useState([]);
-    const [rating, setRating] = useState(0);
+    const [rating, setRating] = useState(5);
     const [avgRating, setAvgRating] = useState(1);
 
     useEffect(() => {
@@ -28,7 +28,11 @@ function Comments(props) {
         totalRating += comment.rating;
       } 
       const averageRating = Math.round(totalRating / comments.length);
-      setAvgRating(averageRating);
+      if(!isNaN(averageRating)) 
+      {setAvgRating(averageRating);
+      console.log("average rating", averageRating)
+      props.updateCallback(averageRating)
+      }
     }, [comments])
 
     const addComment = async (e) => {
@@ -52,19 +56,21 @@ function Comments(props) {
         setComment('');
         setComments([...comments, {body: comment, rating: rating}]);
         document.getElementById("comment_input").value = '';
-        setRating(0);
+        setRating(5);
     }
     
   return (
     <div className="comments">
       <div className="average_rating">
+        {props.showStars ? 
       <StarRatingComponent
               name="rate2" 
               editing={false}
               starCount={5}
-              value={avgRating}/></div>
+              value={avgRating}/> : ""}</div>
         <Divider>Comments</Divider>
-          <ul id="comments_list">
+        {comments.length > 0 ? <ul id="comments_list">
+            
             {comments.map((comment) => (
               <li key={comment.id}>
                 <StarRatingComponent
@@ -74,8 +80,11 @@ function Comments(props) {
               value={comment.rating}/><br/>
               {comment.body} </li>
             ))}
-          </ul>
+          </ul> : <p> No new comments</p>}
+          
+          {props.showStars ? "" : <div> 
           <Divider id="new_rating">Add comment</Divider>
+          <div className='publish_comment'>
           <StarRatingComponent
           name="rate1" 
           starCount={5}
@@ -95,6 +104,8 @@ function Comments(props) {
         <Button variant="outlined" onClick={addComment} id="add_comment_button">
           Add comment
         </Button>
+        </div>
+        </div>}
     </div>
   )
 }

@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './OtherUser.css'
+import Comments from '../Comments/Comments'
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react'
 import { Card, CardContent } from '@mui/material'
 import noUser from '../../images/noUser.png'
+import StarRatingComponent from 'react-star-rating-component';
+import Banner from '../Banner/Banner'
 
 // The OtherUser component is a component which holds and displays the information of other users, 
 function OtherUser() {
@@ -33,9 +36,8 @@ function OtherUser() {
                 if(token.username === currentUserName) {navigate("/app/profile")} else{
                 const formattedDate = new Date(token.date_joined)
                 const formattedInterests = token.interests.map((element, index) => element.substring(0, element.length - 9))
-                console.log(formattedInterests.join(', '))
                 const formatted = ({username: token.username,
-                email: token.email, url: token.url, date_joined: formattedDate.toLocaleDateString(), interests: formattedInterests.join(', ')})
+                email: token.email, url: token.url, rating: token.rating, comments: token.comments, date_joined: formattedDate.toLocaleDateString(), interests: formattedInterests})
                 setUser(formatted)
                 window.scrollTo(0, 0);
                 }
@@ -63,44 +65,54 @@ function OtherUser() {
        
    },[id])
 
+
+   const updateRating = (new_rating) => {
+    setUser( prev_state => ({...prev_state, rating: new_rating}))
+   }
    let content
    if(userExists){
-    content = <div className='content'>
-      <div className='top_banner'>
-        <div className='top_banner_content'>
-        <AdvancedImage className='other_user_pic' cldImg={myCld.image(user.url)}/>
-      <span>{user.username}</span>
-
+    content = 
+    <div className='content'>
+      <div className='banner_container'>
+      {user ? <Banner username= {user.username} url={user.url} date_joined={user.date_joined}/> : "" }
       </div>
-      <p>Date joined: {user.date_joined}</p>
-      </div>
-      <div className='other_user_content'>
-       
-      <Card className='other_user_card card'>
-        <CardContent className='card_content'>
-        <span className='card_title'>{user.username}</span>
-        <AdvancedImage className='other_user_pic' cldImg={myCld.image(user.url)}/>
-        <div className='rating'> rating</div>
-        <div className='pic_line'></div>
-          <span>ABOUT: </span>
-          <div className='line'></div>
-          <div className='other_user_info'>
-          <div className='other_user_bio info'><p className='explanation'>Bio </p> <p className='user_data'>I love adventure and excitement! Flowers are my go-to </p></div>
+      <div className='other_user_page_content'>
+        <div className='other_user_content_container'>
+          <div className='other_user_card_container card_container'>
+          <Card className='other_user_card'>
+          <CardContent className='card_content'>
+          <span className='card_title'>{user.username}</span>
+          <AdvancedImage className='other_user_pic' cldImg={myCld.image(user.url)}/>
+          <div className='pic_line dividing_line' />
+          <div className='other_user_rating'> <StarRatingComponent
+              name="rate2" 
+              editing={false}
+              starCount={5}
+              value={user.rating}/></div>
+              <div className='pic_line dividing_line' />
+              <span className='other_user_content_title'>ABOUT: </span>
+              <div className=' content_dividing_line dividing_line' />
+              <div className='user_info '>
+                <div className='user_bio info_container'> 
+                  <p className='info_title'>Bio </p> 
+                  <p>{false ? "{user.bio}" : "haha sofunnysofunny"} </p>
+                </div>
+                <div className='user_interests info_container'>  
+                <p className='info_title'>Interested topics </p> 
+                <div className='user_interest_container'>
+                {Object.keys(user).length !== 0 &&  user.interests.map(interest => <div key={interest} className="user_interest"> {interest}
+                 </div> )}
+                </div>
+            </div>
+              </div>
+              <div className='comments'>
+              {user.comments ? <Comments updateCallback={updateRating} profile ={user}  />: ''}
+              </div>
+          </CardContent>
+            </Card>
           </div>
-          <div className='other_user_interests'>
-          <span>Interested topics </span>
-
-           {user && user.interests}
-          </div>
-        </CardContent>
-      </Card>
-      <Card className='registered_activities card'>
-
-      <CardContent className=' '>
-      <span>Activities</span>
-</CardContent>
-      </Card>
-
+          <div className='other_user_activities_container card_container'></div>
+        </div>
       </div>
     </div>
 
@@ -110,11 +122,8 @@ function OtherUser() {
    }
 
   return (
-
-
-
     <div className='other_user_page'>
-      
+
         {content}
         <div className='background'></div>
     </div>
