@@ -36,7 +36,7 @@ function OtherUser() {
                 if(token.username === currentUserName) {navigate("/app/profile")} else{
                 const formattedDate = new Date(token.date_joined)
                 const formattedInterests = token.interests.map((element, index) => element.substring(0, element.length - 9))
-                const formatted = ({username: token.username,
+                const formatted = ({username: token.username, activities: token.activities,
                 email: token.email, url: token.url, rating: token.rating, comments: token.comments, date_joined: formattedDate.toLocaleDateString(), interests: formattedInterests})
                 setUser(formatted)
                 window.scrollTo(0, 0);
@@ -111,7 +111,23 @@ function OtherUser() {
           </CardContent>
             </Card>
           </div>
-          <div className='other_user_activities_container card_container'></div>
+          <div className='other_user_activities_container card_container'>
+            <Card className='activities_card'>
+              <CardContent className='activities_card_content'>
+                <div className='activities_title'> 
+                <span> Activities</span>
+                </div>
+                <div className=' content_dividing_line dividing_line' />
+                <div className='registered_activities'>
+                  { user && user.activities && user.interests.length > 0 ? <> {user.interests.map(activity => <div className='activity_container'>
+                    <img src={noUser} alt="activity_picture"/>
+                    <p>haahah rzear ezrezar azer zear </p>
+                     </div>
+                    ) }</> : <p className='no_activities'>No activities yet!</p>}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
