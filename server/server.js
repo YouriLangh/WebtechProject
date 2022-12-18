@@ -143,6 +143,23 @@ app.post('/app/activities/fetch', async (req, res) => {
             return;
         }
         if (activities.length !== 0) {
+            res.send(activities);
+        } else {
+            res.send([]);
+        }
+    });
+})
+
+app.post('/app/activities/fetch/filtered', async (req, res) => {
+    Activity.find({
+        activityType: req.body.activityType,
+    }, (err, activities) => {
+        if (err) {
+            console.log(err)
+            res.send(err)
+            return;
+        }
+        if (activities.length !== 0) {
             console.log(activities);
             res.send(activities);
         } else {
@@ -312,6 +329,8 @@ app.patch('/app/activity/increase', async (req, res) => {
         })
         .catch((err) => res.send(err));
 })
+
+
 
 app.listen(4000, () => {console.log("Server is up and running")})
 

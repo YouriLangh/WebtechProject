@@ -4,6 +4,8 @@ import './MockActivity';
 import {Link} from "react-router-dom";
 import Sidenav from "../Sidenav/Sidenav";
 import axios from "axios";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faQuestion} from "@fortawesome/free-solid-svg-icons";
 
 
 function Activity() {
@@ -12,6 +14,7 @@ function Activity() {
     const [showActivity,setShowActivity] = useState(true)
     const [current, setCurrent] = useState(0);
     const [activities, setActivities] = useState([]);
+    const [filterType, setFilerType] = useState("");
 
     useEffect(() => {
         console.log('fetch');
@@ -145,7 +148,58 @@ function Activity() {
     }
     let pseudoData = {username: '', url:''}
 
-        return (
+    const onSetFilter = (e) => {
+        e.preventDefault();
+        console.log("set filter")
+        if (filterType === "None") {
+
+                try {
+                    axios({
+                        url: 'http://localhost:4000/app/activities/fetch',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }).then(res => {
+                            setActivities(res.data);
+                            console.log(activities);
+                        }
+                    );
+                } catch (error) {
+                    console.log(error);
+                }
+            }
+        else {
+            try {
+                axios({
+                    url: 'http://localhost:4000/app/activities/fetch/filtered',
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    data: JSON.stringify({
+                        activityType: filterType,
+                    }),
+                }).then(res => {
+                        setActivities(res.data);
+                        console.log(activities);
+                    }
+                );
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        console.log("filter set")
+        if (activities.length === 0) {
+            setCurrent(0);
+            setShowActivity(false);
+        } else {
+            setCurrent(0);
+            setShowActivity(true);
+        }
+    }
+
+    return (
             // <!--Registration Form-->
             <div className='aPage'>
                 <div className='window_for_activity'>
@@ -153,6 +207,19 @@ function Activity() {
                         <Link to='/app/events/create'>Go to Creator</Link>
                         <div className="formA">
                             <span className="activity_title">{title}</span>
+                            <div className="dropdown">
+                                <select name="type" onChange={(e) => setFilerType(e.target.value)}>
+                                    <option value="None">None</option>
+                                    <option value="Culture">Culture</option>
+                                    <option value="Music">Music</option>
+                                    <option value="Sports">Sports</option>
+                                    <option value="Parties">Parties</option>
+                                    <option value="Concerts">Concerts</option>
+                                    <option value="Social">Social</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <input onClick= {(e) => onSetFilter(e)} type="button" value="Set Filter"/>
+                            </div>
                             {content}
                         </div>
                         <Link to='/app/events/create'>Go to Creator</Link>
