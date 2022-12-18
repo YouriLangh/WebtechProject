@@ -143,6 +143,23 @@ app.post('/app/activities/fetch', async (req, res) => {
             return;
         }
         if (activities.length !== 0) {
+            res.send(activities);
+        } else {
+            res.send([]);
+        }
+    });
+})
+
+app.post('/app/activities/fetch/filtered', async (req, res) => {
+    Activity.find({
+        activityType: req.body.activityType,
+    }, (err, activities) => {
+        if (err) {
+            console.log(err)
+            res.send(err)
+            return;
+        }
+        if (activities.length !== 0) {
             console.log(activities);
             res.send(activities);
         } else {
@@ -195,6 +212,8 @@ app.post('/app/users', async (req, res) => {
     const formatted = jwt.sign({username: user.username,  
         email: user.email, 
         url: user.url,
+        comments: user.comments,
+        rating: user.rating,
         date_joined: user._id.getTimestamp(), 
         interests: user.interests}, process.env.PRIVATE_KEY)
      res.send({token: formatted})}
@@ -215,32 +234,6 @@ app.post('/app/user/search', async (req, res) => {
 }
 })
 
-
-app.get('/app/users', async (req, res) => {
-    const users = await User.find()
-    const formatted = users.map(element => jwt.sign({username: element.username, 
-        id: element._id, 
-        email: element.email, 
-        url: element.url, 
-        interests: element.interests}, process.env.PRIVATE_KEY))
-    // console.log(formatted)
-    res.send({formatted})
-})
-
-app.post('/app/users', async (req, res) => {
-    const theId = req.body.id
-    try{
-    const user = await User.findOne({_id: theId})
-    const formatted = jwt.sign({username: user.username,  
-        email: user.email, 
-        url: user.url,
-        date_joined: user._id.getTimestamp(), 
-        interests: user.interests}, process.env.PRIVATE_KEY)
-     res.send({token: formatted})}
-     catch (err){
-        res.send({token: false})
-     }
-    })
 
 app.post('/app/user/search', async (req, res) => {
     const name = req.body.aName
@@ -295,6 +288,24 @@ app.patch('/app/activity/join', async (req, res) => {
         .then((result) => res.send(result))
         .catch((err) => res.send(err));
 })
+
+app.patch('/app/activity/increase', async (req, res) => {
+    console.log("in add participant on server");
+    Activity.findOneAndUpdate({
+        _id: req.body.activityID,
+    }, { $inc:
+            {
+                participators: 1
+            }
+    }, { new: true })
+        .exec()
+        .then((result) => {
+            console.log(result.participators);
+            res.send(result)
+        })
+        .catch((err) => res.send(err));
+})
+
 
 
 app.listen(4000, () => {console.log("Server is up and running")})

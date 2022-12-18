@@ -1,105 +1,8 @@
-/* 
-.other_user_page{
-    position: absolute;
-    width: calc(100% - 78px);
-    height: 100%;
-    left: 78px;
-    display: flex;
-}
-
-.content{
-    margin: auto;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-}
-
-.content .other_user_card{
-    position: absolute;
-    width: calc(80% - 80px);
-    height: 60%;
-    min-height: 500px;
-    min-width: 250px;
-    max-width: 400px;
-    box-shadow: 0 1px 8px 1px rgba(0, 0 ,0 , 0.7);
-    background-image: linear-gradient(rgba(255, 255, 255, 0.185), rgba(255, 255, 255, 0.377)), 
-    url('../../images/stock_background.jpg');
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-
-}
-
-.other_user_card_content{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%;
-    margin-top: 0.3em;
-}
-
-.other_user_pic{
-    aspect-ratio: 1;
-    border-radius: 600px;
-    width: 100px;
-    height: 100px;
-    box-shadow: 0 1px 8px 1px rgba(0, 0 ,0 , 0.7);
-}
-.line{
-    margin: 1.3em 0;
-    width: 90%;
-    height: 2px;
-    background-color: rgb(223, 223, 223);
-}
-
-.other_user_card_content .other_user_title{
-    margin-bottom: 1rem;
-    font-weight: 1000;
-    font-size: 23px;
-    font-family: 'Secular One', sans-serif;
-    color: black;
-    font-style: italic;
-}
-
-.other_user_info{
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.other_user_info p{
-    font-size: 21px;
-    /* font-family: 'Secular One', sans-serif; 
-    color: rgb(0, 0, 0);
-    font-weight: 1000;
-}
-.other_user_info span{
-    color: black;
-    font-weight: 600;
-}
-
-
-
-@media (max-width: 26.25em){
-    .other_user_page{
-        left: 0px;
-        width: 100%;
-    }
-    .content .other_user_card{
-        width: 95%;
-    }
-} */
-
 .other_user_page{
     position: absolute;
     height: 100%;
     left: 78px;
     width: calc(100% - 78px);
-
 }
 
 .background{
@@ -113,31 +16,162 @@
     background-size: cover;
     background-repeat: no-repeat;
 }
+
 .content{
     position: absolute;
     height: 100%;
     width: 100%;
-
 }
 
-.top_banner{
+.other_user_page_content{
+    position: absolute;
+    width: 100%;
+    top: 17%;
+    display: flex;
+    height: calc(100% - 17%);
+    justify-content: center;
+    align-items: center;
+}
+
+.other_user_content_container{
+    display: flex;
+    /* background-color: blue; */
+    width: 100%;
+    height: 80%;
+    margin: 0 1rem;
+    justify-content: space-evenly;
+}
+
+.banner_container{
     position: fixed;
     width: calc(100% - 78px);
     z-index: 1;
     height: 17%;
     min-height: 100px;
-    background: #1F2134;
-    display: flex;
-
 }
 
-.top_banner_content{
-    margin: auto 2rem;
+.other_user_card_container{
+    width: 60%;
+    max-width: 600px;
+    min-width: 240px;
+}
+.other_user_card{
     width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
 }
+
+.card_container{
+    margin: 0 2rem;
+}
+
+.card_content .other_user_rating{
+    font-size: 26px;
+}
+
+.other_user_card .card_content{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+}
+.card_content::-webkit-scrollbar {
+    width: 8px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    margin: 2px;
+  }
+  
+.card_content::-webkit-scrollbar-thumb {
+    background-color: #777991;
+    border-radius: 10px;
+    width: 6px;
+  }
+.card_content .other_user_info{
+    width: 100%;
+    height: 100%;
+    padding: 1rem 2rem;
+
+}
+.card_content .card_title{
+    font-size: 28px;
+    font-style: italic;
+    font-family: Overpass,-apple-system,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
+    font-weight: 900;
+    color: black;
+}
+
+.card_content .other_user_pic{
+    margin: 0;
+}
+
+.card_content .dividing_line{
+    padding-top: 3px;
+    background-color: rgb(148, 169, 187);
+}
+.card_content .pic_line{
+    width: 30%;
+}
+.card_content .content_dividing_line{
+    width: 80%;
+}
+
+.other_user_content_title{
+    color: black;
+    margin: 1rem 0;
+    font-size: 26px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+.other_user_card .user_info{
+    /* background-color: red; */
+    margin: 2em 1em;
+}
+
+.other_user_activities_container{
+    background-color: green;
+    width: 15%;
+    max-width: 320px;
+    min-width: 220px;
+}
+
+.info_container{
+    border: solid 2px rgb(55, 56, 68);
+    border-radius: 20px;
+    margin: 1em 0;
+    padding: 0.5em;
+}
+
+
+.user_info .info_title{
+    font-size: 18px;
+    text-decoration: underline;
+    font-weight: 1000;
+    margin-bottom: 0.5em;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+}
+
+.user_interests{
+    display: inline-block;
+    max-width: 100%;
+}
+.user_interest{
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #1F2134;
+    color: white;
+    margin: 5px 5px;
+    font-weight: 600;
+    border-radius: 20px;
+}
+
+
+
+
 
 .other_user_pic{
     width: min(14vw, 14vh);
@@ -151,125 +185,6 @@
     margin: auto 2rem;
 }
 
-.top_banner span{
-    font-size: max(calc(10vw / 3), 21px);
-    font-family: Overpass,-apple-system,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
-    color: white;
-    font-weight: 600;
-
-}
-
-.top_banner p{
-    position: absolute;
-    font-family: Overpass,-apple-system,BlinkMacSystemFont,Segoe UI,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif;
-    right: 5%;
-    bottom: 0;
-}
-
-.other_user_content{
-    position: absolute;
-    width: 100%;
-    top: 17%;
-    height: calc(100% - 17%);
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-.other_user_card{
-    width: 60%;
-    transform: translate();
-    max-width: 500px;
-    min-width: 320px;
-
-}
-.card .card_content{
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.card_content .other_user_info{
-    width: 100%;
-    height: 100%;
-    padding: 1rem 2rem;
-}
-.other_user_info .info{
-    display: flex;
-    width: 100%;
-    margin-bottom: 1rem;
-   
-}
-.info .explanation{
-    width: 20%;
-}
-.info p{
-    color: black;
-    font-weight: 600;
-    font-size: 17px;
-}
-p.user_data{
-    font-style: italic;
-    font-weight: 600;
-    color: black;
-}
-.card span{
-    width: 100%;
-    text-align: center;
-    color: black;
-    font-weight: 600;
-    font-size: 23px;
-    margin-left: 0;
-}
-.card .line{
-    margin: 1em 0;
-    width: 90%;
-    height: 3px;
-    background-color: rgb(148, 169, 187);
-}
-.card .pic_line{
-    margin-top: 1em;
-    margin-bottom: 2em;
-    width: 30%;
-    height: 3px;
-    background-color: rgb(148, 169, 187);
-}
-.card_content .card_title{
-    font-size: 25px;
-    font-style: italic;
-    margin-bottom: 0.5em;
-}
-
-.other_user_bio{
-    border: solid 3px rgba(87, 86, 86, 0.637);
-    border-radius: 5px;
-    padding: 5px 10px;
-    display: flex;
-    flex-direction: column;
-}
-.rating{
-    margin-top: 1rem;
-}
-
-.other_user_interests{
-    color: black;
-    width: 90%;
-    font-weight: 600;
-    border: solid 3px rgba(87, 86, 86, 0.637);
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-}
-
-
-.registered_activities{
-    min-width: 200px;
-    width: 20%;
-    max-width: 300px;
-    height: 70%;
-    margin-left: 3rem;
-}
 
 
 @media (max-width: 26.25em){
@@ -277,59 +192,45 @@ p.user_data{
         left: 0px;
         width: 100%;
     }
-    .top_banner{
-        width: 100%;
-    }
     .background{
         width: 100%;
     }
+    .banner_container{
+        width: 100%;
+    }
 
+    .other_user_content_container{
+        width: 100%;
+        position: absolute;
+        margin: 0;
+        height: 100%;
+    }
+    .other_user_card_container{
+        margin: 0;
+        width: 100%;
+
+    }
 
     .other_user_pic{
         margin: auto 0.7rem auto 0;
     }
 } 
 
-@media (max-width: 26.875em){
-    .other_user_pic{
-        margin: auto 0.7rem auto 0;
-    }
-} 
 
 @media (max-width: 78.75em){
     .other_user_pic{
         margin: auto 0.7rem auto 0;
     }
-    .top_banner p{
-    right: 8%;
-    }
 } 
 @media (max-width: 53.75em){
-    .registered_activities{
+    .other_user_activities_container{
         display: none;
     }
-    .other_user_card{
+}
+@media (min-width: 26.251em) and (max-width: 53.75em){
+
+    .other_user_card_container{
         width: 80%;
     }
 } 
 
-@media (max-width: 42.5em){
-    .info p{
-        font-size: 16px;
-    }
-    .info{
-        margin: -1rem;
-    }
-    .info .user_data{
-        margin-left: 0.5rem;
-    }
-} 
-
-@media (max-width: 30em){
-    .card{
-        width: 100%;
-        position: absolute;
-        top: 5%;
-    }
-} 
-/* from 30 rem --> mobile ui */

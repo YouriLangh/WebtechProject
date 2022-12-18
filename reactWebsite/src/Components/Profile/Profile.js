@@ -13,7 +13,7 @@ import { WidgetLoader, Widget } from 'react-cloudinary-upload-widget'
 
 const jwt = require('jsonwebtoken')
 
-function Profile() {
+function Profile(props) {
 
   const myCld = new Cloudinary({
     cloud: {
@@ -45,10 +45,12 @@ function Profile() {
     let new_profile = {...profile, url: e.info.public_id}
     setProfile(new_profile);
     updatePfp(e.info.public_id);
+    props.updateCallback(e.info.public_id)
   }
 
   useEffect(() => {
       const userToken = localStorage.getItem('token');
+      console.log(userToken)
       const username = jwt.decode(userToken).username;
       try{ 
       axios({
@@ -95,7 +97,9 @@ function Profile() {
         <p align="center">
           {profile.email}
         </p>
-        <Comments profile={profile}/>
+        <div className='user_comments'>
+        <Comments showStars= {true} profile={profile}/>
+        </div>
         </CardContent>
         </Card>
     </div>
