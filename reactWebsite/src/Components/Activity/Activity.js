@@ -34,16 +34,15 @@ function Activity() {
         }
     })
 
-    const fetchingContent = (
-        <div>
-            <p>       fetching</p>
-            <Link to='/app/events/create'>Go to Creator</Link>
-            <Sidenav newData={pseudoData}/>
-        </div>
-    )
 
     if (activities.length === 0) {
-        return <Link to='/app/events/create'>Go to Creator</Link>
+        title = "No more activities";
+        content =
+            <div>
+                <p>fetching</p>
+                <Link to='/app/events/create'>Go to Creator</Link>
+            </div>
+        return content
     }
         console.log('fetched');
 
@@ -52,8 +51,6 @@ function Activity() {
             <div>
                 <li>{activities[current].activityName}</li>
                 <li>{activities[current].activityType}</li>
-                <li>{activities[current].minimumAge.toString()}</li>
-                <li>{activities[current].maximumAge.toString()}</li>
                 <li>{activities[current].activityLocation}</li>
                 <li>{activities[current].minimumGroupSize.toString()}</li>
                 <li>{activities[current].maximumGroupSize.toString()}</li>
@@ -85,6 +82,21 @@ function Activity() {
                     }),
                 }).then(res => {
                     console.log("returned from activity add activity");
+                    console.log(res);
+                })
+            } catch (error) {console.log(error)}
+            try {
+                axios({
+                    url: 'http://localhost:4000/app/activity/increase',
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    data: JSON.stringify({
+                        activityID: activities[current]._id,
+                    }),
+                }).then(res => {
+                    console.log("returned from activity increase activity");
                     console.log(res);
                 })
             } catch (error) {console.log(error)}

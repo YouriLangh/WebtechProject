@@ -52,8 +52,6 @@ function Creator() {
             activityName,
             activityDate,
             activityType,
-            minimumAge,
-            maximumAge,
             activityLocation,
             minimumGroupSize,
             maximumGroupSize,
@@ -99,20 +97,6 @@ function Creator() {
                                     <option value="Social">Social</option>
                                     <option value="Other">Other</option>
                                 </select>
-                            </div>
-
-                            <div className="input_fieldC">
-                                <input value= {minimumAge}
-                                       onChange={(e) => setMinimumAge(e.target.value)}
-                                       type="number" id="activityMinAge" placeholder="Enter min age" min="18" max="30" required/>
-                                <i className="fa-regular icon"><FontAwesomeIcon icon={faSortNumericDown} /></i>
-                            </div>
-
-                            <div className="input_fieldC">
-                                <input value= {maximumAge}
-                                       onChange={(e) => setMaximumAge(e.target.value)}
-                                       type="number" id="activityMaxAge" placeholder="Enter max age" min="18" max="30" required/>
-                                <i className="fa-regular icon"><FontAwesomeIcon icon={faSortNumericUp} /></i>
                             </div>
 
                             <div className="input_fieldC">

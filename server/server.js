@@ -296,6 +296,22 @@ app.patch('/app/activity/join', async (req, res) => {
         .catch((err) => res.send(err));
 })
 
+app.patch('/app/activity/increase', async (req, res) => {
+    console.log("in add participant on server");
+    Activity.findOneAndUpdate({
+        _id: req.body.activityID,
+    }, { $inc:
+            {
+                participators: 1
+            }
+    }, { new: true })
+        .exec()
+        .then((result) => {
+            console.log(result.participators);
+            res.send(result)
+        })
+        .catch((err) => res.send(err));
+})
 
 app.listen(4000, () => {console.log("Server is up and running")})
 
