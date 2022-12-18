@@ -257,6 +257,15 @@ app.patch('/app/profile/comment', async (req, res) => {
         .catch((err) => res.send(err));
 })
 
+app.patch('/app/profile/edit', async (req, res) => {
+    User.findOneAndUpdate({username: req.body.username}, req.body, function(err, result) {
+        if (err) {
+          res.send(err);
+        } else {
+          res.send(result);
+        }
+    })})
+
 app.patch('/app/activity/leave', async (req, res) => {
     const userToken = req.body.userToken;
     const activityID = req.body.activityID;

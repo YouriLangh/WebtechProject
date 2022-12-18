@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { renderToString } from 'react-dom/server';
 import "./Comments.css"
 import { Button, Divider } from '@mui/material';
 import axios from 'axios';
@@ -34,6 +33,23 @@ function Comments(props) {
       if(props.updateCallback) props.updateCallback(averageRating);
       }
     }, [comments])
+
+    useEffect(() => {
+      try {
+        axios({
+          url: 'http://localhost:4000/app/profile/edit',
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+            rating: avgRating
+          }),
+        }).then(res => {
+          console.log(res)
+        })
+      } catch (error) {console.log(error)}
+    }, [avgRating])
 
     const addComment = async (e) => {
         const username = userInfo.username;
