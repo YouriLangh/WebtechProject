@@ -61,7 +61,7 @@
 }
 
 .card_container{
-    margin: 0 2rem;
+    margin: 0 1rem;
 }
 
 .card_content .other_user_rating{
@@ -105,7 +105,7 @@
     margin: 0;
 }
 
-.card_content .dividing_line{
+.dividing_line{
     padding-top: 3px;
     background-color: rgb(148, 169, 187);
 }
@@ -127,13 +127,11 @@
 
 
 .other_user_card .user_info{
-    /* background-color: red; */
     margin: 2em 1em;
 }
 
 .other_user_activities_container{
-    background-color: green;
-    width: 15%;
+    width: 20%;
     max-width: 320px;
     min-width: 220px;
 }
@@ -169,10 +167,6 @@
     border-radius: 20px;
 }
 
-
-
-
-
 .other_user_pic{
     width: min(14vw, 14vh);
     height:  min(14vw, 14vh);
@@ -185,6 +179,84 @@
     margin: auto 2rem;
 }
 
+.other_user_activities_container .activities_card{
+    width: 100%;
+    height: 100%
+}
+
+.activities_card .activities_card_content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.activities_card_content .dividing_line{
+    margin-top: 1rem;
+    width: 80%;
+}
+
+.activities_card span{
+    color: black;
+    font-size: 24px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 800;
+    font-style: italic;
+}
+
+.activities_card .registered_activities{
+    width: 100%;
+    height: 100%;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.registered_activities::-webkit-scrollbar {
+    width: 8px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    margin: 2px;
+  }
+  
+.registered_activities::-webkit-scrollbar-thumb {
+    background-color: #777991;
+    border-radius: 10px;
+    width: 6px;
+  }
+
+.activity_container{
+    background-color: rgb(40, 39, 105);
+    border-radius: 10px;
+    width: 95%;
+    padding:  10px;
+    height: 55px;
+    margin: 1em 10px 1em 0;
+    display: flex;
+    align-items: center;
+}
+
+.activity_container img{
+    object-fit: cover;
+    max-width: 45px;
+    max-height: 45px;
+    border-radius: 50px;
+}
+
+.activity_container p{
+    color: white;
+    text-align: center;
+    margin: 0;
+    margin-left: 1em;
+}
+
+.no_activities{
+    font-size: 20px;
+}
 
 
 @media (max-width: 26.25em){

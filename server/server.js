@@ -215,6 +215,7 @@ app.post('/app/users', async (req, res) => {
         comments: user.comments,
         rating: user.rating,
         date_joined: user._id.getTimestamp(), 
+        activities: user.activities,
         interests: user.interests}, process.env.PRIVATE_KEY)
      res.send({token: formatted})}
      catch (err){

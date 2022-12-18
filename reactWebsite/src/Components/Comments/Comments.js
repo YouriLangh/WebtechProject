@@ -30,7 +30,7 @@ function Comments(props) {
       if(!isNaN(averageRating)) 
       {setAvgRating(averageRating);
       console.log("average rating", averageRating)
-      props.updateCallback(averageRating)
+      if(props.updateCallback) props.updateCallback(averageRating);
       }
     }, [comments])
 
