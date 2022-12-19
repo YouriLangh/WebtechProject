@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const CommentSchema = new mongoose.Schema({
     body: {type: String},
     rating: {type: Number, default: 5},
+    user: {type: String},
 });
 
 const User = new mongoose.Schema({
@@ -13,7 +14,8 @@ const User = new mongoose.Schema({
     interests: [{type: String}],
     comments: [CommentSchema],
     rating: {type: Number, default: 0},
-    activities: [{type: String}]
+    activities: [{type: String}],
+    bio: {type: String, default: 'No bio added yet'}
 },
 { collection: 'user-data'}
 )

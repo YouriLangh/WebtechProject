@@ -120,20 +120,14 @@ app.post('/app/profile', async (req, res) => {
             url: user.url,
             comments: user.comments,
             rating: user.rating,
-            interests: user.interests
+            interests: user.interests,
+            bio: user.bio,
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
         }
     } catch (error) {
          return res.json({ status: 500, message: "Server Error", profile: false});
     }})
-
-app.put('/app/profile/edit', async (req, res) => {
-    console.log(req.body);
-    User.findOneAndUpdate({username: req.body.username}, req.body, { new: true })
-        .exec()
-        .then((result) => res.send(result))
-        .catch((err) => res.send(err));})
 
 app.post('/app/activities/fetch', async (req, res) => {
     Activity.find({}, (err, activities) => {
@@ -251,7 +245,7 @@ app.post('/app/user/search', async (req, res) => {
 
 app.patch('/app/profile/comment', async (req, res) => {
     User.findOneAndUpdate({username: req.body.username}, 
-        { $push: { comments: {body: req.body.comment, rating: req.body.rating } } }, 
+        { $push: { comments: {body: req.body.comment, rating: req.body.rating, user: req.body.posterUsername } } }, 
         { new: true })
         .exec()
         .then((result) => res.send(result))
@@ -259,13 +253,11 @@ app.patch('/app/profile/comment', async (req, res) => {
 })
 
 app.patch('/app/profile/edit', async (req, res) => {
-    User.findOneAndUpdate({username: req.body.username}, req.body, function(err, result) {
-        if (err) {
-          res.send(err);
-        } else {
-          res.send(result);
-        }
-    })})
+    console.log(req.body);
+    User.findOneAndUpdate({username: req.body.username}, req.body, { new: true })
+        .exec()
+        .then((result) => res.send(result))
+        .catch((err) => res.send(err));})
 
 app.patch('/app/activity/leave', async (req, res) => {
     const userToken = req.body.userToken;
