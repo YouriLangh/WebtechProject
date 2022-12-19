@@ -14,7 +14,8 @@ const User = new mongoose.Schema({
     interests: [{type: String}],
     comments: [CommentSchema],
     rating: {type: Number, default: 0},
-    activities: [{type: String}]
+    activities: [{type: String}],
+    bio: {type: String, default: 'No bio added yet'}
 },
 { collection: 'user-data'}
 )

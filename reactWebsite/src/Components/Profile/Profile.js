@@ -3,8 +3,7 @@ import'./Profile.css';
 import Comments from '../Comments/Comments'
 import axios from 'axios';
 import Card from '@mui/material/Card';
-import { useNavigate } from 'react-router-dom';
-import { CardContent, Typography } from '@mui/material';
+import { CardContent, Button } from '@mui/material';
 import { AdvancedImage } from '@cloudinary/react'
 import { Cloudinary } from '@cloudinary/url-gen';
 import {thumbnail} from "@cloudinary/url-gen/actions/resize";
@@ -24,7 +23,6 @@ function Profile(props) {
     }
   });
 
-  const navigate = useNavigate()
   const [profile, setProfile] = useState({
     username: '',
     email: '',
@@ -34,6 +32,8 @@ function Profile(props) {
 
   const [pfp, setPfp] = useState(myCld.image(profile.url))
   const [interests, setInterests] = useState([]);
+  const [bio, setBio] = useState('My bio goes here');
+  const [editMode, setEditMode] = useState(false);
 
   const updatePfp = async (newUrl) => {
     if (newUrl == "") {
@@ -51,44 +51,60 @@ function Profile(props) {
   }
 
   useEffect(() => {
-    const userToken = localStorage.getItem('token');
-    if (userToken){
-     const user = jwt.decode(userToken)
-     if(!user){
-       localStorage.removeItem('token')
-       navigate('/login', { replace: true })}
-       else{
-        const username = jwt.decode(userToken).username;
-        try{ 
-          axios({
-            url: 'http://localhost:4000/app/profile',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            data: JSON.stringify({
-                username,
-            }),
-            }).then(res => {
-              let newProfile = jwt.decode(res.data.profile);
-              setProfile(newProfile);
-              updatePfp(newProfile.url);
-              setInterests(newProfile.interests);})
-          } catch (error) {console.log(error)}
-          pfp
-          .resize(thumbnail().gravity(focusOn(FocusOn.face())))
-        }
-       }
-
-     
+      const userToken = localStorage.getItem('token');
+      const username = jwt.decode(userToken).username;
+      try{ 
+      axios({
+        url: 'http://localhost:4000/app/profile',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: JSON.stringify({
+            username,
+        }),
+        }).then(res => {
+          let newProfile = jwt.decode(res.data.profile);
+          setProfile(newProfile);
+          updatePfp(newProfile.url);
+          setInterests(newProfile.interests);
+          setBio(newProfile.bio);})
+      } catch (error) {console.log(error)}
+      pfp
+      .resize(thumbnail().gravity(focusOn(FocusOn.face())))
   }, []);
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    try {
+      axios({
+        url:'http://localhost:4000/app/profile/edit',
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          username: profile.username,
+          bio: bio,
+        },
+    }).then(res => {
+      console.log(res);
+      setEditMode(false);
+    })
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div> 
       <WidgetLoader />
       <div className='profile_page'>
         <Card variant="outlined" className='profile_card'>
-        <CardContent>
+        <CardContent>  
+        <div className="edit_button">
+        <Button variant="outlined" onClick={() => setEditMode(!editMode)}>Edit</Button>
+        </div><br/>
         <div className='pfp'>
         <AdvancedImage 
         cldImg={pfp} 
@@ -108,6 +124,20 @@ function Profile(props) {
         <p align="center">
           {profile.email}
         </p>
+        <div className="bio">
+          {editMode ? (
+          <div>
+            <textarea 
+            value={bio} 
+            onChange={(event) => setBio(event.target.value)}
+            rows='5'
+            cols='50' /><br/>
+            <Button variant="outlined" onClick={handleSave}>Save</Button>
+          </div>
+          ) : (
+          <div>{bio}</div>
+          )}
+        </div>
         <div className='user_comments'>
         <Comments showStars= {true} profile={profile}/>
         </div>

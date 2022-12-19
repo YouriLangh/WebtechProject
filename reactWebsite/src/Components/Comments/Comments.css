@@ -49,3 +49,7 @@ ul::-webkit-scrollbar-thumb {
 .comment_card {
   background-color: #f5f5f5;
 }
+
+.comment_user {
+  margin-bottom: 5px;
+}

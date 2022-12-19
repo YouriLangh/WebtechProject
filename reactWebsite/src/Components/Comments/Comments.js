@@ -85,8 +85,8 @@ function Comments(props) {
     function renderCommentUser(comment) {
       if (comment.user !== undefined) {
         return (
-          <div>
-            <b>{comment.user}:</b>
+          <div className='comment_user'>
+            {comment.user}:
           </div>
         );}}
     
@@ -104,14 +104,14 @@ function Comments(props) {
             
             {comments.map((comment) => (
               <li key={comment.id}>
-                <Card>
-                <CardContent className="comment_card">
                 <StarRatingComponent
               name="rate3" 
               editing={false}
               starCount={5}
               value={comment.rating}/><br/>
               {renderCommentUser(comment)}
+              <Card>
+                <CardContent className="comment_card">
               {comment.body} </CardContent></Card></li>
             ))}
           </ul> : <p> No new comments</p>}
