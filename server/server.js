@@ -250,7 +250,7 @@ app.post('/app/user/search', async (req, res) => {
 
 app.patch('/app/profile/comment', async (req, res) => {
     User.findOneAndUpdate({username: req.body.username}, 
-        { $push: { comments: {body: req.body.comment, rating: req.body.rating, user: req.body.user } } }, 
+        { $push: { comments: {body: req.body.comment, rating: req.body.rating, user: req.body.posterUsername } } }, 
         { new: true })
         .exec()
         .then((result) => res.send(result))

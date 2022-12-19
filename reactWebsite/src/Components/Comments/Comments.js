@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import "./Comments.css"
-import { Button, Divider } from '@mui/material';
+import { Button, CardContent, Divider } from '@mui/material';
 import axios from 'axios';
 import StarRatingComponent from 'react-star-rating-component';
+import Card from '@mui/material/Card';
+
+const jwt = require('jsonwebtoken')
 
 function Comments(props) {
 
@@ -52,7 +55,10 @@ function Comments(props) {
     }, [avgRating])
 
     const addComment = async (e) => {
-        const username = userInfo.username;
+      const username = userInfo.username;
+      const userToken = localStorage.getItem('token');
+      const user = jwt.decode(userToken)
+      const posterUsername = user.username;
         try {
           axios({
             url: 'http://localhost:4000/app/profile/comment',
@@ -64,6 +70,7 @@ function Comments(props) {
               username,
               comment,
               rating,
+              posterUsername
             }),
           }).then(res => {
             console.log(res)
@@ -74,6 +81,14 @@ function Comments(props) {
         document.getElementById("comment_input").value = '';
         setRating(5);
     }
+
+    function renderCommentUser(comment) {
+      if (comment.user !== undefined) {
+        return (
+          <div>
+            <b>{comment.user}:</b>
+          </div>
+        );}}
     
   return (
     <div className="comments">
@@ -89,13 +104,15 @@ function Comments(props) {
             
             {comments.map((comment) => (
               <li key={comment.id}>
+                <Card>
+                <CardContent className="comment_card">
                 <StarRatingComponent
               name="rate3" 
               editing={false}
               starCount={5}
               value={comment.rating}/><br/>
-              {comment.user}
-              {comment.body} </li>
+              {renderCommentUser(comment)}
+              {comment.body} </CardContent></Card></li>
             ))}
           </ul> : <p> No new comments</p>}
           
