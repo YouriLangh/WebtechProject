@@ -195,11 +195,12 @@ app.put('/app/activities/publish', async (req, res) => {
 
 
 app.get('/app/users', async (req, res) => {
-    const users = await User.find()
+    const users = await User.find().limit(50)
     const formatted = users.map(element => jwt.sign({username: element.username, 
         id: element._id, 
         email: element.email, 
         url: element.url, 
+        rating: element.rating,
         interests: element.interests}, process.env.PRIVATE_KEY))
     // console.log(formatted)
     res.send({formatted})

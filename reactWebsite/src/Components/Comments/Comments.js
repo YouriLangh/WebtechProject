@@ -29,12 +29,13 @@ function Comments(props) {
       const averageRating = Math.round(totalRating / comments.length);
       if(!isNaN(averageRating)) 
       {setAvgRating(averageRating);
-      console.log("average rating", averageRating)
-      if(props.updateCallback) props.updateCallback(averageRating);
       }
     }, [comments])
 
     useEffect(() => {
+      if(props && props.updateCallback){
+        props.updateCallback(avgRating)
+      }
       try {
         axios({
           url: 'http://localhost:4000/app/profile/edit',
@@ -67,12 +68,13 @@ function Comments(props) {
             }),
           }).then(res => {
             console.log(res)
+            setComment('');
+           setComments([...comments, {body: comment, rating: rating}]);
+           document.getElementById("comment_input").value = '';
+           setRating(5);
           })
         } catch (error) {console.log(error)}
-        setComment('');
-        setComments([...comments, {body: comment, rating: rating}]);
-        document.getElementById("comment_input").value = '';
-        setRating(5);
+        
     }
     
   return (

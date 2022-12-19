@@ -1,50 +1,209 @@
 .users_page{
     position: absolute;
     left: 80px;
-    top: 50px;
     width: calc(100% - 80px);
     display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+
+.topbar_users{
+    margin-top: 2rem;
+    position: relative;
+    padding: 20px 5px;
+    width: 80%;
+    top: 0;
+    display: flex;
+    border-radius: 5px;
+    flex-direction: column;
+    background-color: rgba(250, 235, 215, 1);
+}
+
+.topbar_users .top_container{
+    margin: 0.75rem 0;
+    height: 50px;
+    border-radius: 8px;
+    display: flex;
+    width: 100%;
+}
+
+.searchbar_container{
+    border: 1px solid #ccc;
+    justify-content: space-between;
+    background-color: white;
+    padding: 5px;
+    align-items: center;
+
+}
+
+.users_page h1{
+    color: black;
+    font-weight: bold;
+}
+
+.searchbar_container .searchbar{
+    margin-left: 6%;
+    width: 100%;
+    background: none;
+    border: none;
+
+}
+.searchbar_container text:focus, input:focus{
+    outline: none;
+}
+#sort_menu{
+    margin-left: 1em;
+}
+
+.sort_icons{
+    color: black;
+}
+
+.searchbar_container .searchbar_icon{
+    position: absolute;
+    left: 2%;
+    color: #ccc;
+}
+
+.searchbar_container .searchbar_icon:hover{
+    cursor: default;
+}
+.searchbar_container button{
+    border-radius: 20px;
+    background-color: rgb(114, 24, 24);
+    color: white;
+    font-weight: bold;
+    border: none;
+    height: 90%;
+    padding: 0 10px;
+    transition: all ease 0.5s;
+}
+
+.searchbar_container button:hover{
+    background-color: rgb(94, 6, 6);
+}
+
+.users_page .sort_container{
+    border: none;
+    background-color:#F0FAFF;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.5em ;
+}
+
+.sort_container span{
+    color: #2e2e2e;
+    font-weight: bold;
+}
+
+.results_wrapper{
+    margin-top: 3rem;
+    width: 80%;
+
+}
+.results_container{
+    border-radius: 5px;
+    background-color: rgb(234, 242, 245);
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 2em;
+}
+
+.card_wrapper{
+    display: inline-block;
+    max-width: 600px;
+    width: 70%;
+    min-width: 400px;
+    margin:  0.5em 1em;
+}
+
+.results_container .user_content{
+    display: flex;
+
+
+}
+.user_info .name_and_rating{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.user_info p{
+    color: black;
+    font-weight: bold;
+    font-size: 1.2em;
+
+}
+
+.user_info .user_rating{
+    max-width: 85px;
+    margin-bottom: 0.5em;
+    font-size: 1.2em;
+}
+
+.user_info .interest_container{
+    display: inline-block;
+}
+
+.pic_container{
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.all_users{
-    transition: all 0.2ms ease;
-}
-.users_content{
-    display: flex;
-    align-items: center;
-
-}
-.users_pic{
-    width: 50px;
-    height: 50px;
-    aspect-ratio: 1;
-    border-radius: 50px;
-}
-
-.users_info{
-    margin-left: 1.3em;
-}
-.users_info p{
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    font-weight: 600;
-    font-size: 19px;
-}
-
-.users_page .user_card{
-    margin: 1em 5px;
-    min-width: 300px;
+.user_content .user_pic{
+    width: min(8vw, 8vh);
+    height:  min(8vw, 8vh);
+    min-width: 80px;
     min-height: 80px;
-    cursor: pointer;
+    object-fit: cover;
+    max-width: 110px;
+    max-height: 110px;
+    border-radius: 90px;
+    margin-right: 2em;
+}
+
+.results_container .user_card{
+    margin: 1em 0;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.575);
+}
+
+.user_info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@media (max-width: 37.5em){
+    .topbar_users{
+        width: 100%;
+    }
+    .results_wrapper{
+        width: 100%;
+    }
+    .card_wrapper{
+        min-width: 300px;
+        width: 100%;
+    }
+    .user_info p{
+        font-size: 1em;
+    }
+
 }
 
 @media (max-width: 26.25em){
-
     .users_page{
+        left: 0;
         width: 100%;
-        left: 0px;
     }
-}
 
+}
+@media (max-width: 22.5em){
+    .user_info .interest_container{
+        display: none;
+    }
+
+}

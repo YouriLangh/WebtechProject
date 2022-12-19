@@ -103,6 +103,14 @@
 
 .card_content .other_user_pic{
     margin: 0;
+    margin: 0.5em 0;
+    width: min(8vw, 8vh);
+    height:  min(8vw, 8vh);
+    min-width: 80px;
+    min-height: 80px;
+    object-fit: cover;
+    max-width: 110px;
+    max-height: 110px;
 }
 
 .dividing_line{
@@ -128,6 +136,7 @@
 
 .other_user_card .user_info{
     margin: 2em 1em;
+    width: 80%;
 }
 
 .other_user_activities_container{
