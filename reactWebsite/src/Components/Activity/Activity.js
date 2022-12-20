@@ -10,6 +10,7 @@ function Activity() {
 
 
     const [showActivity,setShowActivity] = useState(true)
+    const [showInfo,setShowInfo] = useState(false)
     const [current, setCurrent] = useState(0);
     const [activities, setActivities] = useState([]);
     const [filteredActivities, setFilteredActivities] = useState([])
@@ -103,8 +104,13 @@ function Activity() {
 
         const onInfo = (e) => {
             e.preventDefault();
-            console.log('info');
+            setShowInfo(true);
         }
+
+    const onToggleInfo = (e) => {
+        e.preventDefault();
+        setShowInfo(false);
+    }
 
         const onAccept = (e) => {
             e.preventDefault();
@@ -171,14 +177,42 @@ function Activity() {
             }
         }
 
-        if (showActivity) {
+    if (showActivity && showInfo) {
+        const date = new Date(filteredActivities[current].activityDate)
+        let activityContent =
+            <div>
+                <li>{filteredActivities[current].activityName}</li>
+                <li>{date.toDateString()}</li>
+                <li>{filteredActivities[current].activityType}</li>
+                <li>{filteredActivities[current].activityLocation}</li>
+                <li>{filteredActivities[current].minimumGroupSize.toString()}</li>
+                <li>{filteredActivities[current].maximumGroupSize.toString()}</li>
+            </div>;
+        title = "Info";
+        content =
+            <div>
+                <div>
+                    {activityContent}
+                </div>
+                <div className="input_fieldA button">
+                    <input onClick= {(e) => onToggleInfo(e)} type="button" value="toggle info"/>
+                </div>
+                <div className="input_fieldA button">
+                    <input onClick= {(e) => onAccept(e)} type="button" value="accept"/>
+                </div>
+                <div className="input_fieldA button">
+                    <input onClick= {(e) => onDeny(e)} type="button" value="deny"/>
+                </div>
+            </div>
+    }
+
+        else if (showActivity) {
+        const date = new Date(filteredActivities[current].activityDate)
             let activityContent =
                 <div>
                     <li>{filteredActivities[current].activityName}</li>
-                    <li>{filteredActivities[current].activityType}</li>
+                    <li>{date.toDateString()}</li>
                     <li>{filteredActivities[current].activityLocation}</li>
-                    <li>{filteredActivities[current].minimumGroupSize.toString()}</li>
-                    <li>{filteredActivities[current].maximumGroupSize.toString()}</li>
                 </div>;
             title = "Find";
             content =

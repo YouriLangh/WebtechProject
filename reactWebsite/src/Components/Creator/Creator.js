@@ -7,7 +7,6 @@ import {
     faQuestion,
     faSortNumericDown, faSortNumericUp, faMapPin
 } from '@fortawesome/free-solid-svg-icons'
-import Sidenav from "../Sidenav/Sidenav";
 import {useNavigate} from "react-router-dom";
 import {Link} from "react-router-dom";
 import createActivity from "../Activity/ActivityService";
@@ -103,7 +102,7 @@ function Creator() {
 
                             <div className="dropdown">
                                 <i className="fa-regular icon"><FontAwesomeIcon icon={faQuestion} /></i>
-                                <select name="type" onChange={(e) => setActivityType(e.target.value)}>
+                                <select name="type" onChange={(e) => setActivityType(e.target.value)} required>
                                     <option value="Culture">Culture</option>
                                     <option value="Music">Music</option>
                                     <option value="Sports">Sports</option>
