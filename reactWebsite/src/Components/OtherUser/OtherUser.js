@@ -7,6 +7,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react'
 import { Card, CardContent } from '@mui/material'
 import noUser from '../../images/noUser.png'
+import SportsImg from '../../images/sports.jpg'
 import StarRatingComponent from 'react-star-rating-component';
 import Banner from '../Banner/Banner'
 
@@ -17,6 +18,7 @@ function OtherUser() {
     const {id} = useParams()
     const [user, setUser] = useState({})
     const [userExists, setUserExists] = useState(true)
+    const [activities, setActivities] = useState([])
 
     const navigate = useNavigate()
     const myCld = new Cloudinary({
@@ -27,6 +29,18 @@ function OtherUser() {
         }
       });
 
+    const getAct = async (act) => {
+      await axios.post('http://localhost:4000/app/users/activities', {actId: act}).then((res) => {
+        if (res.status === 200){
+          if(res.data.token){
+            const token = jwt.decode(res.data.token)
+            activities.push(token)
+          }
+        } else console.log("Server Error")
+
+      })
+    }
+
       // Returns the page of the user we are looking for, unless we are looking for ourselves, in which case we redirect to the profile.
     const getUser = async (currentUserName) => {
         await axios.post('http://localhost:4000/app/users', {id: id}).then((res) => {
@@ -34,11 +48,13 @@ function OtherUser() {
               if(res.data.token){
                 const token = jwt.decode(res.data.token)
                 if(token.username === currentUserName) {navigate("/app/profile")} else{
+                  console.log(token)
                 const formattedDate = new Date(token.date_joined)
                 const formattedInterests = token.interests.map((element, index) => element.substring(0, element.length - 9))
                 const formatted = ({username: token.username, activities: token.activities,
-                email: token.email, url: token.url, rating: token.rating, comments: token.comments, date_joined: formattedDate.toLocaleDateString(), interests: formattedInterests})
+                email: token.email, bio: token.bio, url: token.url, rating: token.rating, comments: token.comments, date_joined: formattedDate.toLocaleDateString(), interests: formattedInterests})
                 setUser(formatted)
+                token.activities.forEach(act => getAct(act))
                 window.scrollTo(0, 0);
                 }
               } else {
@@ -65,6 +81,17 @@ function OtherUser() {
        
    },[id])
 
+   const getImage = (activityType) => {
+    if(activityType === "Sports") return SportsImg;
+    if(activityType === "Culture") return noUser;
+    if(activityType === "Social") return noUser;
+    if(activityType === "Music") return noUser;
+    if(activityType === "Parties") return noUser;
+    if(activityType === "Concerts") return noUser;
+    if(activityType === "Other") return noUser;
+
+
+   }
 
    const updateRating = (new_rating) => {
     setUser( prev_state => ({...prev_state, rating: new_rating}))
@@ -95,7 +122,7 @@ function OtherUser() {
               <div className='user_info '>
                 <div className='user_bio info_container'> 
                   <p className='info_title'>Bio </p> 
-                  <p>{false ? "{user.bio}" : "haha sofunnysofunny"} </p>
+                  <p className='bio_text'>{user.bio}</p>
                 </div>
                 <div className='user_interests info_container'>  
                 <p className='info_title'>Interested topics </p> 
@@ -119,9 +146,11 @@ function OtherUser() {
                 </div>
                 <div className=' content_dividing_line dividing_line' />
                 <div className='registered_activities'>
-                  { user && user.activities && user.interests.length > 0 ? <> {user.interests.map(activity => <div className='activity_container'>
-                    <img src={noUser} alt="activity_picture"/>
-                    <p>haahah rzear ezrezar azer zear </p>
+                  { user && user.activities && activities.length > 0 ? <> {activities.map(activity => <div className='activity_container'>
+                    <div className='pic_container'>
+                    <img src={getImage(activity.activityType)} alt="activity_picture"/>
+                    </div>
+                    <p>{activity.activityName}</p>
                      </div>
                     ) }</> : <p className='no_activities'>No activities yet!</p>}
                 </div>

@@ -15,7 +15,7 @@ const User = new mongoose.Schema({
     comments: [CommentSchema],
     rating: {type: Number, default: 5},
     activities: [{type: String}],
-        deniedActivities: [{type: String}],
+    deniedActivities: [{type: String}],
     bio: {type: String, default: 'No bio added yet'}
 },
 { collection: 'user-data'}

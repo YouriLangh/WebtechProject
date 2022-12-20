@@ -162,6 +162,10 @@
 
 }
 
+.user_bio .bio_text{
+    font-size: 1em;
+}
+
 .user_interests{
     display: inline-block;
     max-width: 100%;
@@ -261,10 +265,14 @@
 
 .activity_container img{
     object-fit: cover;
+    min-width: 45px;
+    min-height: 45px;
     max-width: 45px;
     max-height: 45px;
     border-radius: 50px;
 }
+
+
 
 .activity_container p{
     color: white;

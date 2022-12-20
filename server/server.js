@@ -209,6 +209,7 @@ app.get('/app/users', async (req, res) => {
     res.send({formatted})
 })
 
+
 app.post('/app/users', async (req, res) => {
     const theId = req.body.id
     try{
@@ -220,6 +221,7 @@ app.post('/app/users', async (req, res) => {
         rating: user.rating,
         date_joined: user._id.getTimestamp(), 
         activities: user.activities,
+        bio: user.bio,
         interests: user.interests}, process.env.PRIVATE_KEY)
      res.send({token: formatted})}
      catch (err){
@@ -335,6 +337,17 @@ app.patch('/app/activity/increase', async (req, res) => {
         .catch((err) => res.send(err));
 })
 
+app.post('/app/users/activities', async (req, res) => {
+    const actId = req.body.actId
+    try{
+        const activity = await Activity.findOne({_id: actId})
+        const formatted = jwt.sign({activityName: activity.activityName, activityType: activity.activityType}, process.env.PRIVATE_KEY)
+        res.send({token: formatted})}
+        catch (err){
+        res.send({token: false})
+    }
+
+})
 
 
 app.listen(4000, () => {console.log("Server is up and running")})
