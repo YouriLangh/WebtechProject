@@ -38,7 +38,7 @@ margin: 0;
     height: 0px;
 }
 
-.search_bar{
+.sidenav .search_bar{
     display: flex;
     align-items: center;
     height: 2.5rem;
@@ -59,6 +59,7 @@ margin: 0;
     height: 2rem;
 
 }
+
 
 .sidenav.close .side_nav_item{
     align-items: center;
@@ -180,16 +181,51 @@ span{
     background-color: #2e333a;
 }
 
+.pic_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .sidenav_profile_pic{
-    width: 80px;
+    width: min(10vw, 10vh);
+    height: min(10vw, 10vh);
+    min-width: 50px;
+    min-height: 50px;
     max-width: 80px;
     max-height: 80px;
-    height: 80px;
-    aspect-ratio: 1;
+    object-fit: cover;
     margin-top: 10px;
     border-radius: 50px;
     box-shadow: 0 0 15px 3px rgb(100, 2, 2);
 }
+
+.mobile_nav_container .search_bar{
+    margin: 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 2.2rem;
+
+}
+
+.searchbar_icon.mobile{
+    transform: translate(-150%, 0);
+}
+
+.mobile_searchbar{
+    height: 100%;
+    min-width: 100%;
+    border-radius: 5px;
+
+}
+
+.mobile_nav_container .search_bar .searchbar{
+    position: absolute;
+    left: 0;
+    width: 50px;
+}
+
 
 
 .sidenav_user_name{

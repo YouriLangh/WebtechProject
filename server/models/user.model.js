@@ -13,7 +13,7 @@ const User = new mongoose.Schema({
     url: {type: String, required: true, default: 'pfp/default_pfp'},
     interests: [{type: String}],
     comments: [CommentSchema],
-    rating: {type: Number, default: 0},
+    rating: {type: Number, default: 5},
     activities: [{type: String}],
         deniedActivities: [{type: String}],
     bio: {type: String, default: 'No bio added yet'}
