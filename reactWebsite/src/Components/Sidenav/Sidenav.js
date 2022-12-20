@@ -153,7 +153,7 @@ const detectSize = () => {
         {/* <Link className='side_nav_item' to="/app/review"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faStar}/><span> {foldSidenav ? '': 'Review'} </span></li> </Link>  */}
         <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/map"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faMap}/>  <span> {foldSidenav ? '': 'Map'} </span></li></Link>
          <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/users"> <li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faMagnifyingGlass}/>  <span> {foldSidenav ? '': 'Search'} </span></li></Link>
-         <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/settings"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faCog}/>  <span> {foldSidenav ? '': 'Settings'} </span></li></Link>
+         {/* <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/settings"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faCog}/>  <span> {foldSidenav ? '': 'Settings'} </span></li></Link> */}
      
         {/* <Link className='side_nav_item' to="/app/weather"> <li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faCloud}/>  <span> {foldSidenav ? '': 'Weather'} </span></li></Link> */}
         <li onClick={() => {handleLogout()}} className='sidenav_li'> <FontAwesomeIcon className ='side_nav_item sidenav_icon'icon= {faArrowRightFromBracket}/> <span> {foldSidenav ? '': 'Logout'} </span></li>
@@ -177,7 +177,7 @@ const detectSize = () => {
         <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/events"> <li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faCalendarAlt}/> <span> Events </span></li> </Link>
         <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/map"><li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faMap}/>  <span> Map </span></li></Link>
         <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/users"> <li className='mobile_nav_li'><FontAwesomeIcon className ='mobile_icon'icon= {faMagnifyingGlass}/>  <span> Search </span></li></Link>
-        <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/settings"><li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faCog}/><span> Settings </span></li> </Link> 
+        {/* <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/settings"><li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faCog}/><span> Settings </span></li> </Link>  */}
         
         <li onClick={() => {handleLogout()}} className='mobile_nav_li logout_button'> <FontAwesomeIcon className ='side_nav_item mobile_icon'icon= {faArrowRightFromBracket}/> <span> Logout </span></li>
         </ul>

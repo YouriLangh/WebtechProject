@@ -190,14 +190,19 @@ span{
 .sidenav_profile_pic{
     width: min(10vw, 10vh);
     height: min(10vw, 10vh);
-    min-width: 50px;
-    min-height: 50px;
+    min-width: 80px;
+    min-height: 80px;
     max-width: 80px;
     max-height: 80px;
     object-fit: cover;
     margin-top: 10px;
     border-radius: 50px;
     box-shadow: 0 0 15px 3px rgb(100, 2, 2);
+}
+
+.sidenav.close .sidenav_profile_pic{
+    min-width: 50px;
+    min-height: 50px;
 }
 
 .mobile_nav_container .search_bar{
