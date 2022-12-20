@@ -21,12 +21,15 @@ function Creator() {
 
     const[errorMessage, setErrorMessage] = useState('');
 
-    const[activityName, setActivityName] = useState("");
+    const[activityName, setActivityName] = useState('');
     const[activityDate, setActivityDate] = useState('');
     const[activityType, setActivityType] = useState('');
     const[minimumAge, setMinimumAge] = useState('');
     const[maximumAge, setMaximumAge] = useState('');
-    const[activityLocation, setActivityLocation] = useState('');
+    const[country, setCountry] = useState('');
+    const[city, setCity] = useState('');
+    const[street, setStreet] = useState('');
+    const[houseNumber, setHouseNumber] = useState('');
     const[minimumGroupSize, setMinimumGroupSize] = useState('');
     const[maximumGroupSize, setMaximumGroupSize] = useState('');
     const[dateCreated, setDateCreated] = useState(0);
@@ -50,8 +53,11 @@ function Creator() {
     const onSubmit = (e) => {
         e.preventDefault()
         setDateCreated(Date.now);
+        const location = country + ", " + city + ", " + street + " " + houseNumber;
         console.log(activityName);
         console.log(activityType);
+        console.log(country);
+        console.log(location);
         const userToken = localStorage.getItem('token');
         if (!checkValues) {
             setErrorMessage("Invalid Entry");
@@ -61,7 +67,7 @@ function Creator() {
             activityName,
             activityDate,
             activityType,
-            activityLocation,
+            activityLocation: location,
             minimumGroupSize,
             maximumGroupSize,
             dateCreated,
@@ -109,9 +115,30 @@ function Creator() {
                             </div>
 
                             <div className="input_fieldC">
-                                <input value= {activityLocation}
-                                       onChange={(e) => setActivityLocation(e.target.value)}
-                                       type="text" id="activityLocation" placeholder="Enter activity location" required/>
+                                <input value= {country}
+                                       onChange={(e) => setCountry(e.target.value)}
+                                       type="text" id="country" placeholder="Enter country" required/>
+                                <i className="fa-regular icon"><FontAwesomeIcon icon={faMapPin} /></i>
+                            </div>
+
+                            <div className="input_fieldC">
+                                <input value= {city}
+                                       onChange={(e) => setCity(e.target.value)}
+                                       type="text" id="city" placeholder="Enter city" required/>
+                                <i className="fa-regular icon"><FontAwesomeIcon icon={faMapPin} /></i>
+                            </div>
+
+                            <div className="input_fieldC">
+                                <input value= {street}
+                                       onChange={(e) => setStreet(e.target.value)}
+                                       type="text" id="street" placeholder="Enter street" required/>
+                                <i className="fa-regular icon"><FontAwesomeIcon icon={faMapPin} /></i>
+                            </div>
+
+                            <div className="input_fieldC">
+                                <input value= {houseNumber}
+                                       onChange={(e) => setHouseNumber(e.target.value)}
+                                       type="text" id="houseNumber" placeholder="Enter address number" required/>
                                 <i className="fa-regular icon"><FontAwesomeIcon icon={faMapPin} /></i>
                             </div>
 
