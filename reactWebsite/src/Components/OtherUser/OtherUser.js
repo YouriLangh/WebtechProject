@@ -133,7 +133,12 @@ function OtherUser() {
     </div>
 
    } else {
-    navigate("/app/home")
+    content = 
+    <div className='content'>
+      <div className='center'>
+          <h1 className='centered'>User does not exist</h1>
+      </div>
+    </div>
 
    }
 
