@@ -8,6 +8,12 @@ import { AdvancedImage } from '@cloudinary/react'
 import { Card, CardContent } from '@mui/material'
 import noUser from '../../images/noUser.png'
 import SportsImg from '../../images/sports.jpg'
+import CultureImg from '../../images/culture1.jpg'
+import PartiesImg from '../../images/party.jpg'
+import ConcertsImg from '../../images/concert.jpg'
+import MusicImg from '../../images/music.jpg'
+import OtherImg from '../../images/other.jpg'
+import SocialImg from '../../images/social.jpg'
 import StarRatingComponent from 'react-star-rating-component';
 import Banner from '../Banner/Banner'
 
@@ -83,12 +89,12 @@ function OtherUser() {
 
    const getImage = (activityType) => {
     if(activityType === "Sports") return SportsImg;
-    if(activityType === "Culture") return noUser;
-    if(activityType === "Social") return noUser;
-    if(activityType === "Music") return noUser;
-    if(activityType === "Parties") return noUser;
-    if(activityType === "Concerts") return noUser;
-    if(activityType === "Other") return noUser;
+    if(activityType === "Culture") return CultureImg;
+    if(activityType === "Social") return SocialImg;
+    if(activityType === "Music") return MusicImg;
+    if(activityType === "Parties") return PartiesImg;
+    if(activityType === "Concerts") return ConcertsImg;
+    if(activityType === "Other") return OtherImg;
 
 
    }
