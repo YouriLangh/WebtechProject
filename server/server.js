@@ -129,7 +129,14 @@ app.post('/app/profile', async (req, res) => {
          return res.json({ status: 500, message: "Server Error", profile: false});
     }})
 
+
 app.post('/app/activities/fetch', async (req, res) => {
+    const userToken = req.body.userToken;
+    const user = await User.findOne({
+        username: jwtDecode(userToken).username,
+        email: jwtDecode(userToken).email,
+    });
+    let filteredActivities = [];
     Activity.find({}, (err, activities) => {
         if (err) {
             console.log(err)
@@ -137,7 +144,8 @@ app.post('/app/activities/fetch', async (req, res) => {
             return;
         }
         if (activities.length !== 0) {
-            res.send(activities);
+            filteredActivities = activities.filter(act => !user.activities.includes(act._id) && !user.deniedActivities.includes(act._id));
+            res.send(filteredActivities);
         } else {
             res.send([]);
         }
@@ -145,6 +153,7 @@ app.post('/app/activities/fetch', async (req, res) => {
 })
 
 app.post('/app/activities/fetch/filtered', async (req, res) => {
+    console.log("in fetch filtered");
     Activity.find({
         activityType: req.body.activityType,
     }, (err, activities) => {
@@ -285,6 +294,23 @@ app.patch('/app/activity/join', async (req, res) => {
     }, { $push:
             {
                 activities: activityID
+            }
+    }, { new: true })
+        .exec()
+        .then((result) => res.send(result))
+        .catch((err) => res.send(err));
+})
+
+app.patch('/app/activity/deny', async (req, res) => {
+    const userToken = req.body.userToken;
+    const activityID = req.body.activityID;
+    console.log("in deny activity on server");
+    User.findOneAndUpdate({
+        username: jwtDecode(userToken).username,
+        email: jwtDecode(userToken).email,
+    }, { $push:
+            {
+                deniedActivities: activityID
             }
     }, { new: true })
         .exec()
