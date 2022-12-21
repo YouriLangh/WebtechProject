@@ -42,8 +42,23 @@ function Profile(props) {
       setPfp(myCld.image("pfp/default_pfp"))
     } else {
       setPfp(myCld.image(newUrl));
-    }
-  } 
+      try{ 
+        axios({
+          url: 'http://localhost:4000/app/profile/edit',
+          method: 'PATCH',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+              username: profile.username,
+              url: newUrl,
+          }),
+          }).then(res => console.log(res))
+           } catch (error) {console.log(error)}
+        pfp
+        .resize(thumbnail().gravity(focusOn(FocusOn.face())))
+      } 
+    } 
 
   const handleUpload = async (e) => {
     let new_profile = {...profile, url: e.info.public_id}
