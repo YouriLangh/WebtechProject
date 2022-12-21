@@ -41,7 +41,8 @@ function OtherUser() {
         if (res.status === 200){
           if(res.data.token){
             const token = jwt.decode(res.data.token)
-            activities.push(token)
+            setActivities(old => [...old, ({activityName: token.activityName, activityType: token.activityType})])
+            console.log(token)
           }
         } else console.log("Server Error")
 

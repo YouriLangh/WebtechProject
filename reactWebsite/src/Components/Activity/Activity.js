@@ -3,6 +3,12 @@ import './Activity.css';
 import './MockActivity';
 import {Link} from "react-router-dom";
 import axios from "axios";
+import logo from '../../images/Logo.png'
+import background from '../../images/backgrounde.jpg'
+import { CardContent, Card } from "@mui/material";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {  faHeart, faInfo, faMultiply } from '@fortawesome/free-solid-svg-icons'
+import Weather from "../Weather/Weather";
 
 
 
@@ -15,7 +21,7 @@ function Activity() {
     const [activities, setActivities] = useState([]);
     const [filteredActivities, setFilteredActivities] = useState([])
     const [swipedActivities, setSwipedActivities] = useState([]);
-    const [filterType, setFilerType] = useState("");
+    const [filterType, setFilterType] = useState("");
     const [notYetFetched, setNotYetFetched] = useState(true);
     const userToken = localStorage.getItem('token');
 
@@ -62,55 +68,13 @@ function Activity() {
     }
 
 
-    if (activities.length === 0) {
-        return (
-            // <!--Registration Form-->
-            <div className='aPage'>
-                <div className='window_for_activity'>
-                    <div className='activity_container'>
-                        <Link to='/app/events/create'>Go to Creator</Link>
-                        <div className="formA">
-                            <div>
-                                <p>no more activities</p>
-                            </div>
-                            <span className="activity_title">{title}</span>
-                            <div className="dropdown">
-                                <select name="type" onChange={(e) => setFilerType(e.target.value)}>
-                                    <option value="None">None</option>
-                                    <option value="Culture">Culture</option>
-                                    <option value="Music">Music</option>
-                                    <option value="Sports">Sports</option>
-                                    <option value="Parties">Parties</option>
-                                    <option value="Concerts">Concerts</option>
-                                    <option value="Social">Social</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                                <input onClick= {(e) => onSetFilter(e)} type="button" value="Set Filter"/>
-                            </div>
-                        </div>
-                        <Link to='/app/events/create'>Go to Creator</Link>
-
-                    </div>
-                </div>
-                {/* <Sidenav newData={pseudoData}/> */}
-            </div>
-        )
-    }
-
-
-
-        let content
-        let title
-
         const onInfo = (e) => {
             e.preventDefault();
-            setShowInfo(true);
+            setShowInfo(!showInfo);
+            const element = document.getElementById("activity_info")
+            element.classList.toggle("flip")
         }
 
-    const onToggleInfo = (e) => {
-        e.preventDefault();
-        setShowInfo(false);
-    }
 
         const onAccept = (e) => {
             e.preventDefault();
@@ -176,70 +140,43 @@ function Activity() {
                 setCurrent(current+1);
             }
         }
+       
 
-    if (showActivity && showInfo) {
+
+    let activity_content 
+    if(showActivity && showInfo){
         const date = new Date(filteredActivities[current].activityDate)
-        let activityContent =
-            <div>
-                <li>{filteredActivities[current].activityName}</li>
-                <li>{date.toDateString()}</li>
-                <li>{filteredActivities[current].activityType}</li>
-                <li>{filteredActivities[current].activityLocation}</li>
-                <li>{filteredActivities[current].minimumGroupSize.toString()}</li>
-                <li>{filteredActivities[current].maximumGroupSize.toString()}</li>
+        activity_content =
+            <div className="show_info">
+                        <div className="activity_text">
+                <p>Name: {filteredActivities[current].activityName}</p>
+                <p>Date: {date.toDateString()}</p>
+                <p>Type: {filteredActivities[current].activityType}</p>
+                <p>Location: {filteredActivities[current].activityLocation}</p>
+                <p>min. size: {filteredActivities[current].minimumGroupSize.toString()}</p>
+                <p>max. size:{filteredActivities[current].maximumGroupSize.toString()}</p>
+                </div>
             </div>;
-        title = "Info";
-        content =
-            <div>
-                <div>
-                    {activityContent}
-                </div>
-                <div className="input_fieldA button info">
-                    <input onClick= {(e) => onToggleInfo(e)} type="button" value="toggle info"/>
-                </div>
-                <div className="input_fieldA button accept">
-                    <input onClick= {(e) => onAccept(e)} type="button" value="accept"/>
-                </div>
-                <div className="input_fieldA button deny">
-                    <input onClick= {(e) => onDeny(e)} type="button" value="deny"/>
-                </div>
-            </div>
-    }
-
-        else if (showActivity) {
+    } else if (showActivity && activities.length > 0){
         const date = new Date(filteredActivities[current].activityDate)
-            let activityContent =
-                <div>
-                    <li>{filteredActivities[current].activityName}</li>
-                    <li>{date.toDateString()}</li>
-                    <li>{filteredActivities[current].activityLocation}</li>
-                </div>;
-            title = "Find";
-            content =
-                <div>
-                    <div>
-                        {activityContent}
-                    </div>
-                    <div className="input_fieldA button info">
-                        <input onClick= {(e) => onInfo(e)} type="button" value="info"/>
-                    </div>
-                    <div className="input_fieldA button accept">
-                        <input onClick= {(e) => onAccept(e)} type="button" value="accept"/>
-                    </div>
-                    <div className="input_fieldA button deny">
-                        <input onClick= {(e) => onDeny(e)} type="button" value="deny"/>
-                    </div>
-                </div>
-        }
-        else {
-            title = "No more activities";
-            content =
-                <div>
-                    <p>no more activities</p>
-                </div>
+        activity_content = 
+        <div className="justify">
+        <div className="weather_component"> 
+        {/* Event Date moet zoiets zijn  let aDate = new Date("2022-12-19 13:00:00") en dan {aDate} meegeven */}
+        {/* eventLat="50.8833" eventLon="4.5" */}
+            {/* <Weather eventLat= "" eventLon= "" eventDate=""/> */}
+        </div>
+        <div className="activity_text">
+        <p>{filteredActivities[current].activityName}</p>
+        <p>{date.toLocaleDateString()}</p>
+        <p>{filteredActivities[current].activityLocation}</p>
+        </div>
+    </div>;
+    } else {
+            activity_content =
+                    <p className="no_activities">That's it!</p>
 
     }
-    let pseudoData = {username: '', url:''}
 
     const onSetFilter = (e) => {
             e.preventDefault();
@@ -254,16 +191,19 @@ function Activity() {
             setFilteredActivities(filterArray);
         }
 
+    const changeFilter = (e, value) => {
+        setFilterType(value)
+        onSetFilter(e)
+    }
+
     return (
-            // <!--Registration Form-->
-            <div className='aPage'>
-                <div className='window_for_activity'>
-                    <div className='activity_container'>
-                        <Link to='/app/events/create'>Go to Creator</Link>
-                        <div className="formA">
-                            <span className="activity_title">{title}</span>
-                            <div className="dropdown">
-                                <select name="type" onChange={(e) => setFilerType(e.target.value)}>
+            <div className='activity_page'>
+                        <Card className='activity_card'>
+                            <CardContent className="activity_content">
+                                <div className="filter_container">
+                                <div className="">
+                                <select name="type" onChange={(e) => changeFilter(e, e.target.value)}>
+                                    <option value="None">Custom</option>
                                     <option value="None">None</option>
                                     <option value="Culture">Culture</option>
                                     <option value="Music">Music</option>
@@ -273,16 +213,35 @@ function Activity() {
                                     <option value="Social">Social</option>
                                     <option value="Other">Other</option>
                                 </select>
-                                <input onClick= {(e) => onSetFilter(e)} type="button" value="Set Filter"/>
                             </div>
-                            {content}
-                        </div>
-                        <Link to='/app/events/create'>Go to Creator</Link>
+
+                                </div>
+                                <img src={logo} alt='Eventer Logo' className='activity_title logo'/>
+                                <div className="flip_outer">
+                                <div id="activity_info" className="activity_info">
+                                    {activity_content}
+
+                                <img src={background} alt='Eventer Logo' className='activity_background'/>
+                                    <div className="gradient"></div>
+
+
+
+                                </div>
+                                </div>
+                                <div className="buttons">
+                                    <button disabled={activities.length === 0} className="main_button button deny" onClick= {(e) => onDeny(e)}> <FontAwesomeIcon className='button_icon' icon= {faMultiply}/></button>
+                                    <button disabled={activities.length === 0} className="info_button button" onClick= {(e) => onInfo(e)}> <FontAwesomeIcon className='button_icon' icon= {faInfo}/></button>
+                                    <button disabled={activities.length === 0} className="main_button button accept" onClick= {(e) => onAccept(e)}>  <FontAwesomeIcon className='button_icon' icon= {faHeart}/></button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                        {/* <Link to='/app/events/create'>Go to Creator</Link>
+                        <div className="formA">
+                            <span className="activity_title">{title}</span>
+                           
+                        <Link to='/app/events/create'>Go to Creator</Link> */}
 
                 </div>
-            </div>
-            {/* <Sidenav newData={pseudoData}/> */}
-        </div>
     )
 }
 
