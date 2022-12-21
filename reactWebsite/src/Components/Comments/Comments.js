@@ -21,7 +21,7 @@ function Comments(props) {
           const formattedData = {username: props.profile.username, comments: props.profile.comments}
         setUserInfo(formattedData)
         setComments(props.profile.comments)
-          setAvgRating(props.profile.rating)
+        setAvgRating(props.profile.rating)
         }}
       },[])
 
@@ -91,11 +91,18 @@ function Comments(props) {
         
     }
 
+    function isYourComment(comment) {
+      const userToken = localStorage.getItem('token');
+      const username = jwt.decode(userToken).username;
+      return(comment.user == username);
+    }
+
     function renderCommentUser(comment) {
       if (comment.user !== undefined) {
+        let poster = isYourComment(comment) ? "You" : comment.user
         return (
           <div className='comment_user'>
-            {comment.user}:
+            {poster}:
           </div>
         );}}
     
