@@ -80,7 +80,7 @@ app.post('/app/login', async (req, res) => {
 
         },  process.env.PRIVATE_KEY)
         return  res.json({ status: 200, message: "Logged in successfully", user: token});
-    }
+    } else {return res.json({ status: 200, message: "Wrong name or password", user: false})}
     } catch (error) {
         return res.json({ status: 500, message: "Server Error", user: false});
     }
