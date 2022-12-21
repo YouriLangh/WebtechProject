@@ -19,7 +19,6 @@ import Activity from "./Components/Activity/Activity";
 import Sidenav from './Components/Sidenav/Sidenav';
 import { useState } from 'react';
 import OtherUser from './Components/OtherUser/OtherUser';
-import {fetchActivities} from "./Components/Activity/ActivityService";
 
 function App() {
   let aDate = new Date("2022-12-19 13:00:00")
@@ -48,11 +47,12 @@ function App() {
           <Route exact path='/app/profile' element={<div><Profile updateCallback={updateData}/> {sidenav} </div>} />
           <Route exact path='/app/events' element={<div><Activity /> {sidenav} </div>} />
           <Route exact path='/app/events/create' element={<div><Creator /> {sidenav} </div>} />
+          <Route exact path='/app/create' element={<div><Creator /> {sidenav} </div>} />
           <Route exact path='/app/map' element={<div><Map /> {sidenav} </div>} />
-          <Route exact path='/app/settings' element={<div><Map /> {sidenav} </div>} />
+          {/* <Route exact path='/app/settings' element={<div><Map /> {sidenav} </div>} /> */}
           <Route exact path='/app/users' element={<div><Users /> {sidenav} </div>} />
           <Route exact path='/app/users/:id' element={<div><OtherUser /> {sidenav} </div>} />
-          <Route exact path='/app/weather' element={<Weather eventLat="50.8833" eventLon="4.5" eventDate= {aDate} />} />
+          {/* <Route exact path='/app/weather' element={<Weather eventLat="50.8833" eventLon="4.5" eventDate= {aDate} />} /> */}
         </Routes>
       </Router>
     </div>

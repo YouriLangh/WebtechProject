@@ -1,124 +1,210 @@
-body{
-    display: flex;
-}
-*, *::before, *::after {
-    box-sizing: inherit;
-}
-
 .activity_page{
     position: absolute;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-}
-
-.window_for_activity{
-    width: 100%;
+    left: 78px;
+    width: calc(100% - 78px);
     height: 100%;
     display: flex;
+}
+
+
+.activity_card{
+    margin: auto;
+    width: 300px;
+    position:relative;
+    height: 550px;
+}
+
+.activity_content .logo{
+    height: 50px;
+    width: 50px;
+    margin: 0;
+    margin-bottom: 0.5rem;
+}
+
+.activity_content .filter_container{
+    position: absolute;
+    top: 0;
+    left: 3%;
+}
+
+.activity_content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-
+    justify-content: space-evenly;
+    height: 100%;
 }
-.activity_container{
-    position: relative;
-    max-width: 25rem;
-    width: 100%;
-    background: rgba(0,0,0,0.7);
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-}
-
-
-.activity_container .formA{
-    max-width: 25rem;
-    transform: translate(0, -5%);
-    width: 100%;
-    padding: 1.875em;
-    background-color: #333;
-}
-
 
 .activity_title{
     font-size: 1.4375em;
-    font-weight: 600;
+    font-weight: 1000;
+    color: black;
 }
 
-.input_fieldA{
-    position: relative;
-    margin-top: 1.5625em;
-    width: 100%;
-    height: 2.5em;
+
+
+.buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.input_fieldA input{
+.buttons .button{
+    background-color: rgb(240, 240, 240);
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 1px 1px 10px black;
+    border-radius: 50px;
+    width: 55px;
+    height: 55px;
+    margin: 0 0.8rem;
+    font-size: 1.5em;
+}
+
+.buttons .info_button{
+    width: 45px;
+    height: 45px;
+    font-size: 1em;
+
+}
+.accept .button_icon{
+    color: rgb(29, 209, 83);
+}
+
+.deny .button_icon{
+    color: rgb(218, 31, 31);
+}
+
+.activity_info{
     height: 100%;
     width: 100%;
-    padding: 0 1.875em;
-    border-bottom: 2px solid #ccc;
-    font-size: 0.9375em;
+    transition: all ease 0.8s;
+    transform-style: preserve-3d;
+    position: relative;
+    border-radius: 8px;
 }
 
-.input_field input:is(:focus, :valid){
-    border-bottom-color: #b1b1b1;
+.weather_component{
+    position: absolute;
+    right: 2%;
+    top: 1%;
+    width: 80px;
+    height: 80px;
 }
 
-
-
-.form .checkbox_text{
+.justify{
+    position: relative;
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-    font-weight: 600;
-    margin-top: 20px;
-    align-items: center;
-
-}
-.checkbox_text .checkbox_content{
-    display: flex;
-    align-items: center;
+    align-items: flex-end;
 }
 
-.formA .button{
-    margin-top: 30px;
+
+.activity_info .activity_text{
+    width: 100%;
+    display: inline-block;
+    padding: 5px 5px 0 5px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.342), rgba(0, 0, 0, 0.068));
 }
 
-.input_fieldA .button .accept{
-    alignment: right;
-    background-color: green;
-}
-
-.input_fieldA .button .deny{
-    alignment: left;
-    background-color: red;
-}
-
-.input_fieldA .button .info {
-    alignment: center;
-    background-color: cornflowerblue;
-}
-
-.formA .dropdown .select {
-    margin-bottom: 30px;
-    margin-top: 30px;
-}
-
-.formA .button input{
-    border: none;
-    background-color: #4070f4;
-    letter-spacing: 1px;
+.activity_text p{
     color: white;
-    font-size: 16px;
-    font-weight: 400px;
-    height: 45px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px black;
+}
+.gradient{
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(255, 255, 255, 0.658), rgba(255, 255, 255, 0));
+}
+
+.activity_background{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+
+}
+
+.activity_info .no_activities{
+    position: absolute;
+    color: rgb(110, 25, 25);
+    font-weight: bold;
+    text-shadow: 1px 1px 1px black;
+    font-size: 25px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.activity_info.flip .activity_background{
+    transform: rotateY(180deg);
+}
+
+.flip_outer{
+    height: 70%;
+    box-shadow: 1px 1px 10px black;
+    width: 90%;
+    margin-bottom: 1.5rem;
+  perspective: 1000px;
+
+}
+
+.activity_info.flip{
+    transform: rotateY(180deg);
+    align-items: flex-start;
 }
 
 
+.activity_info.flip .show_info{
+    transform: rotateY(180deg);
+    border-radius: 8px;
+}
 
-@media  screen and (max-width: 400px){
-    .formA{
-        padding: 15px 10px;
+
+.info_button .button_icon{
+    color: #1b1db6;
+}
+
+
+@media (max-width: 26.25em){
+    .activity_page{
+        left: 0;
+        width: 100%;
+        background-color: white;
+    }
+    .activity_card{
+        width: 100%;
+        height: 100%;
+    }
+    .activity_content .logo{
+        height: 80px;
+        width: 80px;
+        margin: 0;
+    }
+
+    .buttons .button{
+        width: 65px;
+        height: 65px;
+    }
+
+    .buttons .info_button{
+        width: 50px;
+        height: 50px;
+    }
+
+    .activity_content .filter_container{
+        top: 2%;
     }
 }

@@ -98,7 +98,7 @@ function Profile(props) {
 
   return (
     <div> 
-      <WidgetLoader />
+      {/* <WidgetLoader /> */}
       <div className='profile_page'>
         <Card variant="outlined" className='profile_card'>
         <CardContent>  

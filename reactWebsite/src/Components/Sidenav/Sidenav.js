@@ -9,7 +9,7 @@ import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { AdvancedImage } from '@cloudinary/react'
-import { faHouseChimney,faUser, faBarsStaggered, faCog, faMap, faCalendarAlt, faBars, faTimes, faStar, faCloud, faArrowRightFromBracket, faMagnifyingGlass, faArrowRight, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faHouseChimney,faUser, faBarsStaggered, faCog, faMap, faCalendarAlt, faBars, faTimes, faStar, faCloud, faArrowRightFromBracket, faMagnifyingGlass, faArrowRight, faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons'
 const jwt = require('jsonwebtoken')
 
 function Sidenav(props) {
@@ -150,6 +150,7 @@ const detectSize = () => {
         <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/home"><li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faHouseChimney}/><span> {foldSidenav ? '': 'Home'} </span></li></Link> 
         <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/profile"> <li className='sidenav_li'>  <FontAwesomeIcon className ='sidenav_icon'icon= {faUser}/><span> {foldSidenav ? '': 'Profile'} </span></li> </Link>
         <Link  onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/events"> <li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faCalendarAlt}/> <span> {foldSidenav ? '': 'Events'} </span></li> </Link>
+        <Link  onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/create"> <li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faPlus}/> <span> {foldSidenav ? '': 'Create'} </span></li> </Link>
         {/* <Link className='side_nav_item' to="/app/review"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faStar}/><span> {foldSidenav ? '': 'Review'} </span></li> </Link>  */}
         <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/map"><li className='sidenav_li'> <FontAwesomeIcon className ='sidenav_icon'icon= {faMap}/>  <span> {foldSidenav ? '': 'Map'} </span></li></Link>
          <Link onClick={() => setFoldSidenav(true)} className='side_nav_item' to="/app/users"> <li className='sidenav_li'><FontAwesomeIcon className ='sidenav_icon'icon= {faMagnifyingGlass}/>  <span> {foldSidenav ? '': 'Search'} </span></li></Link>
@@ -175,6 +176,8 @@ const detectSize = () => {
         <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/home"><li className='mobile_nav_li'><FontAwesomeIcon className ='mobile_icon'icon= {faHouseChimney}/><span> Home </span></li></Link> 
         <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/profile"> <li className='mobile_nav_li'>  <FontAwesomeIcon className ='mobile_icon'icon= {faUser}/><span> Profile </span></li> </Link>
         <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/events"> <li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faCalendarAlt}/> <span> Events </span></li> </Link>
+        <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/create"><li className='mobile_nav_li'><FontAwesomeIcon className ='mobile_icon'icon= {faPlus}/><span> Create </span></li></Link> 
+      
         <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/map"><li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faMap}/>  <span> Map </span></li></Link>
         <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/users"> <li className='mobile_nav_li'><FontAwesomeIcon className ='mobile_icon'icon= {faMagnifyingGlass}/>  <span> Search </span></li></Link>
         {/* <Link onClick={() => setShowMobileNav(false)} className='mobile_nav_item' to="/app/settings"><li className='mobile_nav_li'> <FontAwesomeIcon className ='mobile_icon'icon= {faCog}/><span> Settings </span></li> </Link>  */}

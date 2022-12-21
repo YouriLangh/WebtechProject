@@ -69,7 +69,6 @@ app.post('/app/login', async (req, res) => {
     //if user exists, compare the passwords to eachother
 
     if (user) {
-        console.log(user);
         const validPwd = await bcrypt.compare(req.body.password, user.password)
         // Passwords do not match
         if (!validPwd) return res.json({ status: 401, message: "Invalid username or password", user: false});
