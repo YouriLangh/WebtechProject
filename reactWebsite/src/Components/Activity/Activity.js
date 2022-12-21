@@ -47,7 +47,7 @@ function Activity() {
                 console.log(error);
             }
         }
-    })
+    }, [])
 
     const notSwiped = (activity) => {
         if (swipedActivities.length === 0){
