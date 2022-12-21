@@ -9,6 +9,7 @@ body{
     position: absolute;
     width: 100%;
     height: 100%;
+    justify-content: center;
 }
 
 .window_for_activity{
@@ -62,28 +63,6 @@ body{
 }
 
 
-.input_field i.showHidePw{
-    cursor: pointer;
-    padding: 0.3125em;
-}
-
-.input_field i{
-    position: absolute;
-    top: 30%;
-    color: rgb(66, 66, 66);
-}
-
-.input_field i.icon{
-    left: 0;
-}
-
-.input_field i.showHidePw{
-    right: 0;
-    cursor: pointer;
-    padding: 5px;
-    align-items: center;
-}
-
 
 .form .checkbox_text{
     display: flex;
@@ -103,6 +82,26 @@ body{
     margin-top: 30px;
 }
 
+.input_fieldA .button .accept{
+    alignment: right;
+    background-color: green;
+}
+
+.input_fieldA .button .deny{
+    alignment: left;
+    background-color: red;
+}
+
+.input_fieldA .button .info {
+    alignment: center;
+    background-color: cornflowerblue;
+}
+
+.formA .dropdown .select {
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
 .formA .button input{
     border: none;
     background-color: #4070f4;
@@ -116,12 +115,6 @@ body{
     transition: all 0.2s ease;
 }
 
-
-.activity_container .login_signup{
-    margin-top: 20px;
-    font-size: 13px;
-    text-align: center;
-}
 
 
 @media  screen and (max-width: 400px){
