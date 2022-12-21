@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import'./Profile.css';
 import Comments from '../Comments/Comments'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import Card from '@mui/material/Card';
 import { CardContent, Button } from '@mui/material';
@@ -15,6 +16,7 @@ const jwt = require('jsonwebtoken')
 
 function Profile(props) {
 
+  const navigate = useNavigate()
   const myCld = new Cloudinary({
     cloud: {
       cloudName: "dmm5cr74r",
@@ -47,31 +49,43 @@ function Profile(props) {
     let new_profile = {...profile, url: e.info.public_id}
     setProfile(new_profile);
     updatePfp(e.info.public_id);
-    props.updateCallback(e.info.public_id)
+    props.updateCallback({username: profile.username, url: e.info.public_id})
   }
 
   useEffect(() => {
-      const userToken = localStorage.getItem('token');
-      const username = jwt.decode(userToken).username;
-      try{ 
-      axios({
-        url: 'http://localhost:4000/app/profile',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        data: JSON.stringify({
-            username,
-        }),
-        }).then(res => {
-          let newProfile = jwt.decode(res.data.profile);
-          setProfile(newProfile);
-          updatePfp(newProfile.url);
-          setInterests(newProfile.interests);
-          setBio(newProfile.bio);})
-      } catch (error) {console.log(error)}
-      pfp
-      .resize(thumbnail().gravity(focusOn(FocusOn.face())))
+
+    const userToken = localStorage.getItem('token');
+    if (userToken){
+     const user = jwt.decode(userToken)
+     if(!user){
+      //if it is not, redirect the user to the login page and remove the 'token' variable
+       localStorage.removeItem('token')
+       navigate('/login', { replace: true })}
+       else{
+        const username = user.username
+        try{ 
+          axios({
+            url: 'http://localhost:4000/app/profile',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            data: JSON.stringify({
+                username,
+            }),
+            }).then(res => {
+              let newProfile = jwt.decode(res.data.profile);
+              setProfile(newProfile);
+              updatePfp(newProfile.url);
+              setInterests(newProfile.interests);
+              setBio(newProfile.bio);})
+          } catch (error) {console.log(error)}
+          pfp
+          .resize(thumbnail().gravity(focusOn(FocusOn.face())))
+         
+      }
+       }
+
   }, []);
 
   const handleSave = async (e) => {

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faTimes} from '@fortawesome/free-solid-svg-icons'
 import logo from '../../images/Logo.png'
 
+//Header component which is used as a navigation menu on any page before the user is logged in.
 function Header() {
 
   const [showMenu,setShowMenu] = useState(false)
@@ -15,6 +16,7 @@ function Header() {
 
   const [windowDimension, detectHW] = useState({winWidth: window.innerWidth, winHeight: window.innerHeight})
 
+  // to detect changes in the window size, add event listeners. This is done to automatically close the mobile menu.
   const detectSize = () => {
       detectHW({
           winWidth: window.innerWidth,
@@ -30,8 +32,11 @@ function Header() {
               window.removeEventListener('resize', detectSize)
           }
       }, [windowDimension])
+
+
   return (
 
+    // A navigation bar gets made with a brand/logo and a login/register  button.
     <div className='navbar'>
     <Link className='brand' to="/">
     <img src={logo} alt='Eventer Logo' className='logo'/>
@@ -43,6 +48,7 @@ function Header() {
           <li><Link className='nav_item' to="/register"> Register</Link></li>
         </ul>
       </nav>
+      {/* If the window size gets small enough, we transition to a hamburger menu with a navigation menu that slides out */}
       <FontAwesomeIcon className={showMenu ? "menu_icon active" : 'menu_icon'} onClick= {() => onMenuClick(!showMenu)} icon={ showMenu ? faTimes : faBars} />
       <div className={showMenu ?  'slide_window_mask active' : 'slide_window_mask'} onClick={() => setShowMenu(false)}>   </div>  
       <div className= {showMenu ?  'slide_window active' : 'slide_window'}>
@@ -50,8 +56,6 @@ function Header() {
       <ul>
           <li><Link onClick={() => {setShowMenu(false)}} className='slide_nav_item'to="/login">Login</Link></li>
           <li><Link  onClick={() => {setShowMenu(false)}} className='slide_nav_item' to="/register"> Register</Link></li>
-          <li><Link  onClick={() => {setShowMenu(false)}} className='slide_nav_item'to="/login"> Contact us</Link></li>
-          <li><Link  onClick={() => {setShowMenu(false)}} className='slide_nav_item'to="/login"> About us</Link></li>
         </ul>
         </div>
       </div>

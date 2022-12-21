@@ -13,13 +13,13 @@ import axios from 'axios'
 function Signin() {
 
   const navigate = useNavigate()
+  //Used to change the type of the password field to password or text
   const [showPass,setShowPass] = useState(false)
   const[username, setUser] = useState('');
   const[password, setPassword] = useState('');
 
-  
+    //Used to change the type of the password field to password or text
   let passIcon, passType
-
   if(showPass){
     passIcon = faEye
     passType = "text"
@@ -45,13 +45,14 @@ function Signin() {
      try{ 
          const { data } = await axios.post('http://localhost:4000/app/login/auth/google', payload)
          if(data.user){
-            // if we get a reply, and the user field is not false, log in
+            // if we get a reply, and the user field is not false, log in and redirect to the home page
             localStorage.setItem('token', data.user)
             navigate('/app/home')
          }
      } catch (error) { console.log(error)}
        
     } else {
+        // else something went wrong and we alert the user
         alert("Use a verified Google account")
     }
     }
@@ -67,7 +68,8 @@ function Signin() {
     })
 
     // Load in multiple buttons for different sizes.
-    // These buttons cannot be resized via CSS.
+    // This is because the buttons from this API cannot be resized via CSS.
+    // Dirty fix..
     google.accounts.id.renderButton(
         document.getElementById("google_login"),
         { theme: "outline", size: "large", width: "340px"}
@@ -90,7 +92,9 @@ function Signin() {
 
   // logging in normally
   const loginUser = async (e) => {
+    //prevent form from reloading the page
     e.preventDefault();
+    //try to send a request to the server with the username/password
     try{ 
     const { data } = await axios({
         url: 'http://localhost:4000/app/login',
@@ -107,11 +111,11 @@ function Signin() {
      if(data.user){
         localStorage.setItem('token', data.user)
         navigate('/app/home')
-        
+        //if the user field is false, the information given in was incorrect.
     }else {
         alert('Please check your username and password')
     }
-    
+    //the server failed to reply / be reached
 } catch (error) { console.log(error)}
    
 }
@@ -120,6 +124,8 @@ function Signin() {
     
 
 // <!-- Sign in & Log in-->
+// A lot of divs for CSS
+// The Or line separating google login and normal login was made using 2 separate lines and a <p> Or </p>, this is because the background of the login container is see-through
 <div className='page' >
     <Header />
     <div className='page_container'>
@@ -164,6 +170,7 @@ function Signin() {
         
         <div className="or_line"> <div className="or_line1"></div>
         <p> OR </p> <div className="or_line1"></div> </div>
+        {/* Different buttons for google login for responsiveness */}
         <div id='google_login' className="google_login">
             </div>
             <div id='google_login_medium' className="google_login">

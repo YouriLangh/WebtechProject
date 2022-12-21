@@ -16,6 +16,7 @@ const dotenv = require('dotenv')
 const { registerValidation, loginValidation } = require('./validation/validation')
 const bcrypt = require("bcrypt")
 const jwtDecode = require("jwt-decode");
+const {response} = require("express");
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ dotenv.config();
 app.use(cors())
 app.use(express.json())
 
+// Connect to our database
 mongoose.connect(process.env.DB_CONNECTION, ()=> console.log('Database connected'))
 
  app.post('/app/register', async (req, res) => {
@@ -46,7 +48,6 @@ mongoose.connect(process.env.DB_CONNECTION, ()=> console.log('Database connected
              password: hashedPassword,
              interests: req.body.interests
          })
-         //await ProfileUser.create({username: req.body.username})
          return res.json({ status: 201, message: "User created successfully"})
     } catch (err) {
          // in case of no reply from server
@@ -67,7 +68,6 @@ app.post('/app/login', async (req, res) => {
     })
 
     //if user exists, compare the passwords to eachother
-
     if (user) {
         const validPwd = await bcrypt.compare(req.body.password, user.password)
         // Passwords do not match
@@ -78,6 +78,7 @@ app.post('/app/login', async (req, res) => {
             email: user.email
 
         },  process.env.PRIVATE_KEY)
+        // Return succesful response
         return  res.json({ status: 200, message: "Logged in successfully", user: token});
     } else {return res.json({ status: 200, message: "Wrong name or password", user: false})}
     } catch (error) {
@@ -85,18 +86,21 @@ app.post('/app/login', async (req, res) => {
     }
 })
 
+// when logging in with google
 app.post('/app/login/auth/google', async (req, res) => {
-    // Validate given input
     const userInfo = req.body
+    // see if the user has already logged in with google before (this means we have already made an account for them)
     try{
     const user = await User.findOne({username: userInfo.username, email: userInfo.email})
     if (!user){
+        // if not, create a new account for them
         await User.create({
             username: req.body.username,
             email: req.body.email,
-            password: "googlepasswordD1"
+            password: "zar12z1r45za2051zerz5ar55645E115230zrrzerzea321054zrza02rze4r1z56r1z"
          })
        }
+       // if they have already logged in before and have an account, just return a successful status
     const token = jwt.sign({
     username: userInfo.username,
     email: userInfo.userEmail},
@@ -130,72 +134,60 @@ app.post('/app/profile', async (req, res) => {
 
 
 app.post('/app/activities/fetch', async (req, res) => {
-    const userToken = req.body.userToken;
-    const user = await User.findOne({
-        username: jwtDecode(userToken).username,
-        email: jwtDecode(userToken).email,
-    });
-    let filteredActivities = [];
-    Activity.find({}, (err, activities) => {
-        if (err) {
-            console.log(err)
-            res.send(err)
-            return;
-        }
-        if (activities.length !== 0) {
-            filteredActivities = activities.filter(act => !user.activities.includes(act._id) && !user.deniedActivities.includes(act._id));
-            res.send(filteredActivities);
-        } else {
-            res.send([]);
-        }
-    });
+    try {
+        const userToken = req.body.userToken;
+
+        const user = await User.findOne({
+            username: jwtDecode(userToken).username,
+            email: jwtDecode(userToken).email,
+        });
+        let filteredActivities = [];
+        Activity.find({}, (err, activities) => {
+            if (err) {
+                console.log(err)
+                res.send(err)
+                return;
+            }
+                filteredActivities = activities.filter(act => act.maximumGroupSize > act.participators && !user.activities.includes(act._id) && !user.deniedActivities.includes(act._id));
+                res.send(filteredActivities);
+        });
+    } catch (error) {
+        return res.json({ status: 500, message: "Server Error", profile: false})
+    }
 })
 
-app.post('/app/activities/fetch/filtered', async (req, res) => {
-    console.log("in fetch filtered");
-    Activity.find({
-        activityType: req.body.activityType,
-    }, (err, activities) => {
-        if (err) {
-            console.log(err)
-            res.send(err)
-            return;
-        }
-        if (activities.length !== 0) {
-            console.log(activities);
-            res.send(activities);
-        } else {
-            res.send([]);
-        }
-    });
-})
 
 app.put('/app/activities/publish', async (req, res) => {
-    console.log(req.body);
-    const userToken = req.body.userToken;
-    console.log(jwtDecode(userToken));
-    const user = await User.findOne({
-        username: jwtDecode(userToken).username,
-        email: jwtDecode(userToken).email,
-    });
-    console.log(user._id);
-    const activityBody = {
-        activityName: req.body.activityName,
-        activityDate: req.body.activityDate,
-        activityType: req.body.activityType,
-        minimumAge: req.body.minimumAge,
-        maximumAge: req.body.maximumAge,
-        activityLocation: req.body.activityLocation,
-        minimumGroupSize: req.body.minimumGroupSize,
-        maximumGroupSize: req.body.maximumGroupSize,
-        dateCreated: req.body.dateCreated,
-        creator: user._id,
+    try {
+        console.log(req.body);
+        const userToken = req.body.userToken;
+        console.log(jwtDecode(userToken));
+        const user = await User.findOne({
+            username: jwtDecode(userToken).username,
+            email: jwtDecode(userToken).email,
+        });
+        console.log(user._id);
+        const activityBody = {
+            activityName: req.body.activityName,
+            activityDate: req.body.activityDate,
+            activityType: req.body.activityType,
+            minimumAge: req.body.minimumAge,
+            maximumAge: req.body.maximumAge,
+            activityLocation: req.body.activityLocation,
+            minimumGroupSize: req.body.minimumGroupSize,
+            maximumGroupSize: req.body.maximumGroupSize,
+            dateCreated: req.body.dateCreated,
+            creator: user._id,
+        }
+        const activity = await Activity.insertMany(activityBody);
+        console.log(JSON.stringify(activity));
+    } catch (error) {
+        return res.json({ status: 500, message: "Server Error", profile: false})
     }
-    const activity = await Activity.insertMany(activityBody);
-    console.log(JSON.stringify(activity));
 })
 
 
+// get all the users in the database (limit it to 50 to not overload servers)
 app.get('/app/users', async (req, res) => {
     const users = await User.find().limit(50)
     const formatted = users.map(element => jwt.sign({username: element.username, 
@@ -204,11 +196,10 @@ app.get('/app/users', async (req, res) => {
         url: element.url, 
         rating: element.rating,
         interests: element.interests}, process.env.PRIVATE_KEY))
-    // console.log(formatted)
     res.send({formatted})
 })
 
-
+// Fetch a certain user from the database, this is used when we navigate to someone else's profile
 app.post('/app/users', async (req, res) => {
     const theId = req.body.id
     try{
@@ -228,24 +219,11 @@ app.post('/app/users', async (req, res) => {
      }
     })
 
+    // when using the navbar to look for other users, this only returns whether they exist or not.
 app.post('/app/user/search', async (req, res) => {
     const name = req.body.aName
     try{
     const user = await User.findOne({username: name})
-    console.log(user)
-    const formatted = jwt.sign({id: user._id}, process.env.PRIVATE_KEY)
-    res.send({token: formatted})}
-    catch (err){
-    res.send({token: false})
-}
-})
-
-
-app.post('/app/user/search', async (req, res) => {
-    const name = req.body.aName
-    try{
-    const user = await User.findOne({username: name})
-    console.log(user)
     const formatted = jwt.sign({id: user._id}, process.env.PRIVATE_KEY)
     res.send({token: formatted})}
     catch (err){
@@ -380,6 +358,18 @@ app.post('/app/users/activities', async (req, res) => {
         res.send({token: false})
     }
 
+})
+
+
+
+app.post('/app/user/fetch/interests', async (req, res) => {
+    const userToken = req.body.userToken;
+    User.findOne({
+        username: jwtDecode(userToken).username,
+        email: jwtDecode(userToken).email,
+    }).exec()
+        .then((result) => res.send(result.interests))
+        .catch((err) => res.send(err));
 })
 
 

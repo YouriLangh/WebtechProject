@@ -1,5 +1,7 @@
 import React from 'react'
 import { Marker, Popup  } from 'react-leaflet'
+
+// Markers used to indicate events on the leaflet.js API map.
 function EventMarker(props) {
   return (
     <Marker position={[props.event_lat, props.event_lon]}>
