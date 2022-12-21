@@ -194,13 +194,13 @@ function Activity() {
                 <div>
                     {activityContent}
                 </div>
-                <div className="input_fieldA button">
+                <div className="input_fieldA button info">
                     <input onClick= {(e) => onToggleInfo(e)} type="button" value="toggle info"/>
                 </div>
-                <div className="input_fieldA button">
+                <div className="input_fieldA button accept">
                     <input onClick= {(e) => onAccept(e)} type="button" value="accept"/>
                 </div>
-                <div className="input_fieldA button">
+                <div className="input_fieldA button deny">
                     <input onClick= {(e) => onDeny(e)} type="button" value="deny"/>
                 </div>
             </div>
@@ -220,13 +220,13 @@ function Activity() {
                     <div>
                         {activityContent}
                     </div>
-                    <div className="input_fieldA button">
+                    <div className="input_fieldA button info">
                         <input onClick= {(e) => onInfo(e)} type="button" value="info"/>
                     </div>
-                    <div className="input_fieldA button">
+                    <div className="input_fieldA button accept">
                         <input onClick= {(e) => onAccept(e)} type="button" value="accept"/>
                     </div>
-                    <div className="input_fieldA button">
+                    <div className="input_fieldA button deny">
                         <input onClick= {(e) => onDeny(e)} type="button" value="deny"/>
                     </div>
                 </div>

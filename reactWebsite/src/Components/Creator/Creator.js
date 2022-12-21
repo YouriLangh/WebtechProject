@@ -10,6 +10,7 @@ import {
 import {useNavigate} from "react-router-dom";
 import {Link} from "react-router-dom";
 import createActivity from "../Activity/ActivityService";
+import {preventDefault} from "leaflet/src/dom/DomEvent";
 
 const jwt = require('jsonwebtoken')
 
@@ -19,6 +20,7 @@ function Creator() {
     const navigate = useNavigate()
 
     const[errorMessage, setErrorMessage] = useState('');
+    const [activityMade,setActivityMade] = useState(false)
 
     const[activityName, setActivityName] = useState('');
     const[activityDate, setActivityDate] = useState('');
@@ -53,10 +55,6 @@ function Creator() {
         e.preventDefault()
         setDateCreated(Date.now);
         const location = country + ", " + city + ", " + street + " " + houseNumber;
-        console.log(activityName);
-        console.log(activityType);
-        console.log(country);
-        console.log(location);
         const userToken = localStorage.getItem('token');
         if (!checkValues) {
             setErrorMessage("Invalid Entry");
@@ -72,6 +70,29 @@ function Creator() {
             dateCreated,
             userToken,
         }).then(r => console.log(JSON.stringify(r))).catch(e => console.log(JSON.stringify(e)));
+        setActivityMade(true);
+    }
+
+    const onReSubmit = (e) => {
+        preventDefault(e);
+        setActivityMade(false);
+    }
+
+    if (activityMade) {
+        return (
+            <div className='aPage' >
+                <div className='window_for_creator'>
+                    <div className="creator_container">
+                        <div className="formC login">
+                            <span className="creator_title">Created</span>
+                            <p>Activity was made</p>
+                            <Link to='/app/home'>Go to Home</Link>
+                                <Link to='/app/events'>Go to Events</Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     let pseudoData = {username: '', url:''}
