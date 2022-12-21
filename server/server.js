@@ -23,6 +23,7 @@ dotenv.config();
 app.use(cors())
 app.use(express.json())
 
+// Connect to our database
 mongoose.connect(process.env.DB_CONNECTION, ()=> console.log('Database connected'))
 
  app.post('/app/register', async (req, res) => {
@@ -46,7 +47,6 @@ mongoose.connect(process.env.DB_CONNECTION, ()=> console.log('Database connected
              password: hashedPassword,
              interests: req.body.interests
          })
-         //await ProfileUser.create({username: req.body.username})
          return res.json({ status: 201, message: "User created successfully"})
     } catch (err) {
          // in case of no reply from server
@@ -67,7 +67,6 @@ app.post('/app/login', async (req, res) => {
     })
 
     //if user exists, compare the passwords to eachother
-
     if (user) {
         const validPwd = await bcrypt.compare(req.body.password, user.password)
         // Passwords do not match
@@ -78,6 +77,7 @@ app.post('/app/login', async (req, res) => {
             email: user.email
 
         },  process.env.PRIVATE_KEY)
+        // Return succesful response
         return  res.json({ status: 200, message: "Logged in successfully", user: token});
     } else {return res.json({ status: 200, message: "Wrong name or password", user: false})}
     } catch (error) {
@@ -85,18 +85,21 @@ app.post('/app/login', async (req, res) => {
     }
 })
 
+// when logging in with google
 app.post('/app/login/auth/google', async (req, res) => {
-    // Validate given input
     const userInfo = req.body
+    // see if the user has already logged in with google before (this means we have already made an account for them)
     try{
     const user = await User.findOne({username: userInfo.username, email: userInfo.email})
     if (!user){
+        // if not, create a new account for them
         await User.create({
             username: req.body.username,
             email: req.body.email,
-            password: "googlepasswordD1"
+            password: "zar12z1r45za2051zerz5ar55645E115230zrrzerzea321054zrza02rze4r1z56r1z"
          })
        }
+       // if they have already logged in before and have an account, just return a successful status
     const token = jwt.sign({
     username: userInfo.username,
     email: userInfo.userEmail},
@@ -196,6 +199,7 @@ app.put('/app/activities/publish', async (req, res) => {
 })
 
 
+// get all the users in the database (limit it to 50 to not overload servers)
 app.get('/app/users', async (req, res) => {
     const users = await User.find().limit(50)
     const formatted = users.map(element => jwt.sign({username: element.username, 
@@ -204,11 +208,10 @@ app.get('/app/users', async (req, res) => {
         url: element.url, 
         rating: element.rating,
         interests: element.interests}, process.env.PRIVATE_KEY))
-    // console.log(formatted)
     res.send({formatted})
 })
 
-
+// Fetch a certain user from the database, this is used when we navigate to someone else's profile
 app.post('/app/users', async (req, res) => {
     const theId = req.body.id
     try{
@@ -228,24 +231,11 @@ app.post('/app/users', async (req, res) => {
      }
     })
 
+    // when using the navbar to look for other users, this only returns whether they exist or not.
 app.post('/app/user/search', async (req, res) => {
     const name = req.body.aName
     try{
     const user = await User.findOne({username: name})
-    console.log(user)
-    const formatted = jwt.sign({id: user._id}, process.env.PRIVATE_KEY)
-    res.send({token: formatted})}
-    catch (err){
-    res.send({token: false})
-}
-})
-
-
-app.post('/app/user/search', async (req, res) => {
-    const name = req.body.aName
-    try{
-    const user = await User.findOne({username: name})
-    console.log(user)
     const formatted = jwt.sign({id: user._id}, process.env.PRIVATE_KEY)
     res.send({token: formatted})}
     catch (err){

@@ -4,6 +4,7 @@ import Header from '../Header/Header';
 import './LandingPage.css';
 import { Link } from 'react-router-dom';
 
+//Landing page component which represents the landing page and implements the header navigation component
 function LandingPage() {
   return (
 

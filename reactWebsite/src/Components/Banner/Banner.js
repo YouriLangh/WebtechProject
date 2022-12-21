@@ -3,8 +3,9 @@ import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react'
 import "./Banner.css"
 
-
+// Component used to show a banner at the top of the profile of other users
 function Banner(props) {
+  // API used to display the picture of that user, stored in a cloudinary database
     const myCld = new Cloudinary({
         cloud: {
           cloudName: "dmm5cr74r",

@@ -49,7 +49,7 @@ function Register() {
         userRef.current.focus();
     }, [])
 
-    // Client side validation
+    // Client side validation of each of the fields.
     useEffect(() => {
         const result = USER_REGEX.test(username);
         setValidName(result);
@@ -60,6 +60,7 @@ function Register() {
         setValidEmail(result);
     }, [email])
 
+    // Passwords get compared to each other to make sure both passwords match, if not a different visual notice gets displayed
     useEffect(() => {
         const result = PWD_REGEX.test(password);
         setValidPassword(result)
@@ -73,10 +74,10 @@ function Register() {
       try {
         const v1 = USER_REGEX.test(username);
         const v2 = PWD_REGEX.test(password);
-        // If the data has been altered via html editing
+        // If the data has been altered via html editing, then do not submit.
         if (!v1 || !v2) {
             return;
-        }
+        } else {
         // Register the user with all the inputted data
          const { data } = await axios({
              url: 'http://localhost:4000/app/register', 
@@ -91,13 +92,15 @@ function Register() {
                  interests
              }),
          })
-         console.log(data)
+         // If the response status is 201, log the user in
          if(data.status === 201) {
              navigate('/login')
          }
+         // if it is 400, an error happened, serverside validation failed.
          if(data.status === 400){
             alert('Invalid fields')
          }
+        }
 
     } catch (error) {
         console.log(error)
@@ -105,7 +108,7 @@ function Register() {
     }
 
 
-    // If clicked on an interest, add a class for CSS purposes and toggle it from the array of interests kept as a constant
+    // If clicked on an interest, add a class for CSS purposes and toggle it from the array of interests kept as a variable
  const handleInterest = (id) => {
     var element = document.getElementById(id);
     element.classList.toggle("selected")
@@ -135,7 +138,11 @@ function Register() {
     passType = "password"
   }
 
-  // Update content of the register_form depending on the page.
+  // Update content of the register_form depending on which step of registration the user is.
+  // Show first means the user is at the first page of the form
+  // Instructions get shown if the fields do not match the required rules/REGEX. If they do, the instructions get position offscreen.
+  // aria-fields are kept to make sure text-parsing algorithms can understand the fields.
+  // The continue button is disabled until every field passes all the rules AND the "accept to the terms and service" checkbox is checked.
   if(showFirst){
     title = "Register"
     arrow = <div></div>
@@ -157,7 +164,7 @@ function Register() {
             <i className={username && !validName ? "invalid fa-regular fa-user icon" : "fa-regular fa-user icon"}><FontAwesomeIcon icon={faUser}  /></i>
             
         </div>
-        {/* Show instructions if doesn't conform to client-side validation  */}
+        {/* Show instructions if username doesn't conform to client-side validation  */}
         <p id="uidnote" className={userFocus && username && !validName ? "instructions" : "offscreen"}>
                 <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 4 to 20 characters. <br />
@@ -176,6 +183,7 @@ function Register() {
         placeholder="Enter your email" required />
         <i className={email && !validEmail ? "invalid fa-regular fa-envelope icon" : "fa-regular fa-envelope icon"}><FontAwesomeIcon icon={faEnvelope}  /></i>
     </div> 
+              {/* Show instructions if email  doesn't conform to client-side validation  */}
     <p id="emailnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
                 <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 Not a valid e-mail.
@@ -194,6 +202,7 @@ function Register() {
         <i className="fa-regular fa-eye-slash showHidePw"><FontAwesomeIcon icon={passIcon} onClick= {() => setShowPass(!showPass)} /></i>
 
     </div>
+          {/* Show instructions if password doesn't conform to client-side validation  */}
     <p id="pwdnote" className={passwordFocus && !validPassword ? "instructions" : "offscreen"}>
                 <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 8 to 24 characters. <br />
@@ -212,6 +221,7 @@ function Register() {
         <i className= {matchPassword && !validMatch ? "invalid fa-sharp fa-solid fa-lock icon" : "fa-sharp fa-solid fa-lock icon"}><FontAwesomeIcon className="icon"icon={faLock}  /></i>
 
     </div>
+          {/* Show instructions if the passwords do not match  */}
     <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
                 <FontAwesomeIcon className="icon" icon={faInfoCircle} />
                 Must match other password.
@@ -229,6 +239,7 @@ function Register() {
     </div>
     </div>
   } else {
+    //If we are on the second page of registration, display some buttons which reflect interests
     title = "Nearly there!"
     content = 
     <div>
@@ -254,6 +265,8 @@ function Register() {
   }
 
 
+  // A lot of divs for CSS purposes
+  // Implements the header component
   return (
     // <!--Registration Form-->
     <div className='page'>

@@ -6,7 +6,6 @@ import Comments from '../Comments/Comments'
 import { Cloudinary } from '@cloudinary/url-gen';
 import { AdvancedImage } from '@cloudinary/react'
 import { Card, CardContent } from '@mui/material'
-import noUser from '../../images/noUser.png'
 import SportsImg from '../../images/sports.jpg'
 import CultureImg from '../../images/culture1.jpg'
 import PartiesImg from '../../images/party.jpg'
@@ -20,7 +19,9 @@ import Banner from '../Banner/Banner'
 // The OtherUser component is a component which holds and displays the information of other users, 
 function OtherUser() {
 
+  // jwt gets used to decrypt the tokens sent from the server
     const jwt = require('jsonwebtoken')
+    // We get the id of the user we are trying to look up from the searchparameters in the URL
     const {id} = useParams()
     const [user, setUser] = useState({})
     const [userExists, setUserExists] = useState(true)
@@ -36,6 +37,8 @@ function OtherUser() {
         }
       });
 
+      // When fetching the user, they keep fields of all the activities they signed up for. This is kept with the id's of the activities, 
+      // thus we have to fetch the information of each activity corresponding to that id.
     const getAct = async (act) => {
       await axios.post('http://localhost:4000/app/users/activities', {actId: act}).then((res) => {
         if (res.status === 200){
@@ -50,6 +53,7 @@ function OtherUser() {
     }
 
       // Returns the page of the user we are looking for, unless we are looking for ourselves, in which case we redirect to the profile.
+      // Store all the fetched data in the "user" field of the UseState, if we did not find the user, we set the 'userexists' to false.
     const getUser = async (currentUserName) => {
         await axios.post('http://localhost:4000/app/users', {id: id}).then((res) => {
            if(res.status === 200){
@@ -90,6 +94,8 @@ function OtherUser() {
        
    },[id])
 
+   // Hardcoded image fetch for each type of activity.
+   // this is done because the activities did not have an option to upload pictures.
    const getImage = (activityType) => {
     if(activityType === "Sports") return SportsImg;
     if(activityType === "Culture") return CultureImg;
@@ -102,10 +108,21 @@ function OtherUser() {
 
    }
 
+   // When the user receives a new comment, this callback gets called to update the current rating of the user on their profile.
    const updateRating = (new_rating, new_comments) => {
     setAvgRating( new_rating )
    }
+
    let content
+   //If the user exists, we display all their information
+   // A lot of divs for manual CSS
+   // Main features:
+   // - Uses the Banner component, which displays a banner with some user information at the top of the page
+   // - Uses the Comments component, to hold and display all the comments of that user, and the ability to add more comments
+   // - a separate container for all the activities for which that user is registered into
+   // - A Card container for all the user data
+   // - A star rating component to display the rating of the user
+   // To display activities and interests, we map over those lists
    if(userExists){
     content = 
     <div className='content'>
@@ -155,7 +172,7 @@ function OtherUser() {
                 </div>
                 <div className=' content_dividing_line dividing_line' />
                 <div className='registered_activities'>
-                  { user && user.activities && activities.length > 0 ? <> {activities.map(activity => <div className='activity_container'>
+                  { user && user.activities && activities.length > 0 ? <> {activities.map(activity => <div key={activities.indexOf(activity)} className='activity_container'>
                     <div className='pic_container'>
                     <img src={getImage(activity.activityType)} alt="activity_picture"/>
                     </div>
