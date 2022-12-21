@@ -21,23 +21,29 @@ function Comments(props) {
           const formattedData = {username: props.profile.username, comments: props.profile.comments}
         setUserInfo(formattedData)
         setComments(props.profile.comments)
+          setAvgRating(props.profile.rating)
         }}
-      },[props])
+      },[])
 
     useEffect(() => {
-      let totalRating = 0;
-      for (const comment of comments) {
-        totalRating += comment.rating;
-      } 
-      const averageRating = Math.round(totalRating / comments.length);
-      if(!isNaN(averageRating)) 
-      {setAvgRating(averageRating);
+      if (comments.length != 0) {
+        let totalRating = 0;
+        for (const comment of comments) {
+          totalRating += comment.rating;
+        } 
+        const averageRating = Math.round(totalRating / comments.length);
+        console.log(averageRating)
+        if(!isNaN(averageRating)) 
+        {setAvgRating(averageRating);
+        }}
+      else {
+        setAvgRating(5);
       }
     }, [comments])
 
     useEffect(() => {
       if(props && props.updateCallback){
-        props.updateCallback(avgRating)
+        props.updateCallback(avgRating, comments)
       }
       try {
         axios({
@@ -47,6 +53,7 @@ function Comments(props) {
             'Content-Type': 'application/json',
           },
           data: JSON.stringify({
+            username: userInfo.username,
             rating: avgRating
           }),
         }).then(res => {

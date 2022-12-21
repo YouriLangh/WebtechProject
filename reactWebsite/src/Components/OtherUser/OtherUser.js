@@ -25,6 +25,7 @@ function OtherUser() {
     const [user, setUser] = useState({})
     const [userExists, setUserExists] = useState(true)
     const [activities, setActivities] = useState([])
+    const [avgRating, setAvgRating] = useState(5)
 
     const navigate = useNavigate()
     const myCld = new Cloudinary({
@@ -60,6 +61,7 @@ function OtherUser() {
                 const formatted = ({username: token.username, activities: token.activities,
                 email: token.email, bio: token.bio, url: token.url, rating: token.rating, comments: token.comments, date_joined: formattedDate.toLocaleDateString(), interests: formattedInterests})
                 setUser(formatted)
+                setAvgRating(token.rating)
                 token.activities.forEach(act => getAct(act))
                 window.scrollTo(0, 0);
                 }
@@ -99,8 +101,8 @@ function OtherUser() {
 
    }
 
-   const updateRating = (new_rating) => {
-    setUser( prev_state => ({...prev_state, rating: new_rating}))
+   const updateRating = (new_rating, new_comments) => {
+    setAvgRating( new_rating )
    }
    let content
    if(userExists){
@@ -121,7 +123,7 @@ function OtherUser() {
               name="rate2" 
               editing={false}
               starCount={5}
-              value={user.rating}/></div>
+              value={avgRating}/></div>
               <div className='pic_line dividing_line' />
               <span className='other_user_content_title'>ABOUT: </span>
               <div className=' content_dividing_line dividing_line' />
