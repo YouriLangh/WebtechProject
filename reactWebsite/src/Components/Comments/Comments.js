@@ -4,6 +4,8 @@ import { Button, CardContent, Divider } from '@mui/material';
 import axios from 'axios';
 import StarRatingComponent from 'react-star-rating-component';
 import Card from '@mui/material/Card';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 const jwt = require('jsonwebtoken')
 
@@ -14,6 +16,8 @@ function Comments(props) {
     const [comments, setComments] = useState([]);
     const [rating, setRating] = useState(5);
     const [avgRating, setAvgRating] = useState(1);
+    const [editComment, setEditComment] = useState(false);
+    const [edittedComment, setEdittedComment] = useState('');
 
     useEffect(() => {
         if(props){
@@ -26,12 +30,18 @@ function Comments(props) {
       },[])
 
     useEffect(() => {
+      if(props.showStars) {
+        setComments(props.profile.comments)
+      } 
+    }, [props])
+
+    useEffect(() => {
       if (comments.length != 0) {
         let totalRating = 0;
         for (const comment of comments) {
           totalRating += comment.rating;
         } 
-        const averageRating = Math.round((totalRating + 5) / (comments.length + 1));
+        const averageRating = Math.round((totalRating + 5) / (comments.length + 1))
         console.log(averageRating)
         if(!isNaN(averageRating)) 
         {setAvgRating(averageRating);
@@ -105,7 +115,38 @@ function Comments(props) {
             {poster}:
           </div>
         );}}
-    
+
+    function handleEditComment(id, old_comment) {
+      setEditComment(id);
+      setEdittedComment(old_comment);
+    }
+
+    function handleDeleteComment() {
+
+    }
+
+    function handleCommentChange(e) {
+      setEdittedComment(e.target.value);
+    }
+
+    function handleSaveComment(id) {
+      setEditComment(false);
+      try {
+        axios({
+          url: 'http://localhost:4000/app/profile/comment/edit',
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+            comment: edittedComment,
+          }),
+        }).then(res => {
+          console.log(res)
+        })
+      } catch (error) {console.log(error)}
+    }
+
   return (
     <div className="comments">
       <div className="average_rating">
@@ -128,7 +169,27 @@ function Comments(props) {
               {renderCommentUser(comment)}
               <Card>
                 <CardContent className="comment_card">
-              {comment.body} </CardContent></Card></li>
+              {isYourComment(comment) ? (
+                <div>
+                  {(editComment == comment.id) ? (
+                    <div>
+                      <textarea 
+                      value={edittedComment} 
+                      onChange={(event) => setEdittedComment(event.target.value)} />
+                      <div className='edit_comments'>
+                      <Button onClick={() => handleSaveComment(comment.id)}>Save</Button>
+                      </div>
+                    </div>
+                  ) : (
+                  <div>
+                  {comment.body}
+                  <div className='edit_comments'>
+                  <Button onClick={() => handleDeleteComment(comment.id)}><FontAwesomeIcon icon={faTrash} /></Button>
+                  <Button onClick={() => handleEditComment(comment.id, comment.body)}>Edit</Button>
+                  </div></div>)}</div>
+                ) : (
+                  <div>{comment.body}</div>
+                )}</CardContent></Card></li>
             ))}
           </ul> : <p> No new comments</p>}
           

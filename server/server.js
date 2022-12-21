@@ -270,6 +270,20 @@ app.patch('/app/profile/edit', async (req, res) => {
         .then((result) => res.send(result))
         .catch((err) => res.send(err));})
 
+app.patch('/app/profile/comment/edit', async (req, res) => {
+    const comment = req.body.comment;
+    const id = comment.id;
+    User.findOne({'comments._id': id})
+        .exec()
+        .then((user) => {
+            const idx = user.comments.findIndex((comment) => comment._id === id);
+            user.comments[idx].body = req.body.comment;
+            return user.save();
+        })
+        .then((updatedUser) => res.send(updatedUser))
+        .catch((err) => res.send(err));
+})
+
 app.patch('/app/activity/leave', async (req, res) => {
     const userToken = req.body.userToken;
     const activityID = req.body.activityID;

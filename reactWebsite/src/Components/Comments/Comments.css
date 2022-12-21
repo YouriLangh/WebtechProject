@@ -53,3 +53,7 @@ ul::-webkit-scrollbar-thumb {
 .comment_user {
   margin-bottom: 5px;
 }
+
+.edit_comments {
+  float: right;
+}

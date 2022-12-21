@@ -10,8 +10,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDownAZ, faArrowDownZA, faArrowUpAZ, faArrowUpZA, faMagnifyingGlass, faStar, faStarHalf } from '@fortawesome/free-solid-svg-icons'
 const jwt = require('jsonwebtoken')
 
-
-
 function Users() {
 
     const navigate = useNavigate()
