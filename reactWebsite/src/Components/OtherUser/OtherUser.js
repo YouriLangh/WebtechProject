@@ -80,6 +80,10 @@ function OtherUser() {
    }
    // check if the user is still logged in, if yes, find the user we are looking for with getUser
    useEffect( () => {
+    setUser({})
+    setUserExists(true)
+    setActivities([])
+    setAvgRating(5)
     const token = localStorage.getItem('token')
         if (token) {
             const user = jwt.decode(token)
