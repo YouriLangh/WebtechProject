@@ -1,17 +1,17 @@
 .profile_page {
+    position: absolute;
+    left: 78px;
     display: flex;
-    justify-content: center;
-    align-items: center;
     height: 100%;
+    width: calc(100% - 78px);
   }
   
 .profile_card {
-  position: absolute;
-  width: 500px;
+  margin: auto;
+  min-width: 330px;
+  width: 40%;
   max-width: 800px;
   padding: 20px;
-  top: 10%;
-  left: 30%;
 }
 
 .profile_card h1 {
@@ -68,4 +68,16 @@ label {
 .edit_button {
   display: flex;
   justify-content: flex-end;
+}
+
+@media (max-width: 26.25em){
+  .profile_page{
+    width: 100%;
+    left: 0;
+  }
+  .profile_card{
+    width: 99%;
+    height: 90%;
+    min-width: 200px;
+  }
 }

@@ -19,7 +19,6 @@ import Activity from "./Components/Activity/Activity";
 import Sidenav from './Components/Sidenav/Sidenav';
 import { useState } from 'react';
 import OtherUser from './Components/OtherUser/OtherUser';
-import {fetchActivities} from "./Components/Activity/ActivityService";
 
 function App() {
   let aDate = new Date("2022-12-19 13:00:00")
