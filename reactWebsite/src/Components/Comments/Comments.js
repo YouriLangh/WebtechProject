@@ -31,7 +31,7 @@ function Comments(props) {
         for (const comment of comments) {
           totalRating += comment.rating;
         } 
-        const averageRating = Math.round(totalRating / comments.length);
+        const averageRating = Math.round((totalRating + 5) / (comments.length + 1));
         console.log(averageRating)
         if(!isNaN(averageRating)) 
         {setAvgRating(averageRating);
