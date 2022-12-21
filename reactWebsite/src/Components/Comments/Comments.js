@@ -18,6 +18,7 @@ function Comments(props) {
     const [avgRating, setAvgRating] = useState(1);
     const [editComment, setEditComment] = useState(false);
     const [edittedComment, setEdittedComment] = useState('');
+    const [edittedRating, setEdittedRating] = useState(false);
 
     useEffect(() => {
         if(props){
@@ -93,9 +94,9 @@ function Comments(props) {
           }).then(res => {
             console.log(res)
             setComment('');
-           setComments([...comments, {body: comment, rating: rating}]);
-           document.getElementById("comment_input").value = '';
-           setRating(5);
+            setComments([...comments, res.data]);
+            document.getElementById("comment_input").value = '';
+            setRating(5);
           })
         } catch (error) {console.log(error)}
         
@@ -116,21 +117,35 @@ function Comments(props) {
           </div>
         );}}
 
-    function handleEditComment(id, old_comment) {
+    function handleEditComment(id, old_comment, old_rating) {
       setEditComment(id);
       setEdittedComment(old_comment);
+      setEdittedRating(old_rating);
     }
 
-    function handleDeleteComment() {
-
-    }
-
-    function handleCommentChange(e) {
-      setEdittedComment(e.target.value);
+    function handleDeleteComment(id) {
+      try {
+        axios({
+          url: 'http://localhost:4000/app/profile/comment/delete',
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          data: JSON.stringify({
+            username: userInfo.username,
+            id: id,
+          }),
+        }).then(res => {
+          console.log(res)
+          setComments(res.data.comments);
+        })
+      } catch (error) {console.log(error)}
     }
 
     function handleSaveComment(id) {
       setEditComment(false);
+      setEdittedRating(false);
+      setEdittedComment('');
       try {
         axios({
           url: 'http://localhost:4000/app/profile/comment/edit',
@@ -139,10 +154,14 @@ function Comments(props) {
             'Content-Type': 'application/json',
           },
           data: JSON.stringify({
+            username: userInfo.username,
+            id: id,
             comment: edittedComment,
+            rating: edittedRating
           }),
         }).then(res => {
           console.log(res)
+          setComments(res.data.comments);
         })
       } catch (error) {console.log(error)}
     }
@@ -155,7 +174,8 @@ function Comments(props) {
               name="rate2" 
               editing={false}
               starCount={5}
-              value={avgRating}/> : ""}</div>
+              value={avgRating}/> : ""}
+              </div>
         <Divider>Comments</Divider>
         {comments.length > 0 ? <ul id="comments_list">
             
@@ -163,29 +183,32 @@ function Comments(props) {
               <li key={comment.id}>
                 <StarRatingComponent
               name="rate3" 
-              editing={false}
+              editing={(editComment == comment._id) ? true : false}
               starCount={5}
-              value={comment.rating}/><br/>
+              value={edittedRating ? edittedRating : comment.rating}
+              onStarClick={(nextValue) => {
+                setEdittedRating(nextValue)
+              }}/><br/>
               {renderCommentUser(comment)}
               <Card>
                 <CardContent className="comment_card">
               {isYourComment(comment) ? (
                 <div>
-                  {(editComment == comment.id) ? (
+                  {(editComment == comment._id) ? (
                     <div>
                       <textarea 
                       value={edittedComment} 
                       onChange={(event) => setEdittedComment(event.target.value)} />
                       <div className='edit_comments'>
-                      <Button onClick={() => handleSaveComment(comment.id)}>Save</Button>
+                      <Button onClick={() => handleSaveComment(comment._id)}>Save</Button>
                       </div>
                     </div>
                   ) : (
                   <div>
                   {comment.body}
                   <div className='edit_comments'>
-                  <Button onClick={() => handleDeleteComment(comment.id)}><FontAwesomeIcon icon={faTrash} /></Button>
-                  <Button onClick={() => handleEditComment(comment.id, comment.body)}>Edit</Button>
+                  <Button onClick={() => handleDeleteComment(comment._id)}><FontAwesomeIcon icon={faTrash} /></Button>
+                  <Button onClick={() => handleEditComment(comment._id, comment.body, comment.rating)}>Edit</Button>
                   </div></div>)}</div>
                 ) : (
                   <div>{comment.body}</div>

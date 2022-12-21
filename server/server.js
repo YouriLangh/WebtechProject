@@ -258,7 +258,10 @@ app.patch('/app/profile/comment', async (req, res) => {
         { $push: { comments: {body: req.body.comment, rating: req.body.rating, user: req.body.posterUsername } } }, 
         { new: true })
         .exec()
-        .then((result) => res.send(result))
+        .then((result) => {
+            const addedComment = result.comments.find(
+            (comment) => comment.body === req.body.comment);
+          res.send(addedComment);})
         .catch((err) => res.send(err));
 })
 
@@ -270,16 +273,33 @@ app.patch('/app/profile/edit', async (req, res) => {
         .catch((err) => res.send(err));})
 
 app.patch('/app/profile/comment/edit', async (req, res) => {
+    const username = req.body.username;
     const comment = req.body.comment;
-    const id = comment.id;
-    User.findOne({'comments._id': id})
+    const id = req.body.id;
+    const rating = req.body.rating;
+    console.log(comment)
+    console.log(id)
+    const query = {username: username, "comments._id": id};
+    const updateDocument = {
+        $set: { "comments.$.body": comment, "comments.$.rating": rating }
+      };
+    User.findOneAndUpdate(query, updateDocument, { new: true })
         .exec()
-        .then((user) => {
-            const idx = user.comments.findIndex((comment) => comment._id === id);
-            user.comments[idx].body = req.body.comment;
-            return user.save();
-        })
-        .then((updatedUser) => res.send(updatedUser))
+        .then((result) => res.send(result))
+        .catch((err) => res.send(err));
+})
+
+app.patch('/app/profile/comment/delete', async (req, res) => {
+    const username = req.body.username;
+    const id = req.body.id;
+    console.log(id);
+    const query = {username: username, "comments._id": id};
+    const updateDocument = {
+        $pull: { comments: { _id: id } }
+      };
+    User.findOneAndUpdate(query, updateDocument, {new: true})
+        .exec()
+        .then((result) => res.send(result))
         .catch((err) => res.send(err));
 })
 
