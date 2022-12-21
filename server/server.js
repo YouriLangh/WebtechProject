@@ -16,6 +16,7 @@ const dotenv = require('dotenv')
 const { registerValidation, loginValidation } = require('./validation/validation')
 const bcrypt = require("bcrypt")
 const jwtDecode = require("jwt-decode");
+const {response} = require("express");
 
 dotenv.config();
 
@@ -130,69 +131,56 @@ app.post('/app/profile', async (req, res) => {
 
 
 app.post('/app/activities/fetch', async (req, res) => {
-    const userToken = req.body.userToken;
-    const user = await User.findOne({
-        username: jwtDecode(userToken).username,
-        email: jwtDecode(userToken).email,
-    });
-    let filteredActivities = [];
-    Activity.find({}, (err, activities) => {
-        if (err) {
-            console.log(err)
-            res.send(err)
-            return;
-        }
-        if (activities.length !== 0) {
-            filteredActivities = activities.filter(act => !user.activities.includes(act._id) && !user.deniedActivities.includes(act._id));
-            res.send(filteredActivities);
-        } else {
-            res.send([]);
-        }
-    });
+    try {
+        const userToken = req.body.userToken;
+
+        const user = await User.findOne({
+            username: jwtDecode(userToken).username,
+            email: jwtDecode(userToken).email,
+        });
+        let filteredActivities = [];
+        Activity.find({}, (err, activities) => {
+            if (err) {
+                console.log(err)
+                res.send(err)
+                return;
+            }
+                filteredActivities = activities.filter(act => act.maximumGroupSize > act.participators && !user.activities.includes(act._id) && !user.deniedActivities.includes(act._id));
+                res.send(filteredActivities);
+        });
+    } catch (error) {
+        return res.json({ status: 500, message: "Server Error", profile: false})
+    }
 })
 
-app.post('/app/activities/fetch/filtered', async (req, res) => {
-    console.log("in fetch filtered");
-    Activity.find({
-        activityType: req.body.activityType,
-    }, (err, activities) => {
-        if (err) {
-            console.log(err)
-            res.send(err)
-            return;
-        }
-        if (activities.length !== 0) {
-            console.log(activities);
-            res.send(activities);
-        } else {
-            res.send([]);
-        }
-    });
-})
 
 app.put('/app/activities/publish', async (req, res) => {
-    console.log(req.body);
-    const userToken = req.body.userToken;
-    console.log(jwtDecode(userToken));
-    const user = await User.findOne({
-        username: jwtDecode(userToken).username,
-        email: jwtDecode(userToken).email,
-    });
-    console.log(user._id);
-    const activityBody = {
-        activityName: req.body.activityName,
-        activityDate: req.body.activityDate,
-        activityType: req.body.activityType,
-        minimumAge: req.body.minimumAge,
-        maximumAge: req.body.maximumAge,
-        activityLocation: req.body.activityLocation,
-        minimumGroupSize: req.body.minimumGroupSize,
-        maximumGroupSize: req.body.maximumGroupSize,
-        dateCreated: req.body.dateCreated,
-        creator: user._id,
+    try {
+        console.log(req.body);
+        const userToken = req.body.userToken;
+        console.log(jwtDecode(userToken));
+        const user = await User.findOne({
+            username: jwtDecode(userToken).username,
+            email: jwtDecode(userToken).email,
+        });
+        console.log(user._id);
+        const activityBody = {
+            activityName: req.body.activityName,
+            activityDate: req.body.activityDate,
+            activityType: req.body.activityType,
+            minimumAge: req.body.minimumAge,
+            maximumAge: req.body.maximumAge,
+            activityLocation: req.body.activityLocation,
+            minimumGroupSize: req.body.minimumGroupSize,
+            maximumGroupSize: req.body.maximumGroupSize,
+            dateCreated: req.body.dateCreated,
+            creator: user._id,
+        }
+        const activity = await Activity.insertMany(activityBody);
+        console.log(JSON.stringify(activity));
+    } catch (error) {
+        return res.json({ status: 500, message: "Server Error", profile: false})
     }
-    const activity = await Activity.insertMany(activityBody);
-    console.log(JSON.stringify(activity));
 })
 
 
@@ -346,6 +334,18 @@ app.post('/app/users/activities', async (req, res) => {
         res.send({token: false})
     }
 
+})
+
+
+
+app.post('/app/user/fetch/interests', async (req, res) => {
+    const userToken = req.body.userToken;
+    User.findOne({
+        username: jwtDecode(userToken).username,
+        email: jwtDecode(userToken).email,
+    }).exec()
+        .then((result) => res.send(result.interests))
+        .catch((err) => res.send(err));
 })
 
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import './Activity.css';
 import './MockActivity';
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import logo from '../../images/Logo.png'
 import background from '../../images/backgrounde.jpg'
@@ -9,11 +9,13 @@ import { CardContent, Card } from "@mui/material";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faHeart, faInfo, faMultiply } from '@fortawesome/free-solid-svg-icons'
 import Weather from "../Weather/Weather";
+import jwt from "jsonwebtoken";
 
 
 
 function Activity() {
 
+    const navigate = useNavigate()
 
     const [showActivity,setShowActivity] = useState(true)
     const [showInfo,setShowInfo] = useState(false)
@@ -21,33 +23,65 @@ function Activity() {
     const [activities, setActivities] = useState([]);
     const [filteredActivities, setFilteredActivities] = useState([])
     const [swipedActivities, setSwipedActivities] = useState([]);
-    const [filterType, setFilterType] = useState("");
+    const [interests, setInterests] = useState([]);
+    const [filterType, setFilterType] = useState("Interests");
     const [notYetFetched, setNotYetFetched] = useState(true);
+    const [notYetFetchedInterests, setNotYetFetchedInterests] = useState(true);
     const userToken = localStorage.getItem('token');
 
+    // Fetching initial data from the server
+
     useEffect(() => {
-        if (notYetFetched) {
-            try {
-                axios({
-                    url: 'http://localhost:4000/app/activities/fetch',
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    data: JSON.stringify({
-                        userToken,
-                    }),
-                }).then(res => {
-                        setActivities(res.data);
-                        setFilteredActivities(res.data);
-                        setNotYetFetched(false);
-                    }
-                );
-            } catch (error) {
-                console.log(error);
+        const userToken = localStorage.getItem('token');
+        if (userToken) {
+            const user = jwt.decode(userToken)
+            if (!user) {
+                localStorage.removeItem('token')
+                navigate('/login', {replace: true})
+            } else if (notYetFetched || notYetFetchedInterests) {
+                try {
+                    axios({
+                        url: 'http://localhost:4000/app/activities/fetch',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        data: JSON.stringify({
+                            userToken,
+                        }),
+                    }).then(res => {
+                            setActivities(res.data);
+                            setFilteredActivities(res.data);
+                            setNotYetFetched(false);
+                            console.log(res.data);
+                        }
+                    );
+                } catch (error) {
+                    console.log(error);
+                }
+                try {
+                    axios({
+                        url: 'http://localhost:4000/app/user/fetch/interests',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        data: JSON.stringify({
+                            userToken,
+                        }),
+                    }).then(res => {
+                            setInterests(res.data);
+                            setNotYetFetchedInterests(false);
+                        }
+                    );
+                } catch (error) {
+                    console.log(error);
+                }
             }
         }
     }, [])
+
+    // Helper functions for filtering
 
     const notSwiped = (activity) => {
         if (swipedActivities.length === 0){
@@ -56,9 +90,21 @@ function Activity() {
         return !swipedActivities.includes(activity._id);
     }
 
+    const interestsFilter = (activity) => {
+        if (interests.length === 0) {
+            return false;
+        }
+        return interests.includes(activity.activityType);
+    }
+
     const applyFilter = (activity) => {
         if (filterType === "None") {
+            console.log("none");
             return notSwiped(activity);
+        }
+        if (filterType === "Interests") {
+            console.log("interests");
+            return interestsFilter(activity) && notSwiped(activity);
         }
         return activity.activityType === filterType && notSwiped(activity);
     }
@@ -66,6 +112,9 @@ function Activity() {
     const addActivityToSwiped = (activity) => {
         setSwipedActivities(swipedActivities.concat(activity));
     }
+
+
+    // Functions to handle input
 
 
         const onInfo = (e) => {
@@ -90,6 +139,7 @@ function Activity() {
                         activityID: filteredActivities[current]._id,
                     }),
                 }).then(res => {
+                    console.log(res);
                 })
             } catch (error) {console.log(error)}
             try {
@@ -178,9 +228,10 @@ function Activity() {
 
     }
 
-    const onSetFilter = (e) => {
+    const onSetFilter = (e, value) => {
             e.preventDefault();
             const filterArray = activities.filter(applyFilter);
+            console.log("set filter value: " + value + ", filtertype: " + filterType);
             if (filterArray.length === 0) {
                 setCurrent(0);
                 setShowActivity(false);
@@ -188,12 +239,15 @@ function Activity() {
                 setCurrent(0);
                 setShowActivity(true);
             }
+            console.log("filtervalue  after: " + filterType)
             setFilteredActivities(filterArray);
+            console.log(filteredActivities)
         }
 
     const changeFilter = (e, value) => {
-        setFilterType(value)
-        onSetFilter(e)
+        console.log("change filter: " + value);
+        setFilterType(value);
+        onSetFilter(e, value);
     }
 
     return (
@@ -202,8 +256,8 @@ function Activity() {
                             <CardContent className="activity_content">
                                 <div className="filter_container">
                                 <div className="">
-                                <select name="type" onChange={(e) => changeFilter(e, e.target.value)}>
-                                    <option value="None">Custom</option>
+                                <select name="type" onChange={(e) => onSetFilter(e, e.target.value)}>
+                                    <option value="Interests">Interests</option>
                                     <option value="None">None</option>
                                     <option value="Culture">Culture</option>
                                     <option value="Music">Music</option>
