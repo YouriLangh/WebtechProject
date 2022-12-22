@@ -24,7 +24,7 @@ function Creator() {
 
     const[activityName, setActivityName] = useState('');
     const[activityDate, setActivityDate] = useState('');
-    const[activityType, setActivityType] = useState('');
+    const[activityType, setActivityType] = useState('Culture');
     const[minimumAge, setMinimumAge] = useState('');
     const[maximumAge, setMaximumAge] = useState('');
     const[country, setCountry] = useState('');
