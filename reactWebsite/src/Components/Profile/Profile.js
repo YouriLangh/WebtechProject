@@ -30,6 +30,7 @@ function Profile(props) {
     email: '',
     url: '',
     comments: [],
+    interests: []
   })
 
   const [pfp, setPfp] = useState(myCld.image(profile.url))
@@ -115,15 +116,31 @@ function Profile(props) {
         data: {
           username: profile.username,
           bio: bio,
+          interests: interests,
         },
     }).then(res => {
       console.log(res);
+      setProfile(res.data);
       setEditMode(false);
     })
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleInterest = (id) => {
+    var element = document.getElementById(id);
+    element.classList.toggle("selected")
+    if(element.classList.contains("selected")){
+        setInterests(prevArray => [...prevArray, id])
+    } else {setInterests(interests.filter(eId => eId !== id))}
+  }
+
+  const getClasses = (id) => {
+    if(interests.includes(id)){
+        return "interests selected"
+    } else return "interests"
+ }
 
   return (
     <div> 
@@ -166,6 +183,32 @@ function Profile(props) {
           ) : (
           <div>{bio}</div>
           )}
+        </div>
+        <div className='user_interests info_container'>  
+                {editMode ? (
+                <div>
+                <div className="input_fields">
+                  <p>Select activities that interest you!</p>
+                  <div id="interests"className='interest_options'>
+                  <input id="culture_interest" onClick= {() => handleInterest("culture_interest")} className={getClasses("culture_interest")} value="Culture" type="button" />
+                  <input id="music_interest" onClick= {() => handleInterest("music_interest")} className={getClasses("music_interest")} value="Music" type="button" />
+                  <input id="sports_interest" onClick= {() => handleInterest("sports_interest")} className={getClasses("sports_interest")} value="Sports" type="button" />
+                  <input id="parties_interest" onClick= {() => handleInterest("parties_interest")} className={getClasses("parties_interest")} value="Parties" type="button" />
+                  <input id="concerts_interest" onClick= {() => handleInterest("concerts_interest")} className={getClasses("concerts_interest")} value="Concerts" type="button" />
+                  <input id="social_interest" onClick= {() => handleInterest("social_interest")} className={getClasses("social_interest")} value="Social" type="button" />
+                  <input id="other_interest" onClick= {() => handleInterest("other_interest")} className={getClasses("other_interest")} value="Other" type="button" />
+                  </div>
+                </div>
+                <div className='save_interests'>
+                <Button variant="outlined" onClick={handleSave}>Save</Button>
+                </div>
+                </div>
+                ) : (
+                  <div className='user_interest_container'>
+                    <p className='info_title'>Interested topics </p>
+                  {Object.keys(profile).length !== 0 &&  profile.interests.map(interest => <div key={interest} className="user_interest"> {interest}
+                   </div> )}
+                  </div>)}
         </div>
         <div className='user_comments'>
         <Comments showStars= {true} profile={profile}/>
