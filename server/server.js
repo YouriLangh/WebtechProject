@@ -372,6 +372,18 @@ app.post('/app/user/fetch/interests', async (req, res) => {
         .catch((err) => res.send(err));
 })
 
+app.post('/app/map', async  (req, res) => {
+    console.log("in fetching locations");
+    try {
+        const activities = await Activity.find({})
+        const locations = activities.map(el => el.activityLocation);
+        console.log(locations);
+        res.send(locations);
+    } catch (err){
+        res.send({token: false})
+    }
+})
+
 
 app.listen(4000, () => {console.log("Server is up and running")})
 

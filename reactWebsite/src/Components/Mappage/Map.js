@@ -5,6 +5,8 @@ import { useEffect } from 'react'
 import jwt from 'jsonwebtoken'
 import { useNavigate} from 'react-router-dom'
 import axios from 'axios'
+//import "leaflet-control-geocoder/dist/Control.Geocoder.css";
+//import "leaflet-control-geocoder/dist/Control.Geocoder.js";
 
 // The map component shows all events on the map 
 function Map() {
@@ -13,6 +15,7 @@ function Map() {
   // const [activityList, setActivityList] = useState([{event_lat: 0, event_lon: 0, event_name:'', event_date:""}])
     
   const [markers, setMarkers] = useState([])
+    let geocoder = null;
 
   // Check if the user is logged in (cookie did not get deleted from storage)
   // The token logged is a jwt Token holding the username and email of the user
@@ -25,15 +28,42 @@ function Map() {
                 navigate('/login', { replace: true })
     
                 // Get all the activities from the database 
-             } else { 
-              // axios.get('http://localhost:4000/app/map').then((res) => {
-              // if (res.status === 200){
-              //   setMarkers(res.data)
-              // }})
+             } else {
+                try {
+                    axios({
+                        url: 'http://localhost:4000/app/map',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    }).then(res => {
+                            //setMarkers(res.data.map(loc => ))
+                        console.log(res.data);
+                        }
+                    );
+                } catch (error) {
+                    console.log(error);
+                }
             }
 
         } else { navigate('/login', { replace: true })}
     }, [])
+
+    function getCurrentLocation() {
+        let onError = function(error) {
+            alert("Could not get the current location.");
+        };
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    let currentLocation = [position.coords.latitude, position.coords.longitude];
+                },
+                onError
+            );
+        }else{
+            onError();
+        }
+    }
 
   return (
     <div className='map_page'>
