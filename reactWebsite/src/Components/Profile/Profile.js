@@ -200,7 +200,6 @@ function Profile(props) {
     } catch (error) {console.log(error)}
   }
 
-
   return (
     <div> 
       <WidgetLoader />
