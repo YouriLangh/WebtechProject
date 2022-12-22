@@ -17,9 +17,9 @@ function Map() {
     // const [activityList, setActivityList] = useState([{event_lat: 0, event_lon: 0, event_name:'', event_date:""}])
 
     const [markers, setMarkers] = useState([])
-    const [loadingMarkers, setLoadingMarkers] = useState([])
     const [notLoadedMarkers, setNotLoadedMarkers] = useState(true);
     let geocoder = new L.Control.Geocoder.Nominatim();
+    const[allLoaded, setAllLoaded] = useState(false)
 
 
     // Check if the user is logged in (cookie did not get deleted from storage)
@@ -35,19 +35,15 @@ function Map() {
                 // Get all the activities from the database 
             } else if (notLoadedMarkers) {
                 try {
-                    axios({
-                        url: 'http://localhost:4000/app/map',
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    }).then(res => {
-                            setMarkers(res.data.map(loc => geocoder.geocode(loc, function (results) {
-                                const latLng = new L.LatLng(results[0].center.lat, results[0].center.lng);
-                                console.log("while loading: " + latLng);
-                                return latLng;
-                            })));
-                            console.log("while loading: " + loadingMarkers);
+                    axios.get('http://localhost:4000/app/map').then(res => {
+                        console.log("res fetch", res)
+                            res.data.activities.map(act => geocoder.geocode(act.activityLocation, function (results) {
+                                if(results && results.length > 0){
+                                    console.log("res", results)
+                                console.log(results[0].center.lat)
+                                setMarkers(oldArray => [...oldArray, ({activityName: act.activityName, activityDate: act.activityDate, lat: results[0].center.lat, lon: results[0].center.lng})])
+                    }}))
+                    setAllLoaded(true);
                         }
                     )
                 } catch (error) {
@@ -60,31 +56,11 @@ function Map() {
         }
     }, [])
 
+
     useEffect(() => {
-        console.log("in use state: ")
-        setMarkers(loadingMarkers);
-        setNotLoadedMarkers(false);
-        console.log(markers);
-    }, [loadingMarkers])
+        console.log(markers)
+    },[markers])
 
-    if (notLoadedMarkers || markers.length === 0) {
-        return (
-            <div className='map_page'>
-                <div id='map_container'>
-                    <MapContainer className='custom-popup' center={[50.85, 4.35]} zoom={13} scrollWheelZoom={true}>
-                        <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
-                    </MapContainer>
-                </div>
-            </div>
-        )
-    }
-
-
-    else {
-
-        console.log("finally");
 
         return (
             <div className='map_page'>
@@ -94,10 +70,11 @@ function Map() {
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
                         {/* For each event, add a marker and pop up with the info of that event */}
-                        {!markers.includes(undefined) ? markers.map(eventInfo =>
-                            <Marker key={eventInfo.lat} position={[eventInfo.lat, eventInfo.lng]}>
+                        {markers.length > 0  && allLoaded ? markers.map(eventInfo =>
+                            <Marker key={eventInfo.lat + eventInfo.lon / markers.indexOf(eventInfo)} position={eventInfo}>
                                 <Popup>
-                                    abc
+                                    {eventInfo.activityName} 
+                                    {eventInfo.activityDate}
                                 </Popup>
                             </Marker>
                         ) : ''}
@@ -106,6 +83,5 @@ function Map() {
             </div>
         )
     }
-}
 
 export default Map

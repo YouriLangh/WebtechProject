@@ -139,19 +139,14 @@ app.post('/app/activities/fetch', async (req, res) => {
         const userToken = req.body.userToken;
 
         const user = await User.findOne({
-            username: jwtDecode(userToken).username,
-            email: jwtDecode(userToken).email,
+            username: jwt.decode(userToken).username,
+            email: jwt.decode(userToken).email,
         });
         let filteredActivities = [];
-        Activity.find({}, (err, activities) => {
-            if (err) {
-                console.log(err)
-                res.send(err)
-                return;
-            }
-                filteredActivities = activities.filter(act => act.maximumGroupSize > act.participators && !user.activities.includes(act._id) && !user.deniedActivities.includes(act._id));
-                res.send(filteredActivities);
-        });
+        let acts = await Activity.find()
+            filteredActivities = acts.filter(act => act.maximumGroupSize > act.participators && !user.activities.includes(act._id) && !user.deniedActivities.includes(act._id));
+            console.log(filteredActivities)
+            res.send(filteredActivities);
     } catch (error) {
         return res.json({ status: 500, message: "Server Error", profile: false})
     }
@@ -363,28 +358,20 @@ app.post('/app/users/activities', async (req, res) => {
 
 })
 
+app.get('/app/map', async (req, res) => {
+    const acts = await Activity.find()
+    console.log(acts)
+    res.send({activities: acts})
+})
 
 
 app.post('/app/user/fetch/interests', async (req, res) => {
     const userToken = req.body.userToken;
     User.findOne({
-        username: jwtDecode(userToken).username,
-        email: jwtDecode(userToken).email,
-    }).exec()
-        .then((result) => res.send(result.interests))
+        username: jwt.decode(userToken).username,
+        email: jwt.decode(userToken).email,
+    }).then((result) => res.send(result.interests))
         .catch((err) => res.send(err));
-})
-
-app.post('/app/map', async  (req, res) => {
-    console.log("in fetching locations");
-    try {
-        const activities = await Activity.find({})
-        const locations = activities.map(el => el.activityLocation);
-        console.log(locations);
-        res.send(locations);
-    } catch (err){
-        res.send({token: false})
-    }
 })
 
 

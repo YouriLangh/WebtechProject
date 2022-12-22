@@ -33,6 +33,8 @@ function Activity() {
 
     const convertInterests = (i) => {
         let newTypes = [];
+        console.log(i)
+        if(Object.keys(i).length > 0){
         if (i.includes("culture_interest")){
             newTypes.push("Culture");
         }
@@ -56,6 +58,7 @@ function Activity() {
         }
         return newTypes;
     }
+}
 
 
     useEffect(() => {
@@ -77,6 +80,7 @@ function Activity() {
                             userToken,
                         }),
                     }).then(res => {
+                        console.log("acts", res)
                             setActivities(res.data);
                             setFilteredActivities(res.data);
                             setNotYetFetched(false);
@@ -96,6 +100,7 @@ function Activity() {
                             userToken,
                         }),
                     }).then(res => {
+                        console.log(res)
                             const interestTypes = convertInterests(res.data);
                             setInterests(interestTypes);
                             console.log("in setting: " + interestTypes)
@@ -314,9 +319,9 @@ function Activity() {
                                 </div>
                                 </div>
                                 <div className="buttons">
-                                    <button disabled={activities.length === 0} className="main_button button deny" onClick= {(e) => onDeny(e)}> <FontAwesomeIcon className='button_icon' icon= {faMultiply}/></button>
-                                    <button disabled={activities.length === 0} className="info_button button" onClick= {(e) => onInfo(e)}> <FontAwesomeIcon className='button_icon' icon= {faInfo}/></button>
-                                    <button disabled={activities.length === 0} className="main_button button accept" onClick= {(e) => onAccept(e)}>  <FontAwesomeIcon className='button_icon' icon= {faHeart}/></button>
+                                    <button disabled={filteredActivities.length === 0 && !showActivity} className="main_button button deny" onClick= {(e) => onDeny(e)}> <FontAwesomeIcon className='button_icon' icon= {faMultiply}/></button>
+                                    <button disabled={filteredActivities.length === 0 && !showActivity} className="info_button button" onClick= {(e) => onInfo(e)}> <FontAwesomeIcon className='button_icon' icon= {faInfo}/></button>
+                                    <button disabled={filteredActivities.length === 0 && !showActivity} className="main_button button accept" onClick= {(e) => onAccept(e)}>  <FontAwesomeIcon className='button_icon' icon= {faHeart}/></button>
                                 </div>
                             </CardContent>
                         </Card>
