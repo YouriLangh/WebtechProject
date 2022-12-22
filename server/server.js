@@ -125,6 +125,7 @@ app.post('/app/profile', async (req, res) => {
             rating: user.rating,
             interests: user.interests,
             bio: user.bio,
+            activities: user.activities,
         }, process.env.PRIVATE_KEY)
         return res.json({ status: 200, message: "Profile found", profile: token});
         }
@@ -284,6 +285,8 @@ app.patch('/app/profile/comment/delete', async (req, res) => {
 app.patch('/app/activity/leave', async (req, res) => {
     const userToken = req.body.userToken;
     const activityID = req.body.activityID;
+    console.log(userToken);
+    console.log(activityID);
     User.findOneAndUpdate({
         username: jwtDecode(userToken).username,
         email: jwtDecode(userToken).email,

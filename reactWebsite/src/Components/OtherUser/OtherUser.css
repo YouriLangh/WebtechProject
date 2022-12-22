@@ -185,6 +185,7 @@
     height: 100%;
     display: flex;
 }
+
 .center .centered{
     margin: auto;
     color: black;

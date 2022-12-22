@@ -11,6 +11,15 @@ import {thumbnail} from "@cloudinary/url-gen/actions/resize";
 import {focusOn} from "@cloudinary/url-gen/qualifiers/gravity";
 import {FocusOn} from "@cloudinary/url-gen/qualifiers/focusOn";
 import { WidgetLoader, Widget } from 'react-cloudinary-upload-widget'
+import SportsImg from '../../images/sports.jpg'
+import CultureImg from '../../images/culture1.jpg'
+import PartiesImg from '../../images/party.jpg'
+import ConcertsImg from '../../images/concert.jpg'
+import MusicImg from '../../images/music.jpg'
+import OtherImg from '../../images/other.jpg'
+import SocialImg from '../../images/social.jpg'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 const jwt = require('jsonwebtoken')
 
@@ -30,13 +39,17 @@ function Profile(props) {
     email: '',
     url: '',
     comments: [],
-    interests: []
+    interests: [],
+    activities: [],
   })
 
   const [pfp, setPfp] = useState(myCld.image(profile.url))
   const [interests, setInterests] = useState([]);
+  const [activities, setActivities] = useState([]);
   const [bio, setBio] = useState('My bio goes here');
   const [editMode, setEditMode] = useState(false);
+  const [profileToken, setProfileToken] = useState('');
+
 
   const updatePfp = async (newUrl) => {
     if (newUrl == "") {
@@ -60,6 +73,19 @@ function Profile(props) {
         .resize(thumbnail().gravity(focusOn(FocusOn.face())))
       } 
     } 
+
+  const getAct = async (act) => {
+    await axios.post('http://localhost:4000/app/users/activities', {actId: act}).then((res) => {
+      if (res.status === 200){
+        if(res.data.token){
+          const token = jwt.decode(res.data.token)
+          setActivities(old => [...old, ({activityName: token.activityName, activityType: token.activityType, _id: act})])
+          console.log(token)
+        }
+      } else console.log("Server Error")
+
+    })
+  }
 
   const handleUpload = async (e) => {
     let new_profile = {...profile, url: e.info.public_id}
@@ -92,8 +118,10 @@ function Profile(props) {
             }).then(res => {
               let newProfile = jwt.decode(res.data.profile);
               setProfile(newProfile);
+              setProfileToken(res.data.profile);
               updatePfp(newProfile.url);
               setInterests(newProfile.interests);
+              newProfile.activities.forEach(act => getAct(act))
               setBio(newProfile.bio);})
           } catch (error) {console.log(error)}
           pfp
@@ -140,7 +168,38 @@ function Profile(props) {
     if(interests.includes(id)){
         return "interests selected"
     } else return "interests"
- }
+  }  
+
+  const getImage = (activityType) => {
+    if(activityType === "Sports") return SportsImg;
+    if(activityType === "Culture") return CultureImg;
+    if(activityType === "Social") return SocialImg;
+    if(activityType === "Music") return MusicImg;
+    if(activityType === "Parties") return PartiesImg;
+    if(activityType === "Concerts") return ConcertsImg;
+    if(activityType === "Other") return OtherImg;
+   }
+
+   function handleDeleteActivity(act) {
+    try {
+      axios({
+        url: 'http://localhost:4000/app/activity/leave',
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data: JSON.stringify({
+          activityID: act._id,
+          userToken: profileToken,
+        }),
+      }).then(res => {
+        console.log(res)
+        setActivities([])
+        res.data.activities.forEach(act => getAct(act))
+      })
+    } catch (error) {console.log(error)}
+  }
+
 
   return (
     <div> 
@@ -215,6 +274,26 @@ function Profile(props) {
         </div>
         </CardContent>
         </Card>
+        <div className='activities_container'>
+            <Card className='activities_card'>
+              <CardContent className='activities_card_content'>
+                <div className='activities_title'> 
+                <span> Activities</span>
+                </div>
+                <div className=' content_dividing_line dividing_line' />
+                <div className='registered_activities'>
+                  { profile && profile.activities && activities.length > 0 ? <> {activities.map(activity => <div key={activities.indexOf(activity)} className='activity_container'>
+                    <div className='pic_container'>
+                    <img src={getImage(activity.activityType)} alt="activity_picture"/>
+                    </div>
+                    <p>{activity.activityName}</p>
+                    <Button onClick={() => handleDeleteActivity(activity)}><FontAwesomeIcon icon={faTrash} /></Button>
+                    </div>
+                    ) }</> : <p className='no_activities'>No activities yet!</p>}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
     </div>
   </div>
   )
