@@ -31,6 +31,33 @@ function Activity() {
 
     // Fetching initial data from the server
 
+    const convertInterests = (i) => {
+        let newTypes = [];
+        if (i.includes("culture_interest")){
+            newTypes.push("Culture");
+        }
+        if (i.includes("music_interest")){
+            newTypes.push("Music");
+        }
+        if (i.includes("sports_interest")){
+            newTypes.push("Sports");
+        }
+        if (i.includes("parties_interest")){
+            newTypes.push("Parties");
+        }
+        if (i.includes("concerts_interest")){
+            newTypes.push("Concerts");
+        }
+        if (i.includes("social_interest")){
+            newTypes.push("Social");
+        }
+        if (i.includes("other_interest")){
+            newTypes.push("Other");
+        }
+        return newTypes;
+    }
+
+
     useEffect(() => {
         const userToken = localStorage.getItem('token');
         if (userToken) {
@@ -53,7 +80,6 @@ function Activity() {
                             setActivities(res.data);
                             setFilteredActivities(res.data);
                             setNotYetFetched(false);
-                            console.log(res.data);
                         }
                     );
                 } catch (error) {
@@ -70,7 +96,9 @@ function Activity() {
                             userToken,
                         }),
                     }).then(res => {
-                            setInterests(res.data);
+                            const interestTypes = convertInterests(res.data);
+                            setInterests(interestTypes);
+                            console.log("in setting: " + interestTypes)
                             setNotYetFetchedInterests(false);
                         }
                     );
@@ -82,6 +110,32 @@ function Activity() {
     }, [])
 
     // Helper functions for filtering
+
+    useEffect(() => {
+        const filterArray = activities.filter(applyFilter)
+        if (filterArray.length === 0) {
+            setCurrent(0);
+            setShowActivity(false);
+        } else {
+            setCurrent(0);
+            setShowActivity(true);
+        }
+        setFilteredActivities(filterArray);
+    }, [filterType])
+
+
+    const onSetFilter = (e, value) => {
+        e.preventDefault();
+        setFilterType(value);
+    }
+
+    useEffect(() => {
+        setFilter(filterType)
+    }, [interests])
+
+    const setFilter = (value) => {
+        setFilterType(value);
+    }
 
     const notSwiped = (activity) => {
         if (swipedActivities.length === 0){
@@ -103,7 +157,6 @@ function Activity() {
             return notSwiped(activity);
         }
         if (filterType === "Interests") {
-            console.log("interests");
             return interestsFilter(activity) && notSwiped(activity);
         }
         return activity.activityType === filterType && notSwiped(activity);
@@ -226,28 +279,6 @@ function Activity() {
             activity_content =
                     <p className="no_activities">That's it!</p>
 
-    }
-
-    const onSetFilter = (e, value) => {
-            e.preventDefault();
-            const filterArray = activities.filter(applyFilter);
-            console.log("set filter value: " + value + ", filtertype: " + filterType);
-            if (filterArray.length === 0) {
-                setCurrent(0);
-                setShowActivity(false);
-            } else {
-                setCurrent(0);
-                setShowActivity(true);
-            }
-            console.log("filtervalue  after: " + filterType)
-            setFilteredActivities(filterArray);
-            console.log(filteredActivities)
-        }
-
-    const changeFilter = (e, value) => {
-        console.log("change filter: " + value);
-        setFilterType(value);
-        onSetFilter(e, value);
     }
 
     return (
