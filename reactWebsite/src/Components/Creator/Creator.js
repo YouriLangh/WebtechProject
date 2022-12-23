@@ -15,7 +15,11 @@ import {preventDefault} from "leaflet/src/dom/DomEvent";
 const jwt = require('jsonwebtoken')
 
 
+//Component for creating activities
+
 function Creator() {
+
+    //constants
 
     const navigate = useNavigate()
 
@@ -40,6 +44,8 @@ function Creator() {
         return true;
     }
 
+    //make sure the user is still logged in
+
     useEffect(() => {
         const userToken = localStorage.getItem('token');
         if (userToken){
@@ -50,6 +56,7 @@ function Creator() {
            }
       }, []);
 
+    //function for submitting a newly created activity when the submit button is pressed
 
     const onSubmit = (e) => {
         e.preventDefault()
@@ -78,6 +85,8 @@ function Creator() {
         setActivityMade(false);
     }
 
+    // set the screen to the html for after the creation of an activity
+
     if (activityMade) {
         return (
             <div className='aPage' >
@@ -96,6 +105,9 @@ function Creator() {
     }
 
     let pseudoData = {username: '', url:''}
+
+    //html for showing the creator
+
     return (
 
 

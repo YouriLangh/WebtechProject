@@ -17,6 +17,8 @@ import L from 'leaflet';
 
 function Activity() {
 
+    // constants
+
     const navigate = useNavigate()
 
 
@@ -34,11 +36,10 @@ function Activity() {
     const [notYetFetchedInterests, setNotYetFetchedInterests] = useState(true);
     const userToken = localStorage.getItem('token');
 
-    // Fetching initial data from the server
+    // Helper function to translate interest_types to filter types
 
     const convertInterests = (i) => {
         let newTypes = [];
-        console.log(i)
         if(Object.keys(i).length > 0){
         if (i.includes("culture_interest")){
             newTypes.push("Culture");
@@ -65,15 +66,19 @@ function Activity() {
     }
 }
 
+// fetching data from server for activities and user interests
+
 
     useEffect(() => {
         const userToken = localStorage.getItem('token');
         if (userToken) {
             const user = jwt.decode(userToken);
+            //check if user is still logged in
             if (!user) {
                 localStorage.removeItem('token')
                 navigate('/login', {replace: true})
             } else if (notYetFetched || notYetFetchedInterests) {
+                //fetch activities from the server
                 try {
                     axios({
                         url: 'http://localhost:4000/app/activities/fetch',
@@ -85,7 +90,6 @@ function Activity() {
                             userToken,
                         }),
                     }).then(res => {
-                        console.log("acts", res.data)
                             setActivities(res.data);
                             setFilteredActivities(res.data);
                             setNotYetFetched(false);
@@ -95,6 +99,7 @@ function Activity() {
                     console.log(error);
                 }
                 try {
+                    // fetch interests from the server
                     axios({
                         url: 'http://localhost:4000/app/user/fetch/interests',
                         method: 'POST',
@@ -105,10 +110,8 @@ function Activity() {
                             userToken,
                         }),
                     }).then(res => {
-                        console.log(res)
                             const interestTypes = convertInterests(res.data);
                             setInterests(interestTypes);
-                            console.log("in setting: " + interestTypes)
                             setNotYetFetchedInterests(false);
                         }
                     );
@@ -122,8 +125,6 @@ function Activity() {
     // Helper functions for filtering
 
     useEffect(() => {
-        console.log("act: " + activities);
-        console.log("filt: " + activities.filter(applyFilter));
         const filterArray = activities.filter(applyFilter);
         if (filterArray.length === 0) {
             setCurrent(0);
@@ -165,7 +166,6 @@ function Activity() {
 
     const applyFilter = (activity) => {
         if (filterType === "None") {
-            console.log("none");
             return notSwiped(activity);
         }
         if (filterType === "Interests") {
@@ -194,6 +194,7 @@ function Activity() {
             e.preventDefault();
             try {
                 axios({
+                    // send to server that user accepted request
                     url: 'http://localhost:4000/app/activity/join',
                     method: 'PATCH',
                     headers: {
@@ -208,6 +209,7 @@ function Activity() {
                 })
             } catch (error) {console.log(error)}
             try {
+                // tell the server to increase the activity's participator count
                 axios({
                     url: 'http://localhost:4000/app/activity/increase',
                     method: 'PATCH',
@@ -234,6 +236,7 @@ function Activity() {
             e.preventDefault();
             try {
                 axios({
+                    // send to server that user denied activity
                     url: 'http://localhost:4000/app/activity/deny',
                     method: 'PATCH',
                     headers: {
@@ -260,6 +263,7 @@ function Activity() {
 
     let activity_content 
     if(showActivity && showInfo){
+        // html for when the info button is pressed
         const date = new Date(filteredActivities[current].activityDate)
         activity_content =
             <div className="show_info">
@@ -273,6 +277,7 @@ function Activity() {
                 </div>
             </div>;
     } else if (showActivity && activities.length > 0){
+        // html for when there are activities left
         const date = new Date(filteredActivities[current].activityDate)
         let eventLat;
         let eventLon;
@@ -283,7 +288,6 @@ function Activity() {
                 eventLat = results[0].center.lat;
                 eventLon = results[0].center.lng;
             }})
-        console.log(date.toDateString());
         activity_content =
             <div className="justify">
                 <div className="weather_component">
@@ -296,10 +300,13 @@ function Activity() {
         </div>
     </div>;
     } else {
+        // html for when there are no more activities left
             activity_content =
                     <p className="no_activities">That's it!</p>
 
     }
+
+    //general html
 
     return (
             <div className='activity_page'>
@@ -340,11 +347,6 @@ function Activity() {
                                 </div>
                             </CardContent>
                         </Card>
-                        {/* <Link to='/app/events/create'>Go to Creator</Link>
-                        <div className="formA">
-                            <span className="activity_title">{title}</span>
-                           
-                        <Link to='/app/events/create'>Go to Creator</Link> */}
 
                 </div>
     )

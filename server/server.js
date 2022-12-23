@@ -133,7 +133,7 @@ app.post('/app/profile', async (req, res) => {
          return res.json({ status: 500, message: "Server Error", profile: false});
     }})
 
-
+//get activities from the server
 app.post('/app/activities/fetch', async (req, res) => {
     try {
         const userToken = req.body.userToken;
@@ -144,25 +144,22 @@ app.post('/app/activities/fetch', async (req, res) => {
         });
         let filteredActivities = [];
         let acts = await Activity.find()
+        //filter out activities that should not be shown to the user
             filteredActivities = acts.filter(act => act.maximumGroupSize > act.participators && !user.activities.includes(act._id) && !user.deniedActivities.includes(act._id));
-            console.log(filteredActivities)
             res.send(filteredActivities);
     } catch (error) {
         return res.json({ status: 500, message: "Server Error", profile: false})
     }
 })
 
-
+//insert a newly created activity into the database
 app.put('/app/activities/publish', async (req, res) => {
     try {
-        console.log(req.body);
         const userToken = req.body.userToken;
-        console.log(jwtDecode(userToken));
         const user = await User.findOne({
             username: jwtDecode(userToken).username,
             email: jwtDecode(userToken).email,
         });
-        console.log(user._id);
         const activityBody = {
             activityName: req.body.activityName,
             activityDate: req.body.activityDate,
@@ -277,6 +274,8 @@ app.patch('/app/profile/comment/delete', async (req, res) => {
         .catch((err) => res.send(err));
 })
 
+
+//tell the database a user left an activity by deleting the activity from the user's activity list
 app.patch('/app/activity/leave', async (req, res) => {
     const userToken = req.body.userToken;
     const activityID = req.body.activityID;
@@ -295,6 +294,8 @@ app.patch('/app/activity/leave', async (req, res) => {
         .catch((err) => res.send(err));
 })
 
+
+//tell the database a user joined an activity by adding it to the user's activity list
 app.patch('/app/activity/join', async (req, res) => {
     const userToken = req.body.userToken;
     const activityID = req.body.activityID;
@@ -312,6 +313,8 @@ app.patch('/app/activity/join', async (req, res) => {
         .catch((err) => res.send(err));
 })
 
+
+//tell the database a user denied an activity by adding the activity to the user's denied list
 app.patch('/app/activity/deny', async (req, res) => {
     const userToken = req.body.userToken;
     const activityID = req.body.activityID;
@@ -329,6 +332,8 @@ app.patch('/app/activity/deny', async (req, res) => {
         .catch((err) => res.send(err));
 })
 
+
+// increase the participator count of an activity
 app.patch('/app/activity/increase', async (req, res) => {
     console.log("in add participant on server");
     Activity.findOneAndUpdate({
@@ -364,7 +369,7 @@ app.get('/app/map', async (req, res) => {
     res.send({activities: acts})
 })
 
-
+// fetch the interests from a user
 app.post('/app/user/fetch/interests', async (req, res) => {
     const userToken = req.body.userToken;
     User.findOne({
