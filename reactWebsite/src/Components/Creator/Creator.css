@@ -108,11 +108,6 @@ body{
 }
 
 
-input[type="date"]::-webkit-calendar-picker-indicator {
-    cursor: pointer;
-    filter: invert(1) sepia(100%) saturate(100000%) hue-rotate(170deg);
-}
-
 .dropdown {
     position: relative;
     margin-top: 1.5625em;

@@ -10,12 +10,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {  faHeart, faInfo, faMultiply } from '@fortawesome/free-solid-svg-icons'
 import Weather from "../Weather/Weather";
 import jwt from "jsonwebtoken";
-
+import "leaflet-control-geocoder/dist/Control.Geocoder.css";
+import "leaflet-control-geocoder/dist/Control.Geocoder.js";
+import L from 'leaflet';
 
 
 function Activity() {
 
     const navigate = useNavigate()
+
+
+    let geocoder = new L.Control.Geocoder.Nominatim();
 
     const [showActivity,setShowActivity] = useState(true)
     const [showInfo,setShowInfo] = useState(false)
@@ -24,7 +29,7 @@ function Activity() {
     const [filteredActivities, setFilteredActivities] = useState([])
     const [swipedActivities, setSwipedActivities] = useState([]);
     const [interests, setInterests] = useState([]);
-    const [filterType, setFilterType] = useState("Interests");
+    const [filterType, setFilterType] = useState("None");
     const [notYetFetched, setNotYetFetched] = useState(true);
     const [notYetFetchedInterests, setNotYetFetchedInterests] = useState(true);
     const userToken = localStorage.getItem('token');
@@ -64,7 +69,7 @@ function Activity() {
     useEffect(() => {
         const userToken = localStorage.getItem('token');
         if (userToken) {
-            const user = jwt.decode(userToken)
+            const user = jwt.decode(userToken);
             if (!user) {
                 localStorage.removeItem('token')
                 navigate('/login', {replace: true})
@@ -80,7 +85,7 @@ function Activity() {
                             userToken,
                         }),
                     }).then(res => {
-                        console.log("acts", res)
+                        console.log("acts", res.data)
                             setActivities(res.data);
                             setFilteredActivities(res.data);
                             setNotYetFetched(false);
@@ -117,7 +122,9 @@ function Activity() {
     // Helper functions for filtering
 
     useEffect(() => {
-        const filterArray = activities.filter(applyFilter)
+        console.log("act: " + activities);
+        console.log("filt: " + activities.filter(applyFilter));
+        const filterArray = activities.filter(applyFilter);
         if (filterArray.length === 0) {
             setCurrent(0);
             setShowActivity(false);
@@ -267,13 +274,21 @@ function Activity() {
             </div>;
     } else if (showActivity && activities.length > 0){
         const date = new Date(filteredActivities[current].activityDate)
-        activity_content = 
-        <div className="justify">
-        <div className="weather_component"> 
-        {/* Event Date moet zoiets zijn  let aDate = new Date("2022-12-19 13:00:00") en dan {aDate} meegeven */}
-        {/* eventLat="50.8833" eventLon="4.5" */}
-            {/* <Weather eventLat= "" eventLon= "" eventDate=""/> */}
-        </div>
+        let eventLat;
+        let eventLon;
+        eventLat = "50.8833";
+        eventLon = "4.5";
+        geocoder.geocode(filteredActivities[current].activityLocation, function (results) {
+            if(results && results.length > 0){
+                eventLat = results[0].center.lat;
+                eventLon = results[0].center.lng;
+            }})
+        console.log(date.toDateString());
+        activity_content =
+            <div className="justify">
+                <div className="weather_component">
+                    <Weather eventLat={eventLat} eventLon={eventLon} eventDate={date}/>
+                </div>
         <div className="activity_text">
         <p>{filteredActivities[current].activityName}</p>
         <p>{date.toLocaleDateString()}</p>
@@ -293,8 +308,8 @@ function Activity() {
                                 <div className="filter_container">
                                 <div className="">
                                 <select name="type" onChange={(e) => onSetFilter(e, e.target.value)}>
-                                    <option value="Interests">Interests</option>
                                     <option value="None">None</option>
+                                    <option value="Interests">Interests</option>
                                     <option value="Culture">Culture</option>
                                     <option value="Music">Music</option>
                                     <option value="Sports">Sports</option>
